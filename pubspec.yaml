@@ -1,0 +1,47 @@
+name: skillzone
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.5.4
+
+dependencies:
+  auto_size_text: ^3.0.0
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.0.17
+  get: ^4.7.2
+  page_transition: ^2.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  fonts:
+      - family: Oddval
+        fonts:
+          - asset: lib/assets/fonts/Oddval-SemiBold.ttf
+            weight: 600
+          - asset: lib/assets/fonts/Oddval-SemiBoldItalic.ttf
+            weight: 600
+            style: italic
+      - family: K2D
+        fonts:
+          - asset: lib/assets/fonts/K2D-ExtraBold.ttf
+            weight: 800
+
+  assets:
+    - lib/assets/images/welcome_image.png
+    - lib/assets/images/google_logo.png
+    - lib/assets/svgs/oval_shapes.svg
+    - lib/assets/svgs/oval_shapes2.svg
+    - lib/assets/svgs/crystal_shape1.svg
+    - lib/assets/svgs/crystal_shape2.svg
+    - lib/assets/svgs/crystal_shape3.svg
+    - lib/assets/svgs/chat_shape.svg
+    - lib/assets/svgs/notification.svg
+    - lib/assets/svgs/notification_active.svg
