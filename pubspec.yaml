@@ -37,6 +37,7 @@ flutter:
   assets:
     - lib/assets/images/welcome_image.png
     - lib/assets/images/google_logo.png
+    - lib/assets/images/profile_image.png
     - lib/assets/svgs/oval_shapes.svg
     - lib/assets/svgs/oval_shapes2.svg
     - lib/assets/svgs/crystal_shape1.svg
@@ -45,3 +46,9 @@ flutter:
     - lib/assets/svgs/chat_shape.svg
     - lib/assets/svgs/notification.svg
     - lib/assets/svgs/notification_active.svg
+    - lib/assets/svgs/home_active.svg
+    - lib/assets/svgs/card_active.svg
+    - lib/assets/svgs/profile_active.svg
+    - lib/assets/svgs/home_inactive.svg
+    - lib/assets/svgs/card_inactive.svg
+    - lib/assets/svgs/profile_inactive.svg

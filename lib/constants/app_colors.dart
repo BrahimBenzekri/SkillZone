@@ -5,6 +5,10 @@ class AppColors {
 
   // static const Color secondaryColor = Color(0xFFFFB71E);
 
+  static const Color errorColor = Color(0xFFCE4F4F);
+
+  static const Color bottomBarColor = Color(0xFF2F2F2F);
+
   static const Color backgroundColor = Color(0xFF232323);
 
   static const Color textColorLight = Color(0xFFF8F9FA);

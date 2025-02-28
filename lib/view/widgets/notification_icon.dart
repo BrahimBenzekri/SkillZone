@@ -8,10 +8,10 @@ class NotificationIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: <Widget>[
-      SvgPicture.asset('lib/assets/svgs/notification.svg'),
-      if (isThereNotification)
-        SvgPicture.asset('lib/assets/svgs/notification_active.svg'),
-    ]);
+    if (isThereNotification) {
+      return SvgPicture.asset('lib/assets/svgs/notification_active.svg');
+    } else {
+      return SvgPicture.asset('lib/assets/svgs/notification.svg');
+    }
   }
 }
