@@ -21,14 +21,6 @@ class AnimatedBottomBar extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.bottomBarColor,
             borderRadius: BorderRadius.circular(35),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.bottomBarColor.withOpacity(0.5),
-                spreadRadius: 2,
-                blurRadius: 5,
-                offset: const Offset(0, 2), // changes position of shadow
-              ),
-            ],
           ),
           child: Obx(
             () => Row(

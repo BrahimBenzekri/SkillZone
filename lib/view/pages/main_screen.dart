@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillzone/controller/navigation_controller.dart';
 import 'package:skillzone/view/widgets/animated_bottom_bar.dart';
+import 'card_page.dart';
+import 'home_page.dart';
 import 'profile_page.dart';
 
 class MainScreen extends StatelessWidget {
   final NavigationController navController = Get.put(NavigationController());
 
   final List<Widget> pages = [
-    const ProfilePage(),
-    const ProfilePage(),
+    const HomePage(),
+    const CardPage(),
     const ProfilePage(),
   ];
 
