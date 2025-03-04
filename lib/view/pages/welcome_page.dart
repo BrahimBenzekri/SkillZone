@@ -45,15 +45,6 @@ class WelcomePage extends StatelessWidget {
               ),
             ),
             Positioned(
-              bottom: 0,
-              right: 90,
-              child: SvgPicture.asset(
-                'lib/assets/svgs/crystal_shape2.svg',
-                height: 40,
-                width: 40,
-              ),
-            ),
-            Positioned(
               top: 25,
               left: 25,
               child: SvgPicture.asset(
@@ -67,10 +58,11 @@ class WelcomePage extends StatelessWidget {
                 left: 40,
                 child: Text.rich(TextSpan(
                   text: "LEARNING",
-                  style: TextStyle(fontSize: 38, color: AppColors.primaryColor),
+                  style:
+                      TextStyle(fontSize: 38, color: AppColors.secondaryColor),
                   children: [
                     TextSpan(
-                      text: "\nMakes\nMe",
+                      text: "\nMakes\nYou",
                       style: TextStyle(
                         fontSize: 38,
                         color: AppColors.textColorLight,
@@ -95,19 +87,10 @@ class WelcomePage extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 400,
-              right: 50,
-              child: SvgPicture.asset(
-                'lib/assets/svgs/crystal_shape1.svg',
-                height: 40,
-                width: 40,
-              ),
-            ),
-            Positioned(
-                bottom: -10,
-                left: -50,
-                child: Image.asset(
-                  'lib/assets/images/welcome_image.png',
+                bottom: 0,
+                left: 0,
+                child: SvgPicture.asset(
+                  'lib/assets/svgs/welcome_image.svg',
                   height: 400,
                   width: 350,
                 )),

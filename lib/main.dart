@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skillzone/view/pages/main_screen.dart';
+import 'package:skillzone/view/pages/onboarding_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -23,6 +23,6 @@ class MainApp extends StatelessWidget {
             bodySmall: TextStyle(fontWeight: FontWeight.w600),
           ),
         ),
-        home: MainScreen());
+        home: OnboardingScreen());
   }
 }
