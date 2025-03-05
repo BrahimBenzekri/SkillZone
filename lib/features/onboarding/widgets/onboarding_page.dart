@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:skillzone/constants/app_colors.dart';
-import 'package:skillzone/model/onboarding.dart';
+import 'package:skillzone/core/theme/app_colors.dart';
+import 'package:skillzone/features/onboarding/models/onboarding.dart';
 
 class OnboardingPage extends StatelessWidget {
   final Onboarding page;

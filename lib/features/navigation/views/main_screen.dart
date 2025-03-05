@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skillzone/controller/navigation_controller.dart';
-import 'package:skillzone/view/widgets/animated_bottom_bar.dart';
-import 'card_page.dart';
-import 'home_page.dart';
-import 'profile_page.dart';
+import 'package:skillzone/features/navigation/controllers/navigation_controller.dart';
+import 'package:skillzone/features/navigation/widgets/animated_bottom_bar.dart';
+import '../../card/views/card_page.dart';
+import '../../home/views/home_page.dart';
+import '../../profile/views/profile_page.dart';
 
 class MainScreen extends StatelessWidget {
   final NavigationController navController = Get.put(NavigationController());

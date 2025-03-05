@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skillzone/constants/app_colors.dart';
-import 'package:skillzone/controller/onboarding_controller.dart';
-import 'package:skillzone/view/pages/welcome_page.dart';
-import 'package:skillzone/view/widgets/onboarding_page.dart';
+import 'package:skillzone/core/theme/app_colors.dart';
+import 'package:skillzone/features/onboarding/controllers/onboarding_controller.dart';
+import 'package:skillzone/features/onboarding/views/welcome_page.dart';
+import 'package:skillzone/features/onboarding/widgets/onboarding_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingScreen extends StatelessWidget {

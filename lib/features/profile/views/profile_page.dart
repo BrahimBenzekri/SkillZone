@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skillzone/constants/app_colors.dart';
-import 'package:skillzone/view/widgets/notification_icon.dart';
-import 'package:skillzone/view/widgets/profile_option.dart';
+import 'package:skillzone/core/theme/app_colors.dart';
+import 'package:skillzone/widgets/notification_icon.dart';
+import 'package:skillzone/features/profile/widgets/profile_option.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

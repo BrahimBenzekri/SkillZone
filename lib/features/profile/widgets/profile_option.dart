@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:skillzone/constants/app_colors.dart';
+import 'package:skillzone/core/theme/app_colors.dart';
 
 class ProfileOptionCard extends StatelessWidget {
   final String text;

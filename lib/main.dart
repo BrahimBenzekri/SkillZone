@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skillzone/view/pages/onboarding_screen.dart';
+import 'package:skillzone/features/onboarding/views/onboarding_screen.dart';
 
 void main() {
   runApp(const MainApp());

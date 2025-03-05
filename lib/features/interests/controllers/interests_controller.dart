@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:skillzone/constants/app_colors.dart';
-import 'package:skillzone/model/interest.dart';
+import 'package:skillzone/core/theme/app_colors.dart';
+import 'package:skillzone/features/interests/models/interest.dart';
 
 class InterestController extends GetxController {
   var hardSkills = <Interest>[

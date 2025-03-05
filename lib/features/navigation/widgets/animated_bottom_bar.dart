@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:skillzone/constants/app_colors.dart';
-import 'package:skillzone/controller/navigation_controller.dart';
+import 'package:skillzone/core/theme/app_colors.dart';
+import 'package:skillzone/features/navigation/controllers/navigation_controller.dart';
 
 class AnimatedBottomBar extends StatelessWidget {
   final NavigationController navigationController =

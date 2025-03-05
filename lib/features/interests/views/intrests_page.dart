@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skillzone/constants/app_colors.dart';
-import 'package:skillzone/controller/interests_controller.dart';
-import 'package:skillzone/view/pages/profile_page.dart';
-import 'package:skillzone/view/widgets/skill_card.dart';
+import 'package:skillzone/core/theme/app_colors.dart';
+import 'package:skillzone/features/interests/controllers/interests_controller.dart';
+import 'package:skillzone/features/profile/views/profile_page.dart';
+import 'package:skillzone/features/interests/widgets/skill_card.dart';
 
 class InterestsPage extends StatelessWidget {
   final InterestController controller = Get.put(InterestController());
