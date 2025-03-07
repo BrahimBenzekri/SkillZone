@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:skillzone/features/navigation/models/bar_item.dart';
 
 class NavigationController extends GetxController {
   var selectedIndex = 0.obs;
@@ -10,6 +11,11 @@ class NavigationController extends GetxController {
       activeIcon: 'lib/assets/svgs/home_active.svg',
       inactiveIcon: 'lib/assets/svgs/home_inactive.svg',
       name: 'Home',
+    ),
+    BarItem(
+      activeIcon: 'lib/assets/svgs/search_active.svg',
+      inactiveIcon: 'lib/assets/svgs/search_inactive.svg',
+      name: 'Search',
     ),
     BarItem(
       activeIcon: 'lib/assets/svgs/card_active.svg',
@@ -31,15 +37,4 @@ class NavigationController extends GetxController {
       curve: Curves.easeInOut,
     );
   }
-}
-
-class BarItem {
-  String activeIcon;
-  String inactiveIcon;
-  String name;
-  BarItem({
-    required this.activeIcon,
-    required this.inactiveIcon,
-    required this.name,
-  });
 }

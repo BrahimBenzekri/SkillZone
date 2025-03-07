@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/interests/controllers/interests_controller.dart';
-import 'package:skillzone/features/profile/views/profile_page.dart';
+import 'package:skillzone/features/navigation/views/main_screen.dart';
 import 'package:skillzone/features/interests/widgets/skill_card.dart';
 
 class InterestsPage extends StatelessWidget {
@@ -80,7 +80,7 @@ class InterestsPage extends StatelessWidget {
                       onPressed: isButtonEnabled
                           ? () {
                               // Navigate to the next screen
-                              Get.to(() => const ProfilePage());
+                              Get.to(() => MainScreen());
                             }
                           : () {
                               // Show snackbar when the button is disabled

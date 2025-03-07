@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillzone/features/navigation/controllers/navigation_controller.dart';
 import 'package:skillzone/features/navigation/widgets/animated_bottom_bar.dart';
+import 'package:skillzone/features/search/views/search_page.dart';
 import '../../card/views/card_page.dart';
 import '../../home/views/home_page.dart';
 import '../../profile/views/profile_page.dart';
@@ -11,6 +12,7 @@ class MainScreen extends StatelessWidget {
 
   final List<Widget> pages = [
     const HomePage(),
+    const SearchPage(),
     const CardPage(),
     const ProfilePage(),
   ];
