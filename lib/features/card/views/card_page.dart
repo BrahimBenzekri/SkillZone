@@ -18,14 +18,7 @@ class CardPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  color: AppColors.textColorLight,
-                  size: 25,
-                ),
-                onPressed: () => Get.back(),
-              ),
+              const SizedBox(height: 20),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -33,11 +26,12 @@ class CardPage extends StatelessWidget {
                     children: [
                       const Center(
                         child: Text(
-                          'Add New Card',
+                          'Card\nInformation',
                           style: TextStyle(
                             color: AppColors.textColorLight,
-                            fontSize: 26,
+                            fontSize: 28,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                       const SizedBox(height: 30),
