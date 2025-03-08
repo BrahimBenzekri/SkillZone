@@ -13,53 +13,52 @@ class SearchPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: SearchInputField(),
-                  ),
-                  const SizedBox(height: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      'Popular Search',
-                      style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontSize: 22,
-                      ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: SearchInputField(),
+                ),
+                const SizedBox(height: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    'Popular Search',
+                    style: TextStyle(
+                      color: AppColors.primaryColor,
+                      fontSize: 22,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  SizedBox(height: 40, child: PopularSearchesList()),
-                  const SizedBox(height: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      'Popular Categories',
-                      style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontSize: 22,
-                      ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(height: 40, child: PopularSearchesList()),
+                const SizedBox(height: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    'Popular Categories',
+                    style: TextStyle(
+                      color: AppColors.primaryColor,
+                      fontSize: 22,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: PopularCategoriesList(),
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: PopularCategoriesList(),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
+      resizeToAvoidBottomInset:
+          true, // Ensures the screen resizes when keyboard appears
     );
   }
 }
