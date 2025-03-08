@@ -47,14 +47,20 @@ class CourseCard extends StatelessWidget {
             right: 12,
             child: Obx(() => GestureDetector(
                   onTap: () => Get.find<CoursesController>().toggleLike(course),
-                  child: Icon(
-                    course.isLiked.value
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                    color: course.isLiked.value
-                        ? Colors.red
-                        : AppColors.textColorDark,
-                    size: 22,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: AppColors.textColorDark,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      course.isLiked.value
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color:
+                          course.isLiked.value ? Colors.red : backgroundColor,
+                      size: 22,
+                    ),
                   ),
                 )),
           ),
