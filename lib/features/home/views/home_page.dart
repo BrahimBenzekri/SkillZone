@@ -4,12 +4,47 @@ import 'package:skillzone/features/courses/controllers/courses_controller.dart';
 import 'package:skillzone/widgets/notification_icon.dart';
 import 'package:get/get.dart';
 
+import '../../courses/models/course.dart';
 import '../widgets/course_card.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   final CoursesController controller = Get.put(CoursesController());
+
+  Widget _buildCoursesList(
+      String section, List<Course> courses, List<Color> colors) {
+    return SizedBox(
+      height: 150,
+      child: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (courses.isEmpty) {
+          return const Center(
+              child: Text(
+            'No courses available',
+            style: TextStyle(color: AppColors.errorColor, fontSize: 18),
+          ));
+        }
+
+        return ListView.builder(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.only(left: 16.0),
+          itemCount: courses.length,
+          itemBuilder: (context, index) {
+            final course = courses[index];
+            return CourseCard(
+              course: course,
+              backgroundColor: controller.sectionColors[section]![
+                  index % controller.sectionColors[section]!.length],
+            );
+          },
+        );
+      }),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,59 +158,23 @@ class HomePage extends StatelessWidget {
                     // Popular Courses Section
                     const CourseSection(text: 'Popular Courses'),
                     const SizedBox(height: 16),
-                    SizedBox(
-                        height: 150,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.only(left: 16.0),
-                          itemCount: controller.popularCourses.length,
-                          itemBuilder: (context, index) {
-                            final course = controller.popularCourses[index];
-                            return CourseCard(
-                              course: course,
-                              backgroundColor:
-                                  controller.sectionColors['popular']![index],
-                            );
-                          },
-                        )),
+                    _buildCoursesList('popular', controller.popularCourses,
+                        controller.sectionColors['popular']!),
+
                     const SizedBox(height: 16),
                     // Hard Skills Section
                     const CourseSection(text: 'Hard Skills'),
                     const SizedBox(height: 16),
-                    SizedBox(
-                        height: 150,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.only(left: 16.0),
-                          itemCount: controller.premiumCourses.length,
-                          itemBuilder: (context, index) {
-                            final course = controller.premiumCourses[index];
-                            return CourseCard(
-                              course: course,
-                              backgroundColor:
-                                  controller.sectionColors['hard']![index],
-                            );
-                          },
-                        )),
+                    _buildCoursesList('hard', controller.premiumCourses,
+                        controller.sectionColors['hard']!),
+
                     const SizedBox(height: 16),
                     // Soft Skills Section
                     const CourseSection(text: 'Soft Skills'),
                     const SizedBox(height: 16),
-                    SizedBox(
-                        height: 150,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.only(left: 16.0),
-                          itemCount: controller.freemiumCourses.length,
-                          itemBuilder: (context, index) {
-                            final course = controller.freemiumCourses[index];
-                            return CourseCard(
-                              course: course,
-                              backgroundColor:
-                                  controller.sectionColors['soft']![index],
-                            );
-                          },
-                        )),
+                    _buildCoursesList('soft', controller.freemiumCourses,
+                        controller.sectionColors['soft']!),
+
                     const SizedBox(height: 115),
                   ],
                 ),

@@ -10,6 +10,13 @@ class CoursesController extends GetxController {
   final softSkillsCourses = <Course>[].obs;
   final hardSkillsCourses = <Course>[].obs;
 
+  // Add new observable for popular courses
+  final _popularCourses = <Course>[].obs;
+
+  // Add workers as class properties
+  late Worker _softSkillsWorker;
+  late Worker _hardSkillsWorker;
+
   // Loading states
   final isLoading = false.obs;
   final hasError = false.obs;
@@ -55,7 +62,18 @@ class CoursesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // Initialize workers
+    _softSkillsWorker = ever(softSkillsCourses, (_) => _updatePopularCourses());
+    _hardSkillsWorker = ever(hardSkillsCourses, (_) => _updatePopularCourses());
     loadCourses();
+  }
+
+  @override
+  void onClose() {
+    // Dispose of workers
+    _softSkillsWorker.dispose();
+    _hardSkillsWorker.dispose();
+    super.onClose();
   }
 
   // Get freemium courses (free soft skills)
@@ -65,10 +83,13 @@ class CoursesController extends GetxController {
   List<Course> get premiumCourses => hardSkillsCourses;
 
   // Get popular courses (most rated courses from both categories)
-  List<Course> get popularCourses {
+  List<Course> get popularCourses => _popularCourses;
+
+  // Add method to update popular courses
+  void _updatePopularCourses() {
     final allCourses = [...softSkillsCourses, ...hardSkillsCourses];
     allCourses.sort((a, b) => b.rating.compareTo(a.rating));
-    return allCourses.take(5).toList(); // Return top 5 rated courses
+    _popularCourses.assignAll(allCourses.take(5));
   }
 
   // Load courses from API
@@ -77,7 +98,8 @@ class CoursesController extends GetxController {
     hasError.value = false;
 
     try {
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(
+          const Duration(seconds: 5)); // Simulate network delay
       _loadDummyData();
     } catch (e) {
       hasError.value = true;
@@ -115,7 +137,7 @@ class CoursesController extends GetxController {
           DateTime.now().microsecond % courseThumbnails.length];
     }
 
-    softSkillsCourses.value = [
+    softSkillsCourses.assignAll([
       Course(
         id: 's1',
         title: 'Effective Communication Skills',
@@ -179,9 +201,9 @@ class CoursesController extends GetxController {
         points: 75,
         thumbnail: getRandomThumbnail(),
       ),
-    ];
+    ]);
 
-    hardSkillsCourses.value = [
+    hardSkillsCourses.assignAll([
       Course(
         id: 'h1',
         title: 'Flutter Advanced Concepts',
@@ -261,6 +283,6 @@ class CoursesController extends GetxController {
         points: 400,
         thumbnail: getRandomThumbnail(),
       ),
-    ];
+    ]);
   }
 }
