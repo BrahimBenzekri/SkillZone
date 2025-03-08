@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
+import 'package:skillzone/core/utils/media_query_helper.dart';
 import 'package:skillzone/features/navigation/controllers/navigation_controller.dart';
 
 class AnimatedBottomBar extends StatelessWidget {
@@ -13,9 +14,10 @@ class AnimatedBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 30),
         padding: const EdgeInsets.all(10),
         height: 70,
+        width: MediaQueryHelper.getScreenWidth(context) - 60,
         decoration: BoxDecoration(
           color: AppColors.bottomBarColor,
           borderRadius: BorderRadius.circular(35),

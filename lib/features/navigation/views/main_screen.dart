@@ -22,14 +22,17 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: navController.pageController,
-        physics:
-            const NeverScrollableScrollPhysics(), // Disable swipe navigation
-        children: pages,
+      body: Stack(
+        children: [
+          PageView(
+            controller: navController.pageController,
+            physics:
+                const NeverScrollableScrollPhysics(), // Disable swipe navigation
+            children: pages,
+          ),
+          Positioned(bottom: 20, child: AnimatedBottomBar()),
+        ],
       ),
-      extendBody: true,
-      bottomNavigationBar: AnimatedBottomBar(),
     );
   }
 }
