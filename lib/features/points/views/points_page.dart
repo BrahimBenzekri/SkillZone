@@ -5,9 +5,13 @@ import '../controllers/points_controller.dart';
 import '../widgets/level_progress_bar.dart';
 
 class PointsPage extends StatelessWidget {
-  final PointsController controller = Get.put(PointsController());
+  PointsPage({super.key}) {
+    if (!Get.isRegistered<PointsController>()) {
+      Get.lazyPut(() => PointsController());
+    }
+  }
 
-  PointsPage({super.key});
+  PointsController get controller => Get.find<PointsController>();
 
   @override
   Widget build(BuildContext context) {

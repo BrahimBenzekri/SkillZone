@@ -9,7 +9,7 @@ class LevelProgressBar extends StatelessWidget {
   const LevelProgressBar({
     super.key,
     required this.progress,
-    this.height = 12,
+    this.height = 14,
     this.width = double.infinity,
   });
 

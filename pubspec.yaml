@@ -7,14 +7,15 @@ environment:
   sdk: ^3.5.4
 
 dependencies:
-  auto_size_text: ^3.0.0
-  dio: ^5.8.0+1
   flutter:
     sdk: flutter
+  auto_size_text: ^3.0.0
+  dio: ^5.8.0+1
   flutter_native_splash: ^2.4.4
   flutter_svg: ^2.0.17
   get: ^4.7.2
   smooth_page_indicator: ^1.2.1
+  percent_indicator: ^4.2.3
 
 dev_dependencies:
   flutter_test:
