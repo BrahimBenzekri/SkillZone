@@ -141,6 +141,8 @@ class CoursesController extends GetxController {
       Course(
         id: 's1',
         title: 'Effective Communication Skills',
+        description:
+            'Master the art of clear and impactful communication in professional settings. Learn key strategies for better verbal and non-verbal communication.',
         rating: 4.5,
         duration: const Duration(hours: 2, minutes: 30),
         type: CourseType.soft,
@@ -150,6 +152,8 @@ class CoursesController extends GetxController {
       Course(
         id: 's2',
         title: 'Leadership Fundamentals',
+        description:
+            'Develop essential leadership skills and learn how to inspire and guide teams effectively. Perfect for aspiring managers and team leaders.',
         rating: 4.8,
         duration: const Duration(hours: 3),
         type: CourseType.soft,
@@ -159,6 +163,8 @@ class CoursesController extends GetxController {
       Course(
         id: 's3',
         title: 'Time Management Mastery',
+        description:
+            'Learn proven techniques to maximize productivity and achieve better work-life balance through effective time management strategies.',
         rating: 4.6,
         duration: const Duration(hours: 1, minutes: 45),
         type: CourseType.soft,
@@ -168,6 +174,8 @@ class CoursesController extends GetxController {
       Course(
         id: 's4',
         title: 'Emotional Intelligence at Work',
+        description:
+            'Enhance your emotional intelligence to build better relationships and navigate workplace dynamics more effectively.',
         rating: 4.9,
         duration: const Duration(hours: 2, minutes: 15),
         type: CourseType.soft,
@@ -177,6 +185,8 @@ class CoursesController extends GetxController {
       Course(
         id: 's5',
         title: 'Public Speaking Excellence',
+        description:
+            'Overcome stage fright and master the art of public speaking. Learn to deliver compelling presentations with confidence.',
         rating: 4.7,
         duration: const Duration(hours: 4),
         type: CourseType.soft,
@@ -186,6 +196,8 @@ class CoursesController extends GetxController {
       Course(
         id: 's6',
         title: 'Conflict Resolution Strategies',
+        description:
+            'Learn effective techniques for managing and resolving workplace conflicts. Transform challenges into opportunities for growth.',
         rating: 4.4,
         duration: const Duration(hours: 2),
         type: CourseType.soft,
@@ -195,6 +207,8 @@ class CoursesController extends GetxController {
       Course(
         id: 's7',
         title: 'Team Building Essentials',
+        description:
+            'Discover proven methods for building and maintaining high-performing teams. Foster collaboration and team spirit.',
         rating: 4.3,
         duration: const Duration(hours: 1, minutes: 30),
         type: CourseType.soft,
@@ -207,6 +221,8 @@ class CoursesController extends GetxController {
       Course(
         id: 'h1',
         title: 'Flutter Advanced Concepts',
+        description:
+            'Deep dive into advanced Flutter development concepts including state management, custom widgets, and performance optimization.',
         rating: 4.7,
         duration: const Duration(hours: 8),
         type: CourseType.hard,
@@ -217,6 +233,8 @@ class CoursesController extends GetxController {
       Course(
         id: 'h2',
         title: 'AWS Cloud Architecture',
+        description:
+            'Master cloud computing with AWS. Learn to design, deploy and manage scalable cloud infrastructure.',
         rating: 4.6,
         duration: const Duration(hours: 10),
         type: CourseType.hard,
@@ -226,6 +244,8 @@ class CoursesController extends GetxController {
       Course(
         id: 'h3',
         title: 'Machine Learning Fundamentals',
+        description:
+            'Introduction to machine learning algorithms, data preprocessing, and model training. Includes hands-on projects.',
         rating: 4.9,
         duration: const Duration(hours: 12),
         type: CourseType.hard,
@@ -236,6 +256,8 @@ class CoursesController extends GetxController {
       Course(
         id: 'h4',
         title: 'Blockchain Development',
+        description:
+            'Learn blockchain technology and smart contract development. Build decentralized applications from scratch.',
         rating: 4.5,
         duration: const Duration(hours: 8),
         type: CourseType.hard,
@@ -246,6 +268,8 @@ class CoursesController extends GetxController {
       Course(
         id: 'h5',
         title: 'Advanced Python Programming',
+        description:
+            'Master advanced Python concepts including metaclasses, decorators, and concurrent programming.',
         rating: 4.8,
         duration: const Duration(hours: 15),
         type: CourseType.hard,
@@ -256,6 +280,8 @@ class CoursesController extends GetxController {
       Course(
         id: 'h6',
         title: 'Cybersecurity Essentials',
+        description:
+            'Comprehensive guide to network security, threat detection, and security best practices.',
         rating: 4.7,
         duration: const Duration(hours: 20),
         type: CourseType.hard,
@@ -266,6 +292,8 @@ class CoursesController extends GetxController {
       Course(
         id: 'h7',
         title: 'DevOps & CI/CD',
+        description:
+            'Learn modern DevOps practices, continuous integration, and deployment automation techniques.',
         rating: 4.6,
         duration: const Duration(hours: 16),
         type: CourseType.hard,
@@ -276,6 +304,8 @@ class CoursesController extends GetxController {
       Course(
         id: 'h8',
         title: 'React Native Masterclass',
+        description:
+            'Build cross-platform mobile applications using React Native. Includes real-world project development.',
         rating: 4.5,
         duration: const Duration(hours: 10),
         type: CourseType.hard,
