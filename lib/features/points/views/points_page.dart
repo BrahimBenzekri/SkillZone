@@ -18,6 +18,7 @@ class PointsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         backgroundColor: AppColors.backgroundColor,
         elevation: 0,
         leading: IconButton(
