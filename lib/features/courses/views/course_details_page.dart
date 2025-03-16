@@ -8,8 +8,10 @@ import '../widgets/lesson_card.dart';
 
 class CourseDetailsPage extends StatelessWidget {
   final controller = Get.put(CourseDetailsController());
+  final Color backgroundColor;
 
-  CourseDetailsPage({super.key}) {
+  CourseDetailsPage({super.key})
+      : backgroundColor = (Get.arguments as Map)['backgroundColor'] as Color {
     final String courseId = Get.parameters['id'] ?? '';
     controller.loadCourseDetails(courseId);
   }
@@ -20,12 +22,12 @@ class CourseDetailsPage extends StatelessWidget {
       backgroundColor: AppColors.backgroundColor,
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(
+          return Center(
               child: CircularProgressIndicator(
-            color: AppColors.primaryColor,
+            color: backgroundColor,
           ));
         }
-
+            
         if (controller.hasError.value) {
           return Center(
               child: Padding(
@@ -37,53 +39,77 @@ class CourseDetailsPage extends StatelessWidget {
             ),
           ));
         }
-
+            
         final course = controller.course.value;
         if (course == null) return const SizedBox();
-
-        return CustomScrollView(
-          slivers: [
-            // App Bar
-            SliverAppBar(
-              backgroundColor: AppColors.primaryColor,
-              expandedHeight: 200,
-              pinned: true,
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text(
-                  course.title,
-                  style: const TextStyle(
-                      color: AppColors.textColorLight, fontSize: 18),
+            
+      return Column(
+        children: [
+          // Course Header Container
+          Container(
+            height: 250,
+            width: double.infinity,
+            color: backgroundColor,
+            child: Stack(
+              children: [
+                
+                Center(
+                  child: SvgPicture.asset(
+                    course.thumbnail,
+                    fit: BoxFit.cover,
+                    height: 130,
+                  ),
                 ),
-                background: Stack(
-                  children: [
-                    Positioned(
-                      right: 0,
-                      top: 50,
-                      child: SvgPicture.asset(
-                        course.thumbnail,
-                        fit: BoxFit.cover,
-                        height: 150,
-                      ),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.8),
+                      ],
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            Colors.black.withOpacity(0.7),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+                Positioned(
+                  bottom: 16,
+                  left: 16,
+                  right: 16, // Add right constraint
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.7, // Limit width to 70% of screen
+                    child: Text(
+                      course.title,
+                      style: const TextStyle(
+                        color: AppColors.textColorLight,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 2, // Limit to 2 lines
+                      overflow: TextOverflow.ellipsis, // Add ellipsis if text overflows
+                    ),
+                  ),
+                ),
+                // Back Button
+                Positioned(
+                    top : 30,
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      color: AppColors.textColorLight,
+                      size: 24,
+                      
+                    ),
+                    onPressed: () => Get.back(),
+                  ),
+                ),
+              ],
             ),
-
-            // Course Info
-            SliverToBoxAdapter(
+          ),
+            
+          // Scrollable Content
+          Expanded(
+            child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -98,35 +124,18 @@ class CourseDetailsPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-
+            
                     // Stats Row
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildStat(
-                          Icons.star,
-                          '${course.rating}',
-                          'Rating',
-                        ),
-                        _buildStat(
-                          Icons.people,
-                          '${course.totalStudents}',
-                          'Students',
-                        ),
-                        _buildStat(
-                          Icons.timer,
-                          course.durationText,
-                          'Duration',
-                        ),
-                        _buildStat(
-                          Icons.library_books,
-                          '${course.totalLessons}',
-                          'Lessons',
-                        ),
+                        _buildStat(Icons.star, '${course.rating}', 'Rating'),
+                        _buildStat(Icons.timer, course.durationText, 'Duration'),
+                        _buildStat(Icons.library_books, '${course.totalLessons}', 'Lessons'),
                       ],
                     ),
                     const SizedBox(height: 24),
-
+            
                     // Access Information
                     Container(
                       padding: const EdgeInsets.all(16),
@@ -137,29 +146,115 @@ class CourseDetailsPage extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            course.type == CourseType.soft
-                                ? 'Earn ${course.points} points'
-                                : course.price != null
-                                    ? '\$${course.price}'
-                                    : '${course.points} points required',
-                            style: const TextStyle(
-                              color: AppColors.primaryColor,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                          if (course.type == CourseType.hard) ...[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '\$${course.price}',
+                                  style: const TextStyle(
+                                    color: AppColors.primaryColor,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'or ${course.points} points',
+                                  style: const TextStyle(
+                                    color: AppColors.textColorInactive,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              // todo: Implement enrollment
-                            },
-                            child: const Text('Enroll Now'),
-                          ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primaryColor.withOpacity(0.1),
+                                elevation: 0,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 12,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              onPressed: () {
+                                // todo: Implement enrollment
+                              },
+                              child: const Text(
+                                'Enroll Now',
+                                style: TextStyle(
+                                  color: AppColors.primaryColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ] else ...[
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primaryColor.withOpacity(0.1),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.stars_rounded,
+                                      color: AppColors.primaryColor,
+                                      size: 24,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              '+${course.points}',
+                                              style: const TextStyle(
+                                                color: AppColors.primaryColor,
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 4),
+                                            const Text(
+                                              'POINTS',
+                                              style: TextStyle(
+                                                color: AppColors.primaryColor,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                letterSpacing: 1.2,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 4),
+                                        const Text(
+                                          'Complete all lessons to earn points',
+                                          style: TextStyle(
+                                            color: AppColors.textColorInactive,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ),
                     const SizedBox(height: 24),
-
+            
                     // Lessons Header
                     const Text(
                       'Course Content',
@@ -170,28 +265,20 @@ class CourseDetailsPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
+            
+                    // Lessons List
+                    ...course.lessons.map((lesson) => LessonCard(
+                          lesson: lesson,
+                          onTap: () => controller.startLesson(lesson),
+                        )),
                   ],
                 ),
               ),
             ),
-
-            // Lessons List
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final lesson = course.lessons[index];
-                  return LessonCard(
-                    lesson: lesson,
-                    onTap: () => controller.startLesson(lesson),
-                  );
-                },
-                childCount: course.lessons.length,
-              ),
-            ),
-          ],
-        );
-      }),
-    );
+          ),
+        ],
+      );
+            }));
   }
 
   Widget _buildStat(IconData icon, String value, String label) {

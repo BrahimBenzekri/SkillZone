@@ -20,7 +20,13 @@ class CourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.to(() => CourseDetailsPage(), arguments: course),
+      onTap: () => Get.to(
+        () => CourseDetailsPage(),
+        arguments: {
+          'course': course,
+          'backgroundColor': backgroundColor,
+        },
+      ),
       child: Container(
         width: 225,
         height: 150,

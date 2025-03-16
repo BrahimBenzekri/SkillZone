@@ -17,7 +17,8 @@ class CourseDetailsController extends GetxController {
 
     try {
       await Future.delayed(const Duration(seconds: 1));
-      final currentCourse = Get.arguments as Course;
+      final Map<String, dynamic> arguments = Get.arguments as Map<String, dynamic>;
+      final currentCourse = arguments['course'] as Course; // Fix the casting here
 
       if (!availableCourseIds.contains(currentCourse.id)) {
         throw 'This course is not available yet. Stay tuned for updates!';

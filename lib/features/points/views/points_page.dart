@@ -43,7 +43,7 @@ class PointsPage extends StatelessWidget {
               children: [
                 // Current Level Card
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: AppColors.bottomBarColor,
                     borderRadius: BorderRadius.circular(20),
@@ -58,7 +58,7 @@ class PointsPage extends StatelessWidget {
                             width: 80,
                             fit: BoxFit.cover,
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: 6),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
