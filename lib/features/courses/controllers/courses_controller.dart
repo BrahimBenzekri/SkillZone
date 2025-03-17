@@ -40,12 +40,12 @@ class CoursesController extends GetxController {
       AppColors.courseColor5,
     ],
     'soft': [
-      AppColors.courseColor3,
+      AppColors.courseColor6,
       AppColors.courseColor5,
       AppColors.courseColor1,
       AppColors.courseColor4,
       AppColors.courseColor2,
-      AppColors.courseColor6,
+      AppColors.courseColor3,
     ],
   };
 

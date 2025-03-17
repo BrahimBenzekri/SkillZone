@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import '../models/course.dart';
 import '../models/lesson.dart';
+import '../views/lesson_video_page.dart';
 
 class CourseDetailsController extends GetxController {
   final Rx<Course?> course = Rx<Course?>(null);
@@ -47,7 +48,7 @@ class CourseDetailsController extends GetxController {
             id: 's1l1',
             title: 'Understanding Communication Basics',
             duration: const Duration(minutes: 30),
-            videoUrl: 'dummy_url',
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
             isCompleted: false,
           ),
           Lesson(
@@ -55,7 +56,7 @@ class CourseDetailsController extends GetxController {
             id: 's1l2',
             title: 'Verbal Communication Techniques',
             duration: const Duration(minutes: 45),
-            videoUrl: 'dummy_url',
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
             isCompleted: false,
           ),
           Lesson(
@@ -63,7 +64,7 @@ class CourseDetailsController extends GetxController {
             id: 's1l3',
             title: 'Non-verbal Communication',
             duration: const Duration(minutes: 35),
-            videoUrl: 'dummy_url',
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
             isCompleted: false,
           ),
           Lesson(
@@ -71,7 +72,7 @@ class CourseDetailsController extends GetxController {
             id: 's1l4',
             title: 'Active Listening Skills',
             duration: const Duration(minutes: 40),
-            videoUrl: 'dummy_url',
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
             isCompleted: false,
           ),
         ];
@@ -82,7 +83,7 @@ class CourseDetailsController extends GetxController {
             id: 'h1l1',
             title: 'Advanced State Management',
             duration: const Duration(minutes: 60),
-            videoUrl: 'dummy_url',
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
             isCompleted: false,
           ),
           Lesson(
@@ -90,7 +91,7 @@ class CourseDetailsController extends GetxController {
             id: 'h1l2',
             title: 'Custom Widgets and Inheritance',
             duration: const Duration(minutes: 55),
-            videoUrl: 'dummy_url',
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
             isCompleted: false,
           ),
           Lesson(
@@ -98,7 +99,7 @@ class CourseDetailsController extends GetxController {
             id: 'h1l3',
             title: 'Performance Optimization Techniques',
             duration: const Duration(minutes: 50),
-            videoUrl: 'dummy_url',
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
             isCompleted: false,
           ),
           Lesson(
@@ -106,7 +107,7 @@ class CourseDetailsController extends GetxController {
             id: 'h1l4',
             title: 'Advanced Animation and Gestures',
             duration: const Duration(minutes: 65),
-            videoUrl: 'dummy_url',
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
             isCompleted: false,
           ),
         ];
@@ -116,6 +117,10 @@ class CourseDetailsController extends GetxController {
   }
 
   Future<void> startLesson(Lesson lesson) async {
-    Get.toNamed('/lesson/${lesson.id}', arguments: lesson);
+    Get.to(
+      () => const LessonVideoPage(),
+      arguments: lesson,
+      transition: Transition.rightToLeft,
+    );
   }
 }

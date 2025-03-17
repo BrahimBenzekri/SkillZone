@@ -16,6 +16,9 @@ dependencies:
   get: ^4.7.2
   smooth_page_indicator: ^1.2.1
   percent_indicator: ^4.2.3
+  video_player: ^2.9.3
+  chewie: ^1.10.0
+  video_player_android: ^2.7.16
 
 dev_dependencies:
   flutter_test:
