@@ -19,7 +19,7 @@ class LevelProgressBar extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-        color: AppColors.textColorInactive.withOpacity(0.2),
+        color: AppColors.textColorInactive.withValues(alpha:0.2),
         borderRadius: BorderRadius.circular(height / 2),
       ),
       child: Stack(

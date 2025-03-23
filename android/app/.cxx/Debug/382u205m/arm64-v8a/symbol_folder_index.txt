@@ -1,0 +1,1 @@
+/home/bahitto/myapps/skillzone/build/app/intermediates/cxx/Debug/382u205m/obj/arm64-v8a

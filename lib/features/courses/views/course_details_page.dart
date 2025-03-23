@@ -67,7 +67,7 @@ class CourseDetailsPage extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [
                         Colors.transparent,
-                        Colors.black.withOpacity(0.8),
+                        Colors.black.withValues(alpha:0.8),
                       ],
                     ),
                   ),
@@ -170,7 +170,7 @@ class CourseDetailsPage extends StatelessWidget {
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primaryColor.withOpacity(0.1),
+                                backgroundColor: AppColors.primaryColor.withValues(alpha:0.1),
                                 elevation: 0,
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 24,
@@ -199,7 +199,7 @@ class CourseDetailsPage extends StatelessWidget {
                                   Container(
                                     padding: const EdgeInsets.all(12),
                                     decoration: BoxDecoration(
-                                      color: AppColors.primaryColor.withOpacity(0.1),
+                                      color: AppColors.primaryColor.withValues(alpha:0.1),
                                       shape: BoxShape.circle,
                                     ),
                                     child: const Icon(

@@ -213,7 +213,7 @@ class CourseSection extends StatelessWidget {
             child: Container(
               margin: const EdgeInsets.only(bottom: 6),
               height: 1,
-              color: AppColors.textColorInactive.withOpacity(0.5),
+              color: AppColors.textColorInactive.withValues(alpha:0.5),
             ),
           ),
         ],

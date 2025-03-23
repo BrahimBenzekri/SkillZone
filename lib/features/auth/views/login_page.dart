@@ -98,7 +98,7 @@ class LoginPage extends StatelessWidget {
                               hintStyle: TextStyle(
                                   fontSize: 18,
                                   color: AppColors.backgroundColor
-                                      .withOpacity(0.7)),
+                                      .withValues(alpha:0.7)),
                               border: InputBorder.none,
                               contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16, vertical: 16),
@@ -128,7 +128,7 @@ class LoginPage extends StatelessWidget {
                               hintStyle: TextStyle(
                                   fontSize: 18,
                                   color: AppColors.backgroundColor
-                                      .withOpacity(0.7)),
+                                      .withValues(alpha:0.7)),
                               border: InputBorder.none,
                               contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16, vertical: 16),

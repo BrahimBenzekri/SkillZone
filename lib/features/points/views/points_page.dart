@@ -128,11 +128,11 @@ class PointsPage extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 16),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppColors.bottomBarColor.withOpacity(0.5),
+                        color: AppColors.bottomBarColor.withValues(alpha:0.5),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: isUnlocked
-                              ? AppColors.primaryColor.withOpacity(0.3)
+                              ? AppColors.primaryColor.withValues(alpha:0.3)
                               : Colors.transparent,
                         ),
                       ),
