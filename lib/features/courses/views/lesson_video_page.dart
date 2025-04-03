@@ -28,14 +28,8 @@ class _LessonVideoPageState extends State<LessonVideoPage> {
 
   Future<void> _initializePlayer() async {
     try {
-      if (lesson.videoUrl == null || lesson.videoUrl!.isEmpty) {
-        throw Exception('Video URL is not available');
-      }
-
-      _videoPlayerController = VideoPlayerController.networkUrl(
-        Uri.parse(lesson.videoUrl!),
-      );
       
+      _videoPlayerController = VideoPlayerController.asset('lib/assets/videos/output.mp4');
       await _videoPlayerController.initialize();
 
       _chewieController = ChewieController(
@@ -52,13 +46,35 @@ class _LessonVideoPageState extends State<LessonVideoPage> {
           backgroundColor: AppColors.bottomBarColor,
           bufferedColor: AppColors.textColorInactive,
         ),
+        errorBuilder: (context, errorMessage) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  color: AppColors.textColorInactive,
+                  size: 48,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  errorMessage,
+                  style: const TextStyle(
+                    color: AppColors.textColorInactive,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        },
       );
 
       setState(() {
         isLoading = false;
       });
     } catch (e) {
-      print('Error initializing video player: $e');
+      debugPrint('Error initializing video player: $e');
       setState(() {
         isLoading = false;
         errorMessage = 'Failed to load video. Please try again later.';
@@ -220,7 +236,7 @@ class _LessonVideoPageState extends State<LessonVideoPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          // TODO: Implement mark as complete functionality
+                          // todo: Implement mark as complete functionality
                           Get.back();
                         },
                         style: ElevatedButton.styleFrom(
