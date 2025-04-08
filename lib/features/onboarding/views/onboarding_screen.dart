@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/onboarding/controllers/onboarding_controller.dart';
-import 'package:skillzone/features/onboarding/views/welcome_page.dart';
 import 'package:skillzone/features/onboarding/widgets/onboarding_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -23,7 +23,7 @@ class OnboardingScreen extends StatelessWidget {
               curve: Curves.easeInOut,
             );
           } else {
-            Get.to(() => const WelcomePage());
+            Get.toNamed(AppRoutes.login);
           }
         },
         child: Padding(

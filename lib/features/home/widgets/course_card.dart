@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/courses/controllers/courses_controller.dart';
 import 'package:skillzone/features/courses/models/course.dart';
-
-import '../../courses/views/course_details_page.dart';
 
 class CourseCard extends StatelessWidget {
   final Course course;
@@ -20,8 +19,8 @@ class CourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.to(
-        () => CourseDetailsPage(),
+      onTap: () => Get.toNamed(
+        AppRoutes.courseDetails,
         arguments: {
           'course': course,
           'backgroundColor': backgroundColor,

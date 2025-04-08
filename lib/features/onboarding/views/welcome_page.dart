@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
-import 'package:skillzone/features/auth/views/login_page.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -13,9 +13,7 @@ class WelcomePage extends StatelessWidget {
         backgroundColor: AppColors.backgroundColor,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Get.to(() => const LoginPage(),
-                transition: Transition.rightToLeft,
-                duration: const Duration(milliseconds: 500));
+            Get.toNamed(AppRoutes.onboarding);
           },
           backgroundColor: AppColors.primaryColor,
           child: const Icon(

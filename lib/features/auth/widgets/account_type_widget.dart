@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
-import 'package:skillzone/features/interests/views/intrests_page.dart';
 
 void showAccountTypeDialog() {
   Get.dialog(
@@ -27,9 +27,7 @@ void showAccountTypeDialog() {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Get.to(() => InterestsPage(),
-                      transition: Transition.rightToLeft,
-                      duration: const Duration(milliseconds: 500));
+                  Get.toNamed(AppRoutes.interests);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryColor,

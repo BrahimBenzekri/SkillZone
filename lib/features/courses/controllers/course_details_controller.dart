@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
+import 'package:skillzone/core/routes/app_routes.dart';
 import '../models/course.dart';
 import '../models/lesson.dart';
-import '../views/lesson_video_page.dart';
 
 class CourseDetailsController extends GetxController {
   final Rx<Course?> course = Rx<Course?>(null);
@@ -117,10 +117,12 @@ class CourseDetailsController extends GetxController {
   }
 
   Future<void> startLesson(Lesson lesson) async {
-    Get.to(
-      () => const LessonVideoPage(),
-      arguments: lesson,
-      transition: Transition.rightToLeft,
+    // Using named route with arguments
+    await Get.toNamed(
+      AppRoutes.lessonVideo,
+      arguments: {
+        'lesson': lesson,
+      },
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/interests/controllers/interests_controller.dart';
-import 'package:skillzone/features/navigation/views/main_screen.dart';
 import 'package:skillzone/features/interests/widgets/skill_card.dart';
 
 class InterestsPage extends StatelessWidget {
@@ -78,14 +78,8 @@ class InterestsPage extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: isButtonEnabled
-                          ? () {
-                              // Navigate to the next screen
-                              Get.to(() => MainScreen());
-                            }
-                          : () {
-                              // Show snackbar when the button is disabled
-                              controller.showWarningSnackbar();
-                            },
+                          ? () => Get.offAllNamed(AppRoutes.main)
+                          : () => controller.showWarningSnackbar(),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: isButtonEnabled
                             ? AppColors.primaryColor

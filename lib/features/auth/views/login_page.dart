@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
-
-import 'signup_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -141,7 +140,7 @@ class LoginPage extends StatelessWidget {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () => Get.offAllNamed(AppRoutes.main),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primaryColor,
                               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -172,12 +171,7 @@ class LoginPage extends StatelessWidget {
                                   ),
                                 ),
                                 TextButton(
-                                  onPressed: () {
-                                    Get.to(() => const SignupPage(),
-                                        transition: Transition.rightToLeft,
-                                        duration:
-                                            const Duration(milliseconds: 500));
-                                  },
+                                  onPressed: () => Get.toNamed(AppRoutes.signup),
                                   child: const Text(
                                     'Join us',
                                     style: TextStyle(
