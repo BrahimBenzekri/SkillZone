@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/widgets/notification_icon.dart';
 import 'package:skillzone/features/profile/widgets/profile_option.dart';
@@ -21,18 +20,8 @@ class ProfilePage extends StatelessWidget {
               fontSize: 24,
             ),
           ),
-          leading: IconButton(
-            onPressed: () => Get.back(),
-            icon: const Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: AppColors.textColorLight,
-              size: 24,
-            ),
-          ),
-          actions: [
-            IconButton(
-                onPressed: () {},
-                icon: const NotificationIcon(isThereNotification: true))
+          actions: const [
+            NotificationIcon(isThereNotification: true)
           ],
         ),
         body: Padding(
