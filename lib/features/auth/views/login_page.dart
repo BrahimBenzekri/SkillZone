@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
+import 'package:skillzone/features/auth/controllers/auth_controller.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  LoginPage({super.key});
+
+  final AuthController _authController = Get.put(AuthController());
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -92,18 +97,20 @@ class LoginPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(25),
                           ),
                           child: TextField(
+                            controller: _emailController,
                             decoration: InputDecoration(
                               hintText: 'example@skillzone.com',
                               hintStyle: TextStyle(
-                                  fontSize: 18,
-                                  color: AppColors.backgroundColor
-                                      .withValues(alpha:0.7)),
+                                fontSize: 18,
+                                color: AppColors.backgroundColor.withValues(alpha: 0.7),
+                              ),
                               border: InputBorder.none,
                               contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 16),
+                                horizontal: 16,
+                                vertical: 16,
+                              ),
                             ),
-                            style: const TextStyle(
-                                color: AppColors.backgroundColor),
+                            style: const TextStyle(color: AppColors.backgroundColor),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -121,41 +128,73 @@ class LoginPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(25),
                           ),
                           child: TextField(
+                            controller: _passwordController,
                             obscureText: true,
                             decoration: InputDecoration(
                               hintText: 'Enter your password',
                               hintStyle: TextStyle(
-                                  fontSize: 18,
-                                  color: AppColors.backgroundColor
-                                      .withValues(alpha:0.7)),
+                                fontSize: 18,
+                                color: AppColors.backgroundColor.withValues(alpha: 0.7),
+                              ),
                               border: InputBorder.none,
                               contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 16),
+                                horizontal: 16,
+                                vertical: 16,
+                              ),
                             ),
-                            style: const TextStyle(
-                                color: AppColors.backgroundColor),
+                            style: const TextStyle(color: AppColors.backgroundColor),
                           ),
                         ),
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 10),
+                        Obx(() {
+                          if (_authController.error.isNotEmpty) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                _authController.error.value,
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        }),
+                        const SizedBox(height: 30),
                         SizedBox(
                           width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () => Get.offAllNamed(AppRoutes.main),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primaryColor,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(28),
-                              ),
-                            ),
-                            child: const Text(
-                              'Login',
-                              style: TextStyle(
-                                color: AppColors.backgroundColor,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
+                          child: Obx(() => ElevatedButton(
+                                onPressed: _authController.isLoading.value
+                                    ? null
+                                    : () => _authController.login(
+                                          _emailController.text,
+                                          _passwordController.text,
+                                        ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primaryColor,
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(28),
+                                  ),
+                                ),
+                                child: _authController.isLoading.value
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          color: AppColors.backgroundColor,
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                    : const Text(
+                                        'Login',
+                                        style: TextStyle(
+                                          color: AppColors.backgroundColor,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                              )),
                         ),
                         const SizedBox(height: 5),
                         Center(

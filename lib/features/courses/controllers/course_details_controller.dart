@@ -120,9 +120,7 @@ class CourseDetailsController extends GetxController {
     // Using named route with arguments
     await Get.toNamed(
       AppRoutes.lessonVideo,
-      arguments: {
-        'lesson': lesson,
-      },
+      arguments: lesson,
     );
   }
 }

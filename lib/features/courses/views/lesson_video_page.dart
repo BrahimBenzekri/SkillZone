@@ -251,6 +251,7 @@ class _LessonVideoPageState extends State<LessonVideoPage> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            color: AppColors.textColorLight
                           ),
                         ),
                       ),

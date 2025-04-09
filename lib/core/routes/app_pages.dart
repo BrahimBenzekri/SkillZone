@@ -30,12 +30,12 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.login,
-      page: () => const LoginPage(),
+      page: () => LoginPage(),
       transition: Transition.rightToLeft,
     ),
     GetPage(
       name: AppRoutes.signup,
-      page: () => const SignupPage(),
+      page: () => SignupPage(),
       transition: Transition.rightToLeft,
     ),
     GetPage(
