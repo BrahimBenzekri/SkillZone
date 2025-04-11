@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
+import 'package:skillzone/core/config/env_config.dart';
 
 class AuthController extends GetxController {
   final RxBool isLoading = false.obs;
@@ -12,9 +13,8 @@ class AuthController extends GetxController {
       isLoading.value = true;
       error.value = '';
 
-      // TODO: Replace with your API endpoint
       final response = await GetConnect().post(
-        'https://skillzone-4ewv.onrender.com/api/v1/users/login/',
+        EnvConfig.loginEndpoint,
         {
           'email': email,
           'password': password,
@@ -51,13 +51,15 @@ class AuthController extends GetxController {
       log('Signup Request Body: {first_name: $firstName, last_name: $lastName, username: $username, email: $email, password: $password}');
 
       final response = await GetConnect().post(
-        'https://skillzone-4ewv.onrender.com/api/v1/users/register/',
+        EnvConfig.registerEndpoint,
         {
           'first_name': firstName,
           'last_name': lastName,
           'username': username,
           'email': email,
           'password': password,
+          'password2': password,
+          'accept_terms': true
         },
       );
 
@@ -67,7 +69,7 @@ class AuthController extends GetxController {
 
       if (response.statusCode == 201) {
         // Successfully created account
-        Get.offAllNamed(AppRoutes.login);
+        Get.offAllNamed(AppRoutes.interests);
       } else {
         error.value = response.body['message'] ?? 'Signup failed';
         log('Signup Error: ${response.body}');

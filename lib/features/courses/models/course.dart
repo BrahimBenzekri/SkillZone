@@ -14,7 +14,6 @@ class Course {
   final RxBool isLiked;
   final String thumbnail;
   final List<Lesson> lessons;
-  final int totalStudents;
 
   Course({
     required this.id,
@@ -28,7 +27,6 @@ class Course {
     bool isLiked = false,
     required this.thumbnail,
     this.lessons = const [],
-    this.totalStudents = 0,
   }) : isLiked = isLiked.obs;
 
   int get completedLessons =>
@@ -78,7 +76,6 @@ class Course {
         'isLiked': isLiked.value,
         'thumbnail': thumbnail,
         'lessons': lessons.map((e) => e.toJson()).toList(),
-        'totalStudents': totalStudents,
       };
 
   // Create from JSON for API communication
@@ -100,7 +97,6 @@ class Course {
                 ?.map((e) => Lesson.fromJson(e))
                 .toList() ??
             [],
-        totalStudents: json['totalStudents'] ?? 0,
       );
 
   Course copyWith({
@@ -129,7 +125,6 @@ class Course {
       isLiked: isLiked ?? this.isLiked.value,
       thumbnail: thumbnail ?? this.thumbnail,
       lessons: lessons ?? this.lessons,
-      totalStudents: totalStudents ?? this.totalStudents,
     );
   }
 }
