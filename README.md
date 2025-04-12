@@ -35,6 +35,10 @@ Some features might be incomplete or subject to change as development progresses
     <img src="screenshots/course_details_screenshot.jpg" width="250" alt="Course Details Page Screenshot">
   </div>
   <div>
+    <h3>Quizly Page</h3>
+    <img src="screenshots/quizly_screenshot.png" width="250" alt="Quizly Page Screenshot">
+  </div>
+  <div>
     <h3>Profile Section</h3>
     <img src="screenshots/profile_screenshot.jpg" width="250" alt="Profile Page Screenshot">
   </div>
