@@ -51,7 +51,6 @@ class QuizPage extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     // Timer and Progress
                     Obx(() => LinearProgressIndicator(
@@ -92,25 +91,25 @@ class QuizPage extends StatelessWidget {
                     Obx(() => Text(
                           controller.currentQuestion?.question ?? '',
                           style: const TextStyle(
-                            color: AppColors.textColorLight,
+                            color: AppColors.primaryColor,
                             fontSize: 22,
-                            fontWeight: FontWeight.w500,
                           ),
                           textAlign: TextAlign.center,
                         )),
-                    const SizedBox(height: 32),
+                    const Spacer(),
 
                     // Options
-                    Expanded(
+                    SizedBox(
+                      height: MediaQueryHelper.getScreenHeight(context) * 0.4,
                       child: ListView.separated(
                         itemCount: controller.currentQuestion?.options.length ?? 0,
                         separatorBuilder: (context, index) =>
                             const SizedBox(height: 16),
                         itemBuilder: (context, index) {
-                          final option =
-                              controller.currentQuestion?.options[index] ?? '';
                           
                           return Obx(() {  // Wrap the GestureDetector with Obx
+                            final option =
+                                controller.currentQuestion?.options[index] ?? '';
                             final isSelected =
                                 controller.selectedOptionIndex.value == index;
                             return GestureDetector(
@@ -118,15 +117,12 @@ class QuizPage extends StatelessWidget {
                               child: Container(
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? AppColors.primaryColor
-                                      : AppColors.bottomBarColor,
                                   borderRadius: BorderRadius.circular(50),
                                   border: Border.all(
                                     color: isSelected
                                         ? AppColors.primaryColor
-                                        : Colors.transparent,
-                                    width: 2,
+                                        : AppColors.textColorInactive,
+                                    width: 3,
                                   ),
                                 ),
                                 child: Row(
@@ -135,19 +131,28 @@ class QuizPage extends StatelessWidget {
                                       child: Text(
                                         option,
                                         style: TextStyle(
-                                          color: isSelected
-                                              ? AppColors.backgroundColor
-                                              : AppColors.textColorLight,
+                                          color: isSelected ? AppColors.primaryColor : AppColors.textColorLight,
                                           fontSize: 16,
                                         ),
                                       ),
                                     ),
-                                    if (isSelected)
+                                    isSelected ?
                                       const Icon(
                                         Icons.check_circle_rounded,
-                                        color: AppColors.backgroundColor,
+                                        color: AppColors.primaryColor,
                                         size: 24,
-                                      ),
+                                      )
+                                      : Container(
+                                          width: 24,
+                                          height: 24,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                              color: AppColors.textColorInactive,
+                                              width: 3,
+                                            ),
+                                          ),
+                                        ),
                                   ],
                                 ),
                               ),
@@ -156,6 +161,7 @@ class QuizPage extends StatelessWidget {
                         },
                       ),
                     ),
+                    const Spacer(),
 
                     // Next Button
                     Obx(() {
