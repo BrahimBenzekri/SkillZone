@@ -25,20 +25,28 @@ Some features might be incomplete or subject to change as development progresses
 
 ## 📱 Screenshots
 
-### Home Screen
-![Home Screen Screenshot](screenshots/home_screenshot.jpg)
-
-### Course Details
-![Course Details Page Screenshot](screenshots/course_details_screenshot.jpg)
-
-### Profile Section
-![Profile Page Screenshot](screenshots/profile_screenshot.jpg)
-
-### Points Section
-![Points Page Screenshot](screenshots/points_and_level_screenshot.jpg)
-
-### Search Section
-![Search Page Screenshot](screenshots/search_screenshot.jpg)
+<div align="center" style="display: flex; overflow-x: auto; padding: 20px; gap: 20px;">
+  <div>
+    <h3>Home Screen</h3>
+    <img src="screenshots/home_screenshot.jpg" width="250" alt="Home Screen Screenshot">
+  </div>
+  <div>
+    <h3>Course Details</h3>
+    <img src="screenshots/course_details_screenshot.jpg" width="250" alt="Course Details Page Screenshot">
+  </div>
+  <div>
+    <h3>Profile Section</h3>
+    <img src="screenshots/profile_screenshot.jpg" width="250" alt="Profile Page Screenshot">
+  </div>
+  <div>
+    <h3>Points Section</h3>
+    <img src="screenshots/points_and_level_screenshot.jpg" width="250" alt="Points Page Screenshot">
+  </div>
+  <div>
+    <h3>Search Section</h3>
+    <img src="screenshots/search_screenshot.jpg" width="250" alt="Search Page Screenshot">
+  </div>
+</div>
 
 ## ✨ Features
 
