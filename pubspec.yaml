@@ -47,6 +47,7 @@ flutter:
     - lib/assets/images/
     - lib/assets/svgs/
     - lib/assets/videos/
+    - .env
 
 flutter_native_splash:
   color: "#232323"

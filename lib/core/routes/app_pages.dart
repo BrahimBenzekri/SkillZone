@@ -13,6 +13,8 @@ import 'package:skillzone/features/onboarding/views/onboarding_screen.dart';
 import 'package:skillzone/features/onboarding/views/welcome_page.dart';
 import 'package:skillzone/features/points/views/points_page.dart';
 import 'package:skillzone/features/profile/views/profile_page.dart';
+import 'package:skillzone/features/quiz/controllers/quiz_controller.dart';
+import 'package:skillzone/features/quiz/views/quiz_page.dart';
 import 'package:skillzone/features/search/views/search_page.dart';
 
 class AppPages {
@@ -82,6 +84,13 @@ class AppPages {
       name: AppRoutes.notifications,
       page: () => const NotificationsPage(),
       transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.quiz,
+      page: () => QuizPage(),
+      binding: BindingsBuilder(() {
+        Get.put(QuizController());
+      }),
     ),
   ];
 }

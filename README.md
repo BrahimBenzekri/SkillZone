@@ -35,7 +35,7 @@ Some features might be incomplete or subject to change as development progresses
 ![Profile Page Screenshot](screenshots/profile_screenshot.jpg)
 
 ### Points Section
-![Points Page Screenshot](screenshots/points_screenshot.jpg)
+![Points Page Screenshot](screenshots/points_and_level_screenshot.jpg)
 
 ### Search Section
 ![Search Page Screenshot](screenshots/search_screenshot.jpg)
