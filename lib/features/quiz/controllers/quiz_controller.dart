@@ -283,11 +283,9 @@ class QuizController extends GetxController {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (timeLeft.value > 0) {
         timeLeft.value--;
-        // Changed the formula to make progress decrease instead of increase
         progress.value = timeLeft.value / (currentQuiz.value?.timePerQuestion.inSeconds ?? 30);
       } else {
-        // nextQuestion();
-        timeLeft.value = 30;
+        nextQuestion();
       }
     });
   }
@@ -317,18 +315,7 @@ class QuizController extends GetxController {
 
   void finishQuiz() {
     _timer?.cancel();
-    // Calculate final score and percentage
-    final totalPoints = currentQuiz.value?.totalPoints ?? 0;
-    final percentage = (score.value / totalPoints) * 100;
-    
-    // Navigate to results page
-    Get.offNamed('/quiz-results', arguments: {
-      'score': score.value,
-      'totalPoints': totalPoints,
-      'percentage': percentage,
-      'answers': answers,
-      'quiz': currentQuiz.value,
-    });
+    Get.offNamed('/quiz-results');
   }
 
   Quiz? getQuizForCourse(String courseId) {

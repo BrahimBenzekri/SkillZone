@@ -15,6 +15,7 @@ import 'package:skillzone/features/points/views/points_page.dart';
 import 'package:skillzone/features/profile/views/profile_page.dart';
 import 'package:skillzone/features/quiz/controllers/quiz_controller.dart';
 import 'package:skillzone/features/quiz/views/quiz_page.dart';
+import 'package:skillzone/features/quiz/views/quiz_results_page.dart';
 import 'package:skillzone/features/search/views/search_page.dart';
 
 class AppPages {
@@ -91,6 +92,10 @@ class AppPages {
       binding: BindingsBuilder(() {
         Get.put(QuizController());
       }),
+    ),
+    GetPage(
+      name: AppRoutes.quizResults,
+      page: () => const QuizResultsPage(),
     ),
   ];
 }

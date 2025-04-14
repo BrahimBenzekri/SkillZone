@@ -10,7 +10,7 @@ class Course {
   final Duration duration;
   final CourseType type;
   final int? price; // null means free
-  final int? points; // points needed for hard skills or earned for soft skills
+  final int points; // points needed for hard skills or earned for soft skills
   final RxBool isLiked;
   final String thumbnail;
   final List<Lesson> lessons;
@@ -23,7 +23,7 @@ class Course {
     required this.duration,
     required this.type,
     this.price,
-    this.points,
+    required this.points,
     bool isLiked = false,
     required this.thumbnail,
     this.lessons = const [],
@@ -53,7 +53,7 @@ class Course {
   // Get price or points text
   String get accessText {
     if (type == CourseType.soft) {
-      return 'Free • Earn ${points ?? 0} points';
+      return 'Free • Earn $points points';
     } else {
       if (price != null) {
         return '\$${price.toString()}';

@@ -239,6 +239,7 @@ class CoursesController extends GetxController {
         duration: const Duration(hours: 10),
         type: CourseType.hard,
         price: 99,
+        points: 400,
         thumbnail: getRandomThumbnail(),
       ),
       Course(

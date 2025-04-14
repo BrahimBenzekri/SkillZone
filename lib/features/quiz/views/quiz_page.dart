@@ -194,29 +194,33 @@ class QuizPage extends StatelessWidget {
                         Obx(() {
                           final isButtonEnabled =
                               controller.selectedOptionIndex.value != -1;
-                          return SizedBox(
-                              width: MediaQueryHelper.getScreenWidth(context)*60/100,
-                              child: ElevatedButton(
-                                onPressed: isButtonEnabled
-                                    ? controller.nextQuestion
-                                    : controller.showWarningSnackbar,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: isButtonEnabled ? AppColors.secondaryColor : AppColors.textColorInactive,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                ),
-                                child: Text(
-                                  controller.isLastQuestion ? 'Finish' : 'Next Question',
-                                  style: const TextStyle(
-                                    color: AppColors.backgroundColor,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          return Container(
+                            width: MediaQueryHelper.getScreenWidth(context)*60/100,
+                            decoration: isButtonEnabled ? BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                            ) : null,
+                            child: ElevatedButton(
+                              onPressed: isButtonEnabled
+                                  ? controller.nextQuestion
+                                  : controller.showWarningSnackbar,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: isButtonEnabled ? AppColors.secondaryColor : AppColors.textColorInactive,
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50),
                                 ),
                               ),
-                            );}),
+                              child: Text(
+                                controller.isLastQuestion ? 'Finish' : 'Next Question',
+                                style: const TextStyle(
+                                  color: AppColors.backgroundColor,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
                       ],
                     ),
                   ),
