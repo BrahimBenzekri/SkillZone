@@ -1,6 +1,7 @@
 
 import 'package:get/get.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
+import 'package:skillzone/features/auth/views/email_verification_page.dart';
 import 'package:skillzone/features/auth/views/login_page.dart';
 import 'package:skillzone/features/auth/views/signup_page.dart';
 import 'package:skillzone/features/courses/views/course_details_page.dart';
@@ -24,27 +25,26 @@ class AppPages {
     GetPage(
       name: AppRoutes.onboarding,
       page: () => OnboardingScreen(),
-      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: AppRoutes.welcome,
       page: () => const WelcomePage(),
-      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: AppRoutes.login,
       page: () => LoginPage(),
-      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: AppRoutes.signup,
       page: () => SignupPage(),
-      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.emailVerification,
+      page: () => EmailVerificationPage(),
     ),
     GetPage(
       name: AppRoutes.interests,
       page: () => InterestsPage(),
-      transition: Transition.rightToLeft,
     ),
 
     // Main App Pages
@@ -74,17 +74,14 @@ class AppPages {
     GetPage(
       name: AppRoutes.courseDetails,
       page: () => CourseDetailsPage(),
-      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: AppRoutes.lessonVideo,
       page: () => const LessonVideoPage(),
-      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: AppRoutes.notifications,
       page: () => const NotificationsPage(),
-      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: AppRoutes.quiz,

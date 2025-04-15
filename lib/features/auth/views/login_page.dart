@@ -7,9 +7,11 @@ import 'package:skillzone/features/auth/controllers/auth_controller.dart';
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
-  final AuthController _authController = Get.put(AuthController());
+  // Use Get.put() with permanent: true
+  final AuthController _authController = Get.put(AuthController(), permanent: true);
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final RxBool _obscurePassword = true.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -127,9 +129,9 @@ class LoginPage extends StatelessWidget {
                             color: AppColors.textColorLight,
                             borderRadius: BorderRadius.circular(25),
                           ),
-                          child: TextField(
+                          child: Obx(() => TextField(
                             controller: _passwordController,
-                            obscureText: true,
+                            obscureText: _obscurePassword.value,
                             decoration: InputDecoration(
                               hintText: 'Enter your password',
                               hintStyle: TextStyle(
@@ -141,9 +143,18 @@ class LoginPage extends StatelessWidget {
                                 horizontal: 16,
                                 vertical: 16,
                               ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscurePassword.value 
+                                    ? Icons.visibility_off_rounded
+                                    : Icons.visibility_rounded,
+                                  color: AppColors.backgroundColor.withValues(alpha: 0.7),
+                                ),
+                                onPressed: () => _obscurePassword.value = !_obscurePassword.value,
+                              ),
                             ),
                             style: const TextStyle(color: AppColors.backgroundColor),
-                          ),
+                          )),
                         ),
                         const SizedBox(height: 10),
                         Obx(() {
@@ -166,7 +177,7 @@ class LoginPage extends StatelessWidget {
                           width: double.infinity,
                           child: Obx(() => ElevatedButton(
                                 onPressed: _authController.isLoading.value
-                                    ? null
+                                    ? (){}
                                     : () => _authController.login(
                                           _emailController.text,
                                           _passwordController.text,
@@ -224,54 +235,7 @@ class LoginPage extends StatelessWidget {
                           ),
                         ),
                       ],
-                    ),
-                    const SizedBox(height: 20),
-                    const Row(children: [
-                      Expanded(
-                        child: Divider(
-                          color: AppColors.textColorLight,
-                          thickness: 1.3,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        'OR',
-                        style: TextStyle(
-                          color: AppColors.textColorLight,
-                          fontSize: 20,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: Divider(
-                          color: AppColors.textColorLight,
-                          thickness: 1.3,
-                        ),
-                      ),
-                    ]),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: Image.asset('lib/assets/images/google_logo.png',
-                            height: 23),
-                        label: const Text(
-                          'Sign in with Google',
-                          style: TextStyle(
-                            color: AppColors.backgroundColor,
-                            fontSize: 20,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.textColorLight,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(28),
-                          ),
-                        ),
-                      ),
-                    ),
+                    ),                    
                   ],
                 ),
               ),

@@ -6,13 +6,14 @@ import 'package:skillzone/features/auth/controllers/auth_controller.dart';
 class SignupPage extends StatelessWidget {
   SignupPage({super.key});
 
-  final AuthController _authController = Get.put(AuthController());
+  // Use Get.put() with permanent: true
+  final AuthController _authController = Get.put(AuthController(), permanent: true);
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final RxBool _obscurePassword = true.obs;
+  final RxBool _obscurePassword = true.obs; 
 
   @override
   Widget build(BuildContext context) {
@@ -278,7 +279,7 @@ class SignupPage extends StatelessWidget {
                           width: double.infinity,
                           child: Obx(() => ElevatedButton(
                                 onPressed: _authController.isLoading.value
-                                    ? null
+                                    ? (){}
                                     : () => _authController.signup(
                                           firstName: _firstNameController.text,
                                           lastName: _lastNameController.text,
