@@ -28,7 +28,7 @@ class MainApp extends StatelessWidget {
           bodySmall: TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
-      initialRoute: AppRoutes.login,
+      initialRoute: AppRoutes.main,
       // onInit: () {
       //   // Initialize and start quiz for Flutter Advanced Concepts course
       //   final quizController = Get.put(QuizController());

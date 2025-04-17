@@ -7,7 +7,6 @@ import 'package:skillzone/core/config/env_config.dart';
 class AuthController extends GetxController {
   static const String accessTokenKey = 'access_token';
   static const String refreshTokenKey = 'refresh_token';
-  static const String userDataKey = 'user_data';
   
   final storage = GetStorage();
   final RxBool isLoading = false.obs;
@@ -36,9 +35,8 @@ class AuthController extends GetxController {
       isLoading.value = true;
       error.value = '';
       userEmail.value = email;
-
       final response = await GetConnect().post(
-        "EnvConfig.loginEndpoint",
+        EnvConfig.loginEndpoint,
         {
           'email': email,
           'password': password,
@@ -51,7 +49,6 @@ class AuthController extends GetxController {
           await _saveAuthData(
             accessToken: authData['access'],
             refreshToken: authData['refresh'],
-            userData: authData['user'],
           );
           Get.offAllNamed(AppRoutes.main);
         } else {
@@ -71,8 +68,8 @@ class AuthController extends GetxController {
   }
 
   Future<void> signup({
-    required String firstName,
-    required String lastName,
+    required String? firstName,
+    required String? lastName,
     required String username,
     required String email,
     required String password,
@@ -84,7 +81,6 @@ class AuthController extends GetxController {
 
       // Log the request payload
       log('Signup Request Body: {first_name: $firstName, last_name: $lastName, username: $username, email: $email, password: $password}');
-
       final response = await GetConnect().post(
         EnvConfig.registerEndpoint,
         {
@@ -103,18 +99,7 @@ class AuthController extends GetxController {
       log('Response Body: ${response.body}');
 
       if (response.statusCode == 201) {
-        final authData = _extractAuthData(response);
-        if (authData != null) {
-          await _saveAuthData(
-            accessToken: authData['access'],
-            refreshToken: authData['refresh'],
-            userData: authData['user'],
-          );
-          Get.offAllNamed(AppRoutes.emailVerification);
-        } else {
-          error.value = 'Invalid response format';
-          log('Signup Error: Invalid response format');
-        }
+        Get.offAllNamed(AppRoutes.emailVerification);
       } else {
         error.value = response.body['message'] ?? 'Signup failed';
         log('Signup Error: ${response.body}');
@@ -132,14 +117,17 @@ class AuthController extends GetxController {
       isLoading.value = true;
       error.value = '';
 
-      // TODO: Implement email verification API call
       final response = await GetConnect().post(
-        '${EnvConfig.apiUrl}/verify-email/',
+        EnvConfig.verifyEmail,
         {
           'email': userEmail.value,
           'code': code,
         },
       );
+
+      // Log complete response for debugging
+      log('Response Status: ${response.statusCode}');
+      log('Response Body: ${response.body}');
 
       if (response.statusCode == 200) {
         Get.offAllNamed(AppRoutes.interests);
@@ -184,12 +172,10 @@ class AuthController extends GetxController {
   Future<void> _saveAuthData({
     required String accessToken,
     required String refreshToken,
-    required Map<String, dynamic> userData,
   }) async {
     try {
       await storage.write(accessTokenKey, accessToken);
       await storage.write(refreshTokenKey, refreshToken);
-      await storage.write(userDataKey, userData);
       log('Auth data saved successfully');
     } catch (e) {
       log('Error saving auth data: $e');
@@ -201,13 +187,11 @@ class AuthController extends GetxController {
   Future<void> _clearAuthData() async {
     await storage.remove(accessTokenKey);
     await storage.remove(refreshTokenKey);
-    await storage.remove(userDataKey);
   }
 
   // Getter methods for stored data
   String? get accessToken => storage.read(accessTokenKey);
   String? get refreshToken => storage.read(refreshTokenKey);
-  Map<String, dynamic>? get userData => storage.read(userDataKey);
 
   // Update logout method to clear stored data
   Future<void> logout() async {

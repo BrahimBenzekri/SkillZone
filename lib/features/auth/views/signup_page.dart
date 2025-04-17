@@ -315,53 +315,6 @@ class SignupPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
-                    const Row(children: [
-                      Expanded(
-                        child: Divider(
-                          color: AppColors.textColorLight,
-                          thickness: 1.3,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        'OR',
-                        style: TextStyle(
-                          color: AppColors.textColorLight,
-                          fontSize: 20,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: Divider(
-                          color: AppColors.textColorLight,
-                          thickness: 1.3,
-                        ),
-                      ),
-                    ]),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: Image.asset('lib/assets/images/google_logo.png',
-                            height: 20),
-                        label: const Text(
-                          'Sign up with Google',
-                          style: TextStyle(
-                            color: AppColors.backgroundColor,
-                            fontSize: 18,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.textColorLight,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
