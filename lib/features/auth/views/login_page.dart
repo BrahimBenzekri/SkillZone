@@ -18,26 +18,9 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 30.0),
+        padding: const EdgeInsets.symmetric(vertical: 60.0),
         child: Column(
           children: [
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    color: AppColors.textColorLight,
-                    size: 25,
-                  ),
-                  onPressed: () => Get.back(),
-                ),
-                const Expanded(
-                  child: SizedBox(
-                    width: 100,
-                  ),
-                )
-              ],
-            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -156,22 +139,6 @@ class LoginPage extends StatelessWidget {
                             style: const TextStyle(color: AppColors.backgroundColor),
                           )),
                         ),
-                        const SizedBox(height: 10),
-                        Obx(() {
-                          if (_authController.error.isNotEmpty) {
-                            return Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                _authController.error.value,
-                                style: const TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            );
-                          }
-                          return const SizedBox.shrink();
-                        }),
                         const SizedBox(height: 30),
                         SizedBox(
                           width: double.infinity,

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:skillzone/core/routes/app_pages.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/features/auth/controllers/auth_controller.dart';
 
 Future<void> main() async {
@@ -17,7 +18,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Initialize AuthController permanently at app startup
-    final authController = Get.put(AuthController(), permanent: true);
+    Get.put(AuthController(), permanent: true);
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
@@ -31,7 +32,7 @@ class MainApp extends StatelessWidget {
           bodySmall: TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
-      initialRoute: authController.initialRoute,
+      initialRoute: AppRoutes.splash,
       getPages: AppPages.pages,
     );
   }

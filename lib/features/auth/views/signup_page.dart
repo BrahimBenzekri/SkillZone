@@ -258,22 +258,6 @@ class SignupPage extends StatelessWidget {
                             style: const TextStyle(color: AppColors.backgroundColor),
                           )),
                         ),
-                        const SizedBox(height: 10),
-                        Obx(() {
-                          if (_authController.error.isNotEmpty) {
-                            return Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                _authController.error.value,
-                                style: const TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            );
-                          }
-                          return const SizedBox.shrink();
-                        }),
                         const SizedBox(height: 30),
                         SizedBox(
                           width: double.infinity,

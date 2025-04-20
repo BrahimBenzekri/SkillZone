@@ -16,18 +16,88 @@ class AuthController extends GetxController {
   final RxBool isLoggingOut = false.obs;
   final RxString logoutError = ''.obs;
 
-  String? get initialRoute {
-    final accessToken = storage.read<String>(accessTokenKey);
-    final isFirstLaunch = storage.read<bool>('isFirstLaunch') ?? true;
+  Future<String> determineInitialRoute() async {
+    try {
+      final isFirstLaunch = storage.read<bool>('isFirstLaunch') ?? true;
 
-    if (isFirstLaunch) {
-      storage.write('isFirstLaunch', false);
-      return AppRoutes.welcome;
+      if (isFirstLaunch) {
+        await storage.write('isFirstLaunch', false);
+        log("First launch detected");
+        return AppRoutes.welcome;
+      }
+
+      // If no tokens exist, go to login
+      if (accessToken == null || refreshToken == null) {
+        log("No tokens found, navigating to login");
+        return AppRoutes.login;
+      }
+
+      // Try to refresh the tokens
+      final isValid = await _refreshTokens();
+      if (isValid) {
+        return AppRoutes.main;
+      } else {
+        log("Tokens are invalid, clearing and navigating to login");
+        await _clearAuthData();
+        return AppRoutes.login;
+      }
+    } catch (e) {
+      log('Error in determineInitialRoute: $e');
+      await _clearAuthData();
+      return AppRoutes.login;
     }
-    if (accessToken != null) {
-      return AppRoutes.main;
+  }
+
+  Future<bool> _refreshTokens() async {
+    try {
+      log('Starting token refresh process...');
+      
+      final refreshToken = storage.read<String>(refreshTokenKey);
+      if (refreshToken == null) {
+        log('Refresh token not found in storage');
+        return false;
+      }
+      log('Found refresh token: $refreshToken');
+
+      final response = await GetConnect().post(
+        EnvConfig.refreshToken,
+        {
+          'refresh': refreshToken
+        },
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      log('Refresh token response status: ${response.statusCode}');
+      log('Refresh token response body: ${response.body}');
+
+      if (response.statusCode == 200 && response.body != null) {
+        final newAccessToken = response.body['access'];
+        final newRefreshToken = response.body['refresh'];
+        
+        log('New tokens received - Access: $newAccessToken, Refresh: $newRefreshToken');
+        
+        if (newAccessToken != null && newRefreshToken != null) {
+          await _saveAuthData(
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken,
+          );
+          log('Successfully saved new tokens to storage');
+          return true;
+        } else {
+          log('Error: Received null tokens in response');
+        }
+      } else {
+        log('Error: Invalid response status code or empty body');
+      }
+      
+      return false;
+    } catch (e) {
+      log('Error refreshing tokens: $e');
+      log('Stack trace: ${StackTrace.current}');
+      return false;
     }
-    return AppRoutes.login;
   }
 
   Map<String, dynamic>? _extractAuthData(Response response) {
@@ -37,7 +107,6 @@ class AuthController extends GetxController {
         return {
           'access': data['access'],
           'refresh': data['refresh'],
-          'user': data['user'],
         };
       }
       return null;
@@ -67,6 +136,8 @@ class AuthController extends GetxController {
             accessToken: authData['access'],
             refreshToken: authData['refresh'],
           );
+          log(accessToken!);
+          log(refreshToken!);
           Get.offAllNamed(AppRoutes.main);
         } else {
           throw 'Invalid response format';

@@ -18,9 +18,14 @@ import 'package:skillzone/features/quiz/controllers/quiz_controller.dart';
 import 'package:skillzone/features/quiz/views/quiz_page.dart';
 import 'package:skillzone/features/quiz/views/quiz_results_page.dart';
 import 'package:skillzone/features/search/views/search_page.dart';
+import 'package:skillzone/features/splash/views/splash_screen.dart';
 
 class AppPages {
   static final List<GetPage> pages = [
+    GetPage(
+      name: AppRoutes.splash,
+      page: () => const SplashScreen(),
+    ),
     // Auth Pages
     GetPage(
       name: AppRoutes.onboarding,

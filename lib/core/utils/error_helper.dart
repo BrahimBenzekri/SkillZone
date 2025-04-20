@@ -16,7 +16,7 @@ class ErrorHelper {
       message,
       backgroundColor: AppColors.errorColor,
       colorText: AppColors.backgroundColor,
-      duration: duration ?? const Duration(seconds: 3),
+      duration: duration ?? const Duration(seconds: 7),
       snackPosition: position ?? SnackPosition.TOP,
       margin: const EdgeInsets.all(10),
       borderRadius: 10,
