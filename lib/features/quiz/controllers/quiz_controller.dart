@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import 'package:skillzone/core/theme/app_colors.dart';
 import 'dart:async';
 import '../models/quiz.dart';
 import '../models/quiz_question.dart';
+import 'package:skillzone/core/utils/error_helper.dart';
 
 class QuizController extends GetxController {
   static final Map<String, Quiz> _quizzes = {
@@ -323,11 +323,8 @@ class QuizController extends GetxController {
   }
 
   void showWarningSnackbar() {
-    Get.snackbar(
-      "Selection Required",
-      "Please select an option.",
-      backgroundColor: AppColors.errorColor,
-      colorText: AppColors.backgroundColor,
+    ErrorHelper.showValidationError(
+      message: "Please select an option.",
     );
   }
 }

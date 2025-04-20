@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/interests/models/interest.dart';
+import 'package:skillzone/core/utils/error_helper.dart';
 
 class InterestController extends GetxController {
   var hardSkills = <Interest>[
@@ -35,12 +35,8 @@ class InterestController extends GetxController {
       softSkills.any((skill) => skill.isSelected.value);
 
   void showWarningSnackbar() {
-    Get.snackbar(
-      "Selection Required",
-      "Please select at least one hard skill and one soft skill.",
-      // snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: AppColors.primaryColor,
-      colorText: AppColors.backgroundColor,
+    ErrorHelper.showValidationError(
+      message: "Please select at least one hard skill and one soft skill.",
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/config/env_config.dart';
+import 'package:skillzone/core/utils/error_helper.dart';
 
 class AuthController extends GetxController {
   static const String accessTokenKey = 'access_token';
@@ -12,6 +13,8 @@ class AuthController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxString error = ''.obs;
   final RxString userEmail = ''.obs;
+  final RxBool isLoggingOut = false.obs;
+  final RxString logoutError = ''.obs;
 
   String? get initialRoute {
     final accessToken = storage.read<String>(accessTokenKey);
@@ -22,18 +25,9 @@ class AuthController extends GetxController {
       return AppRoutes.welcome;
     }
     if (accessToken != null) {
-      log("Access Token found: $accessToken");
       return AppRoutes.main;
     }
     return AppRoutes.login;
-  }
-
-  // Remove or modify checkAuthStatus since we'll use initialRoute instead
-  Future<void> checkAuthStatus() async {
-    final accessToken = storage.read<String>(accessTokenKey);
-    if (accessToken == null) {
-      Get.offAllNamed(AppRoutes.login);
-    }
   }
 
   Map<String, dynamic>? _extractAuthData(Response response) {
@@ -75,16 +69,17 @@ class AuthController extends GetxController {
           );
           Get.offAllNamed(AppRoutes.main);
         } else {
-          error.value = 'Invalid response format';
-          log('Login Error: Invalid response format');
+          throw 'Invalid response format';
         }
       } else {
-        error.value = response.body['message'] ?? 'Login failed';
-        log('Login Error: ${response.body}');
+        throw response.body['message'] ?? 'Login failed';
       }
     } catch (e) {
-      error.value = 'Connection error, please wait while the srever starts!';
-      log('Login Exception: $e');
+      error.value = e.toString();
+      ErrorHelper.showAuthError(
+        message: e.toString(),
+        onRetry: () => login(email, password),
+      );
     } finally {
       isLoading.value = false;
     }
@@ -219,11 +214,36 @@ class AuthController extends GetxController {
   // Update logout method to clear stored data
   Future<void> logout() async {
     try {
-      await _clearAuthData();
-      Get.delete<AuthController>();
-      Get.offAllNamed(AppRoutes.login);
+      if (refreshToken == null) {
+        throw 'No refresh token found';
+      }
+
+      final response = await GetConnect().post(
+        EnvConfig.logout,
+        {
+          'refresh_token': refreshToken
+        },
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
+      
+      log("Logout response: ${response.body}");
+
+      if (response.body["success"]) {
+        await _clearAuthData();
+        log("Cleared the tokens from storage");
+        Get.delete<AuthController>();
+        Get.offAllNamed(AppRoutes.login);
+      } else {
+        throw response.body["message"] ?? 'Logout failed';
+      }
     } catch (e) {
-      log('Logout Exception: $e');
+      ErrorHelper.showAuthError(
+        message: 'Failed to logout. Please try again.',
+        onRetry: logout,
+      );
     }
   }
 }
