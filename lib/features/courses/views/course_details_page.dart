@@ -29,15 +29,31 @@ class CourseDetailsPage extends StatelessWidget {
         }
             
         if (controller.hasError.value) {
-          return Center(
-              child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Text(
-              controller.errorMessage.value,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.errorColor, fontSize: 18),
+          return Scaffold(
+            backgroundColor: AppColors.backgroundColor,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: AppColors.textColorLight,
+                  size: 24,
+                ),
+                onPressed: () => Get.back(),
+              ),
             ),
-          ));
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Text(
+                  controller.errorMessage.value,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: AppColors.errorColor, fontSize: 18),
+                ),
+              ),
+            ),
+          );
         }
             
         final course = controller.course.value;

@@ -7,4 +7,5 @@ class EnvConfig {
   static String get loginEndpoint => '$apiUrl/login/';
   static String get registerEndpoint => '$apiUrl/register/';
   static String get verifyEmail => '$apiUrl/verify-email/';
+  static String get logout => '$apiUrl/logout/';
 }

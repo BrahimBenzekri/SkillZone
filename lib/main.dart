@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:skillzone/core/routes/app_pages.dart';
-import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:skillzone/features/auth/controllers/auth_controller.dart';
 
 Future<void> main() async {
   await GetStorage.init();
@@ -16,6 +16,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Initialize AuthController permanently at app startup
+    final authController = Get.put(AuthController(), permanent: true);
+
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -28,12 +31,7 @@ class MainApp extends StatelessWidget {
           bodySmall: TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
-      initialRoute: AppRoutes.main,
-      // onInit: () {
-      //   // Initialize and start quiz for Flutter Advanced Concepts course
-      //   final quizController = Get.put(QuizController());
-      //   quizController.startQuiz('h1');
-      // },
+      initialRoute: authController.initialRoute,
       getPages: AppPages.pages,
     );
   }

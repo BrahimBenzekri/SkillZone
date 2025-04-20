@@ -21,7 +21,8 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
           actions: const [
-            NotificationIcon(isThereNotification: true)
+            NotificationIcon(isThereNotification: true),
+            SizedBox(width: 12,)
           ],
         ),
         body: Padding(
@@ -67,10 +68,8 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(
                   height: 50,
                 ),
-                const ProfileOptionCard(text: "Edit Profile"),
-                const ProfileOptionCard(text: "My Points"),
-                const ProfileOptionCard(text: "Payments"),
-                const ProfileOptionCard(text: "Content"),
+                const ProfileOptionCard(text: "Edit Avatar"),
+                const ProfileOptionCard(text: "Card Information"),
                 const ProfileOptionCard(text: "About the app"),
                 const SizedBox(
                   height: 60,

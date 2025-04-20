@@ -13,9 +13,32 @@ class AuthController extends GetxController {
   final RxString error = ''.obs;
   final RxString userEmail = ''.obs;
 
+  String? get initialRoute {
+    final accessToken = storage.read<String>(accessTokenKey);
+    final isFirstLaunch = storage.read<bool>('isFirstLaunch') ?? true;
+
+    if (isFirstLaunch) {
+      storage.write('isFirstLaunch', false);
+      return AppRoutes.welcome;
+    }
+    if (accessToken != null) {
+      log("Access Token found: $accessToken");
+      return AppRoutes.main;
+    }
+    return AppRoutes.login;
+  }
+
+  // Remove or modify checkAuthStatus since we'll use initialRoute instead
+  Future<void> checkAuthStatus() async {
+    final accessToken = storage.read<String>(accessTokenKey);
+    if (accessToken == null) {
+      Get.offAllNamed(AppRoutes.login);
+    }
+  }
+
   Map<String, dynamic>? _extractAuthData(Response response) {
     try {
-      if (response.body['success'] == true) {
+      if (response.body['status'] == true) {
         final data = response.body['data'];
         return {
           'access': data['access'],
@@ -60,7 +83,7 @@ class AuthController extends GetxController {
         log('Login Error: ${response.body}');
       }
     } catch (e) {
-      error.value = 'Connection error';
+      error.value = 'Connection error, please wait while the srever starts!';
       log('Login Exception: $e');
     } finally {
       isLoading.value = false;
@@ -105,7 +128,7 @@ class AuthController extends GetxController {
         log('Signup Error: ${response.body}');
       }
     } catch (e) {
-      error.value = 'Connection error';
+      error.value = 'Connection error, please wait while the srever starts!';
       log('Signup Exception: $e');
     } finally {
       isLoading.value = false;
