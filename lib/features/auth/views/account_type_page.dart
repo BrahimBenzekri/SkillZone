@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/auth/controllers/auth_controller.dart';
 import 'package:skillzone/features/auth/models/user_type.dart';
@@ -22,52 +21,67 @@ class AccountTypePage extends GetView<AuthController> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 35.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text.rich(
-                  TextSpan(
-                    text: 'Join ',
-                    style: const TextStyle(
-                      color: AppColors.textColorLight,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: 'SkillZone',
-                        style: TextStyle(
-                          foreground: Paint()
-                            ..shader = const LinearGradient(
-                              colors: [
-                                AppColors.primaryColor,
-                                AppColors.secondaryColor,
-                              ],
-                            ).createShader(
-                              const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),
-                            ),
-                        ),
-                      ),
-                      const TextSpan(text: ' as'),
-                    ],
+                IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    color: AppColors.textColorLight,
+                    size: 25,
                   ),
+                  onPressed: () => Get.back(),
                 ),
-                const SizedBox(height: 30),
-                _buildTypeCard(
-                  title: 'Student',
-                  description: 'Access courses, take quizzes, and earn points',
-                  icon: Icons.school,
-                  onTap: () => _selectType(UserType.student),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text.rich(
+                      TextSpan(
+                        text: 'Join ',
+                        style: const TextStyle(
+                          color: AppColors.textColorLight,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: 'SkillZone',
+                            style: TextStyle(
+                              foreground: Paint()
+                                ..shader = const LinearGradient(
+                                  colors: [
+                                    AppColors.primaryColor,
+                                    AppColors.secondaryColor,
+                                  ],
+                                ).createShader(
+                                  const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),
+                                ),
+                            ),
+                          ),
+                          const TextSpan(text: ' as'),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    _buildTypeCard(
+                      title: 'Student',
+                      description: 'Access courses, take quizzes, and earn points',
+                      icon: Icons.school,
+                      onTap: () => _selectType(UserType.student),
+                    ),
+                    const SizedBox(height: 20),
+                    _buildTypeCard(
+                      title: 'Teacher',
+                      description: 'Create courses, manage content, and teach others',
+                      icon: Icons.person_outline,
+                      isTeacher: true,
+                      onTap: () => _selectType(UserType.teacher),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 20),
-                _buildTypeCard(
-                  title: 'Teacher',
-                  description: 'Create courses, manage content, and teach others',
-                  icon: Icons.person_outline,
-                  isTeacher: true,
-                  onTap: () => _selectType(UserType.teacher),
-                ),
               ],
             ),
           ),
@@ -163,7 +177,14 @@ class AccountTypePage extends GetView<AuthController> {
   }
 
   void _selectType(UserType type) {
-    controller.updateUserType(type);
-    Get.toNamed(AppRoutes.interests);
+    final signupData = controller.tempSignupData.value;
+    controller.signup(
+      firstName: signupData['firstName'],
+      lastName: signupData['lastName'],
+      username: signupData['username'] ?? "",
+      email: signupData['email'] ?? "",
+      password: signupData['password'] ?? "",
+      userType: type,
+    );
   }
 }

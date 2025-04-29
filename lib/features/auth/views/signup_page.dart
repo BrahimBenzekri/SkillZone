@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/auth/controllers/auth_controller.dart';
-
-import '../widgets/account_type_widget.dart';
 
 class SignupPage extends StatelessWidget {
   SignupPage({super.key});
@@ -265,19 +264,18 @@ class SignupPage extends StatelessWidget {
                           width: double.infinity,
                           child: Obx(() => ElevatedButton(
                                 onPressed: _authController.isLoading.value
-                                    ? (){}
-                                    : () => showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AccountTypeWidget(
-                                              firstName: _firstNameController.text,
-                                              lastName: _lastNameController.text,
-                                              username: _usernameController.text,
-                                              email: _emailController.text,
-                                              password: _passwordController.text,
-                                            );
-                                          },
-                                        ),
+                                    ? null
+                                    : () {
+                                        // Store the user data in the controller for later use
+                                        _authController.tempSignupData.value = {
+                                          'firstName': _firstNameController.text,
+                                          'lastName': _lastNameController.text,
+                                          'username': _usernameController.text,
+                                          'email': _emailController.text,
+                                          'password': _passwordController.text,
+                                        };
+                                        Get.toNamed(AppRoutes.accountType);
+                                      },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primaryColor,
                                   padding:

@@ -19,6 +19,13 @@ class AuthController extends GetxController {
   final Rx<UserType?> userType = Rx<UserType?>(null);
   final RxBool isLoggingOut = false.obs;
   final RxString logoutError = ''.obs;
+  final Rx<Map<String, String>> tempSignupData = Rx<Map<String, String>>({
+    'firstName': '',
+    'lastName': '',
+    'username': '',
+    'email': '',
+    'password': '',
+  });
 
   @override
   void onInit() {
@@ -224,7 +231,7 @@ class AuthController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        Get.offAllNamed(AppRoutes.accountType);
+        Get.offAllNamed(AppRoutes.interests);
       } else {
         error.value = response.body['message'] ?? 'Verification failed';
         log('Verification Error: ${response.body}');
@@ -242,7 +249,6 @@ class AuthController extends GetxController {
       isLoading.value = true;
       error.value = '';
 
-      // TODO: Implement resend verification code API call
       final response = await GetConnect().post(
         '${EnvConfig.apiUrl}/resend-verification/',
         {
