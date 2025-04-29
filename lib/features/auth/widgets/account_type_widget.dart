@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
+import 'package:skillzone/features/auth/controllers/auth_controller.dart';
+import 'package:skillzone/features/auth/models/user_type.dart';
 
-void showAccountTypeDialog() {
-  Get.dialog(
-    Dialog(
-      shape: RoundedRectangleBorder(
+class AccountTypeWidget extends StatelessWidget {
+  final String email;
+  final String password;
+  final String username;
+  final String? firstName;
+  final String? lastName;
+
+  const AccountTypeWidget({
+    required this.email,
+    required this.password,
+    required this.username,
+    this.firstName,
+    this.lastName,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final AuthController authController = Get.find<AuthController>();
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.textColorLight,
         borderRadius: BorderRadius.circular(20),
       ),
-      backgroundColor: AppColors.textColorLight,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
         child: Column(
@@ -17,18 +36,21 @@ void showAccountTypeDialog() {
           children: [
             const Text(
               'Join us as',
-              style: TextStyle(
-                fontSize: 25,
-              ),
+              style: TextStyle(fontSize: 25),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 25),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  Get.toNamed(AppRoutes.interests);
-                },
+                onPressed: () => authController.signup(
+                  firstName: firstName,
+                  lastName: lastName,
+                  username: username,
+                  email: email,
+                  password: password,
+                  userType: UserType.student,
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryColor,
                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -38,8 +60,10 @@ void showAccountTypeDialog() {
                 ),
                 child: const Text(
                   'Student',
-                  style:
-                      TextStyle(fontSize: 20, color: AppColors.backgroundColor),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: AppColors.backgroundColor,
+                  ),
                 ),
               ),
             ),
@@ -47,9 +71,14 @@ void showAccountTypeDialog() {
             SizedBox(
               width: double.infinity,
               child: OutlinedButton(
-                onPressed: () {
-                  // Handle Teacher button press
-                },
+                onPressed: () => authController.signup(
+                  firstName: firstName,
+                  lastName: lastName,
+                  username: username,
+                  email: email,
+                  password: password,
+                  userType: UserType.teacher,
+                ),
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: AppColors.backgroundColor),
                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -59,14 +88,16 @@ void showAccountTypeDialog() {
                 ),
                 child: const Text(
                   'Teacher',
-                  style:
-                      TextStyle(fontSize: 20, color: AppColors.backgroundColor),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: AppColors.backgroundColor,
+                  ),
                 ),
               ),
             ),
           ],
         ),
       ),
-    ),
-  );
+    );
+  }
 }

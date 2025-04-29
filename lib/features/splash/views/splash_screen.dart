@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/auth/controllers/auth_controller.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -33,8 +34,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
+      body: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
   }

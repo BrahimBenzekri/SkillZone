@@ -6,6 +6,8 @@ class AppRoutes {
   static const String welcome = '/welcome';
   static const String login = '/login';
   static const String signup = '/signup';
+  static const String emailVerification = '/email-verification';
+  static const String accountType = '/account-type';
   static const String interests = '/interests';
   
   // Main App Routes
@@ -21,6 +23,5 @@ class AppRoutes {
   static const String notifications = '/notifications';
   static const String quiz = '/quiz';
   static const String quizResults = '/quiz-results';
-  static const String emailVerification = '/email-verification';
 }
 

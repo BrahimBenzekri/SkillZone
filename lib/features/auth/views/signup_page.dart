@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/auth/controllers/auth_controller.dart';
 
+import '../widgets/account_type_widget.dart';
+
 class SignupPage extends StatelessWidget {
   SignupPage({super.key});
 
@@ -264,12 +266,17 @@ class SignupPage extends StatelessWidget {
                           child: Obx(() => ElevatedButton(
                                 onPressed: _authController.isLoading.value
                                     ? (){}
-                                    : () => _authController.signup(
-                                          firstName: _firstNameController.text,
-                                          lastName: _lastNameController.text,
-                                          username: _usernameController.text,
-                                          email: _emailController.text,
-                                          password: _passwordController.text,
+                                    : () => showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AccountTypeWidget(
+                                              firstName: _firstNameController.text,
+                                              lastName: _lastNameController.text,
+                                              username: _usernameController.text,
+                                              email: _emailController.text,
+                                              password: _passwordController.text,
+                                            );
+                                          },
                                         ),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primaryColor,

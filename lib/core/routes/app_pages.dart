@@ -1,6 +1,7 @@
 
 import 'package:get/get.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
+import 'package:skillzone/features/auth/views/account_type_page.dart';
 import 'package:skillzone/features/auth/views/email_verification_page.dart';
 import 'package:skillzone/features/auth/views/login_page.dart';
 import 'package:skillzone/features/auth/views/signup_page.dart';
@@ -50,6 +51,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.interests,
       page: () => InterestsPage(),
+    ),
+    GetPage(
+      name: AppRoutes.accountType,
+      page: () => const AccountTypePage(),
     ),
 
     // Main App Pages
