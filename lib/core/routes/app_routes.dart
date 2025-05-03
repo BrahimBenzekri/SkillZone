@@ -23,5 +23,6 @@ class AppRoutes {
   static const String notifications = '/notifications';
   static const String quiz = '/quiz';
   static const String quizResults = '/quiz-results';
+  static const String uploadCourse = '/upload-course';
 }
 

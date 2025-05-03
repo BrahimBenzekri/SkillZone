@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:get/get.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
+import 'package:skillzone/core/utils/error_helper.dart';
 import '../models/course.dart';
 import '../models/course_type.dart';
+import '../models/lesson.dart';
 
 class CoursesController extends GetxController {
   // Observable lists for both course types
@@ -129,13 +131,13 @@ class CoursesController extends GetxController {
       .where((course) => course.isLiked.value)
       .toList();
 
-  // Private method to load dummy data
-  void _loadDummyData() {
     // Helper function to get random thumbnail
     String getRandomThumbnail() {
       return courseThumbnails[
           DateTime.now().microsecond % courseThumbnails.length];
     }
+  // Private method to load dummy data
+  void _loadDummyData() {
 
     softSkillsCourses.assignAll([
       Course(
@@ -315,5 +317,65 @@ class CoursesController extends GetxController {
         thumbnail: getRandomThumbnail(),
       ),
     ]);
+  }
+
+  Future<void> uploadCourse({
+    required String title,
+    required String description,
+    required Duration duration,
+    int? price,
+    required int points,
+    CourseType type = CourseType.hard,
+    List<Lesson> lessons = const [],
+  }) async {
+    try {
+      isLoading.value = true;
+      
+      if (type == CourseType.hard) {
+        hardSkillsCourses.add(
+          Course(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            title: title,
+            description: description,
+            rating: 0.0,
+            duration: duration,
+            type: type,
+            price: price,
+            points: points,
+            lessons: lessons,
+            thumbnail: getRandomThumbnail()
+          ),
+        );
+      } else {
+        softSkillsCourses.add(
+          Course(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            title: title,
+            description: description,
+            rating: 0.0,
+            duration: duration,
+            type: type,
+            points: points,
+            lessons: lessons,
+            thumbnail: getRandomThumbnail()
+          ),
+        );
+      }
+      
+      Get.back();
+      Get.snackbar(
+        'Success',
+        'Course uploaded successfully',
+        backgroundColor: AppColors.primaryColor,
+        colorText: AppColors.backgroundColor,
+      );
+    } catch (e) {
+      ErrorHelper.showError(
+        title: 'Error',
+        message: 'Failed to upload course: $e',
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

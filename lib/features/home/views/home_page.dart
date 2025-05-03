@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/courses/controllers/courses_controller.dart';
 import 'package:skillzone/widgets/notification_icon.dart';
@@ -65,35 +66,73 @@ class HomePage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Points Display
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'lib/assets/images/rocket.png',
-                          height: 18,
-                          width: 18,
+                  // Points and Upload Course Row
+                  Row(
+                    children: [
+                      // Points Display
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
                         ),
-                        const SizedBox(width: 8),
-                        const Text(
-                          '450 Pts',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColor,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'lib/assets/images/rocket.png',
+                              height: 18,
+                              width: 18,
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              '450 Pts',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      // Upload Course Button
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColor.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: InkWell(
+                          onTap: () => Get.toNamed(AppRoutes.uploadCourse),
+                          child: const Row(
+                            children: [
+                              Icon(
+                                Icons.add_circle_outline_rounded,
+                                color: AppColors.primaryColor,
+                                size: 18,
+                              ),
+                              SizedBox(width: 6),
+                              Text(
+                                'Upload Course',
+                                style: TextStyle(
+                                  color: AppColors.primaryColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   // Profile and Notification
                   Row(

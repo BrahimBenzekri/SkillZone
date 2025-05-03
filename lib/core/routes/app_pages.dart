@@ -7,6 +7,7 @@ import 'package:skillzone/features/auth/views/login_page.dart';
 import 'package:skillzone/features/auth/views/signup_page.dart';
 import 'package:skillzone/features/courses/views/course_details_page.dart';
 import 'package:skillzone/features/courses/views/lesson_video_page.dart';
+import 'package:skillzone/features/courses/views/upload_course_page.dart';
 import 'package:skillzone/features/home/views/home_page.dart';
 import 'package:skillzone/features/interests/views/intrests_page.dart';
 import 'package:skillzone/features/navigation/views/main_screen.dart';
@@ -103,6 +104,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.quizResults,
       page: () => const QuizResultsPage(),
+    ),
+    GetPage(
+      name: AppRoutes.uploadCourse,
+      page: () => const UploadCoursePage(),
     ),
   ];
 }
