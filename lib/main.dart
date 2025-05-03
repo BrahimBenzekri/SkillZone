@@ -32,7 +32,7 @@ class MainApp extends StatelessWidget {
           bodySmall: TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
-      initialRoute: AppRoutes.uploadCourse,
+      initialRoute: AppRoutes.main,
       getPages: AppPages.pages,
     );
   }

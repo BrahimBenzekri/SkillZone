@@ -7,6 +7,7 @@ import 'package:skillzone/features/auth/views/login_page.dart';
 import 'package:skillzone/features/auth/views/signup_page.dart';
 import 'package:skillzone/features/courses/views/course_details_page.dart';
 import 'package:skillzone/features/courses/views/lesson_video_page.dart';
+import 'package:skillzone/features/courses/views/teacher_courses_page.dart';
 import 'package:skillzone/features/courses/views/upload_course_page.dart';
 import 'package:skillzone/features/home/views/home_page.dart';
 import 'package:skillzone/features/interests/views/intrests_page.dart';
@@ -79,6 +80,12 @@ class AppPages {
     GetPage(
       name: AppRoutes.profile,
       page: () => const ProfilePage(),
+    ),
+
+    // Profile Pages
+    GetPage(
+      name: AppRoutes.teacherCourses,
+      page: () => const TeacherCoursesPage()
     ),
 
     // Course Pages

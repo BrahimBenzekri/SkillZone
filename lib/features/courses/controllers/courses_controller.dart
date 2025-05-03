@@ -14,6 +14,9 @@ class CoursesController extends GetxController {
 
   // Add new observable for popular courses
   final _popularCourses = <Course>[].obs;
+  
+  // Add new observable for teacher's uploaded courses
+  final _teacherCourses = <Course>[].obs;
 
   // Add workers as class properties
   late Worker _softSkillsWorker;
@@ -24,30 +27,22 @@ class CoursesController extends GetxController {
   final hasError = false.obs;
   final errorMessage = ''.obs;
 
-  // Course colors for each section
+  // Section colors for UI
   final Map<String, List<Color>> sectionColors = {
     'popular': [
-      AppColors.courseColor1,
-      AppColors.courseColor3,
-      AppColors.courseColor5,
-      AppColors.courseColor2,
-      AppColors.courseColor4,
+      const Color(0xFF6C5CE7),
+      const Color(0xFFa29bfe),
+      const Color(0xFF81ecec),
     ],
     'hard': [
-      AppColors.courseColor2,
-      AppColors.courseColor4,
-      AppColors.courseColor6,
-      AppColors.courseColor1,
-      AppColors.courseColor3,
-      AppColors.courseColor5,
+      const Color(0xFFe17055),
+      const Color(0xFFfdcb6e),
+      const Color(0xFFffeaa7),
     ],
     'soft': [
-      AppColors.courseColor6,
-      AppColors.courseColor5,
-      AppColors.courseColor1,
-      AppColors.courseColor4,
-      AppColors.courseColor2,
-      AppColors.courseColor3,
+      const Color(0xFF00cec9),
+      const Color(0xFF55efc4),
+      const Color(0xFF81ecec),
     ],
   };
 
@@ -86,6 +81,9 @@ class CoursesController extends GetxController {
 
   // Get popular courses (most rated courses from both categories)
   List<Course> get popularCourses => _popularCourses;
+  
+  // Get teacher's uploaded courses
+  List<Course> get teacherCourses => _teacherCourses;
 
   // Add method to update popular courses
   void _updatePopularCourses() {
@@ -131,14 +129,14 @@ class CoursesController extends GetxController {
       .where((course) => course.isLiked.value)
       .toList();
 
-    // Helper function to get random thumbnail
-    String getRandomThumbnail() {
-      return courseThumbnails[
-          DateTime.now().microsecond % courseThumbnails.length];
-    }
+  // Helper function to get random thumbnail
+  String getRandomThumbnail() {
+    return courseThumbnails[
+        DateTime.now().microsecond % courseThumbnails.length];
+  }
+
   // Private method to load dummy data
   void _loadDummyData() {
-
     softSkillsCourses.assignAll([
       Course(
         id: 's1',
@@ -317,6 +315,63 @@ class CoursesController extends GetxController {
         thumbnail: getRandomThumbnail(),
       ),
     ]);
+
+    // Add some dummy teacher courses
+    _teacherCourses.assignAll([
+      Course(
+        id: 't1',
+        title: 'Introduction to Flutter',
+        description: 'Learn the basics of Flutter development and build your first app.',
+        rating: 4.2,
+        duration: const Duration(hours: 5, minutes: 30),
+        type: CourseType.hard,
+        price: 79,
+        points: 300,
+        thumbnail: getRandomThumbnail(),
+        lessons: [
+          Lesson(
+            id: 'l1',
+            title: 'Getting Started with Flutter',
+            number: 1,
+            duration: const Duration(minutes: 45),
+            videoUrl: 'https://example.com/videos/flutter-intro',
+          ),
+          Lesson(
+            id: 'l2',
+            title: 'Building Your First Widget',
+            number: 2,
+            duration: const Duration(minutes: 60),
+            videoUrl: 'https://example.com/videos/flutter-widgets',
+          ),
+        ],
+      ),
+      Course(
+        id: 't2',
+        title: 'Effective Team Communication',
+        description: 'Master the art of communication within teams for better collaboration.',
+        rating: 4.8,
+        duration: const Duration(hours: 3, minutes: 15),
+        type: CourseType.soft,
+        points: 150,
+        thumbnail: getRandomThumbnail(),
+        lessons: [
+          Lesson(
+            id: 'l1',
+            title: 'Understanding Communication Styles',
+            number: 1,
+            duration: const Duration(minutes: 30),
+            videoUrl: 'https://example.com/videos/comm-styles',
+          ),
+          Lesson(
+            id: 'l2',
+            title: 'Active Listening Techniques',
+            number: 2,
+            duration: const Duration(minutes: 45),
+            videoUrl: 'https://example.com/videos/active-listening',
+          ),
+        ],
+      ),
+    ]);
   }
 
   Future<void> uploadCourse({
@@ -331,36 +386,29 @@ class CoursesController extends GetxController {
     try {
       isLoading.value = true;
       
+      // Create new course
+      final newCourse = Course(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        title: title,
+        description: description,
+        rating: 0.0,
+        duration: duration,
+        type: type,
+        price: price,
+        points: points,
+        lessons: lessons,
+        thumbnail: getRandomThumbnail()
+      );
+      
+      // Add to appropriate category list
       if (type == CourseType.hard) {
-        hardSkillsCourses.add(
-          Course(
-            id: DateTime.now().millisecondsSinceEpoch.toString(),
-            title: title,
-            description: description,
-            rating: 0.0,
-            duration: duration,
-            type: type,
-            price: price,
-            points: points,
-            lessons: lessons,
-            thumbnail: getRandomThumbnail()
-          ),
-        );
+        hardSkillsCourses.add(newCourse);
       } else {
-        softSkillsCourses.add(
-          Course(
-            id: DateTime.now().millisecondsSinceEpoch.toString(),
-            title: title,
-            description: description,
-            rating: 0.0,
-            duration: duration,
-            type: type,
-            points: points,
-            lessons: lessons,
-            thumbnail: getRandomThumbnail()
-          ),
-        );
+        softSkillsCourses.add(newCourse);
       }
+      
+      // Add to teacher's courses
+      _teacherCourses.add(newCourse);
       
       Get.back();
       Get.snackbar(

@@ -27,6 +27,9 @@ class AuthController extends GetxController {
     'password': '',
   });
 
+  // Add a property to track if the user is a teacher
+  final isTeacher = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -326,7 +329,6 @@ class AuthController extends GetxController {
   String? get accessToken => storage.read(accessTokenKey);
   String? get refreshToken => storage.read(refreshTokenKey);
 
-  bool get isTeacher => userType.value?.isTeacher ?? false;
   bool get isStudent => userType.value?.isStudent ?? false;
 
   // Update logout method to clear stored data
