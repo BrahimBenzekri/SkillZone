@@ -16,7 +16,9 @@ import 'package:skillzone/features/notifications/views/notifications_page.dart';
 import 'package:skillzone/features/onboarding/views/onboarding_screen.dart';
 import 'package:skillzone/features/onboarding/views/welcome_page.dart';
 import 'package:skillzone/features/points/views/points_page.dart';
+import 'package:skillzone/features/profile/controllers/profile_controller.dart';
 import 'package:skillzone/features/profile/views/profile_page.dart';
+import 'package:skillzone/features/profile/views/edit_avatar_page.dart';
 import 'package:skillzone/features/quiz/controllers/quiz_controller.dart';
 import 'package:skillzone/features/quiz/views/quiz_page.dart';
 import 'package:skillzone/features/quiz/views/quiz_results_page.dart';
@@ -115,6 +117,13 @@ class AppPages {
     GetPage(
       name: AppRoutes.uploadCourse,
       page: () => const UploadCoursePage(),
+    ),
+    GetPage(
+      name: AppRoutes.editAvatar,
+      page: () => const EditAvatarPage(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => ProfileController());
+      }),
     ),
   ];
 }

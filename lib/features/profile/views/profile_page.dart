@@ -53,9 +53,10 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                   CircleAvatar(
+                    backgroundColor: AppColors.backgroundColor,
                     radius: 63,
                     child: Image.asset(
-                      'lib/assets/images/profile_image.png',
+                      'lib/assets/images/avatar7.png',
                     ),
                   ),
                 ],
