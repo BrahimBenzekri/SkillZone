@@ -62,9 +62,9 @@ class EditAvatarPage extends GetView<ProfileController> {
                   height: 150,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: controller.selectedAvatarColor.value.withValues(alpha: 0.2),
+                    color: controller.selectedAvatarColor.withValues(alpha: 0.2),
                     border: Border.all(
-                      color: controller.selectedAvatarColor.value,
+                      color: controller.selectedAvatarColor,
                       width: 3,
                     ),
                   ),
@@ -110,7 +110,7 @@ class EditAvatarPage extends GetView<ProfileController> {
                             color: AppColors.bottomBarColor,
                             border: Border.all(
                               color: controller.selectedAvatarImage.value == avatar
-                                  ? controller.selectedAvatarColor.value
+                                  ? controller.selectedAvatarColor
                                   : Colors.transparent,
                               width: 3,
                             ),
@@ -160,7 +160,7 @@ class EditAvatarPage extends GetView<ProfileController> {
                             shape: BoxShape.circle,
                             color: color,
                             border: Border.all(
-                              color: controller.selectedAvatarColor.value == color
+                              color: controller.selectedAvatarColor == color
                                   ? AppColors.textColorLight
                                   : Colors.transparent,
                               width: 3,

@@ -3,14 +3,17 @@ import 'package:get/get.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/auth/controllers/auth_controller.dart';
+import 'package:skillzone/features/profile/controllers/profile_controller.dart';
 import 'package:skillzone/widgets/notification_icon.dart';
 import 'package:skillzone/features/auth/widgets/logout_confirmation_dialog.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends GetView<ProfileController> {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Make sure ProfileController is initialized
+    Get.put(ProfileController(), permanent: true);
     final AuthController authController = Get.find<AuthController>();
 
     return Scaffold(
@@ -37,38 +40,31 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 136,
-                    height: 136,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.backgroundColor,
-                      border: Border.all(
-                        color: AppColors.primaryColor,
-                        width: 3,
-                      ),
-                    ),
+              Obx(() => Container(
+                height: 136,
+                width: 136,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: controller.selectedAvatarColor.withValues(alpha: 0.2),
+                  border: Border.all(
+                    color: controller.selectedAvatarColor,
+                    width: 2,
                   ),
-                  CircleAvatar(
-                    backgroundColor: AppColors.backgroundColor,
-                    radius: 63,
-                    child: Image.asset(
-                      'lib/assets/images/avatar7.png',
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                child: Image.asset(
+                controller.selectedAvatarImage.value,
+                ),
+              )),
               const SizedBox(
                 height: 5,
               ),
-              const Text('Cool Guy',
-                  style: TextStyle(
-                    color: AppColors.primaryColor,
-                    fontSize: 22,
-                  )),
+              Obx(() => Text(
+                controller.username.value,
+                style: TextStyle(
+                  color: controller.selectedAvatarColor,
+                  fontSize: 22,
+                ),
+              )),
               const SizedBox(
                 height: 50,
               ),

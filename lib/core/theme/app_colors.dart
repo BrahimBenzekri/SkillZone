@@ -28,4 +28,13 @@ class AppColors {
   static const Color courseColor5 = Color(0xFFCE864F);
 
   static const Color courseColor6 = Color(0xFFCBCE4F);
+
+  static const List<Color> avatarColors = [
+    courseColor1,
+    courseColor2,
+    courseColor3,
+    courseColor4,
+    courseColor5,
+    courseColor6,
+  ];
 }

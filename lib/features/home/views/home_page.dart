@@ -4,6 +4,7 @@ import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/courses/controllers/courses_controller.dart';
 import 'package:skillzone/widgets/notification_icon.dart';
 import 'package:get/get.dart';
+import 'package:skillzone/widgets/profile_icon.dart';
 
 import '../../courses/models/course.dart';
 import '../widgets/course_card.dart';
@@ -138,28 +139,11 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   // Profile and Notification
-                  Row(
+                  const Row(
                     children: [
-                      const NotificationIcon(isThereNotification: true),
-                      const SizedBox(width: 8),
-                      Container(
-                        height: 30,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppColors.primaryColor,
-                            width: 2,
-                          ),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(22.5),
-                          child: Image.asset(
-                            'lib/assets/images/profile_image.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
+                      NotificationIcon(isThereNotification: true),
+                      SizedBox(width: 8),
+                      ProfileIcon()
                     ],
                   ),
                 ],
