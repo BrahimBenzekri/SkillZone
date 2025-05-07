@@ -616,7 +616,7 @@ class UploadCoursePage extends GetView<CoursesController> {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      'Uploading lesson...',
+                      'Adding lesson...',
                       style: TextStyle(
                         color: AppColors.textColorLight,
                       ),

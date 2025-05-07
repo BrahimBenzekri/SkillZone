@@ -13,14 +13,14 @@ class NavigationController extends GetxController {
       name: 'Home',
     ),
     BarItem(
-      activeIcon: 'lib/assets/svgs/search_active.svg',
-      inactiveIcon: 'lib/assets/svgs/search_inactive.svg',
-      name: 'Search',
+      activeIcon: 'lib/assets/svgs/inventory_active.svg',
+      inactiveIcon: 'lib/assets/svgs/inventory_inactive.svg',
+      name: 'Inventory',
     ),
     BarItem(
-      activeIcon: 'lib/assets/svgs/card_active.svg',
-      inactiveIcon: 'lib/assets/svgs/card_inactive.svg',
-      name: 'Card',
+      activeIcon: 'lib/assets/svgs/points_active.svg',
+      inactiveIcon: 'lib/assets/svgs/points_inactive.svg',
+      name: 'Points',
     ),
     BarItem(
       activeIcon: 'lib/assets/svgs/profile_active.svg',

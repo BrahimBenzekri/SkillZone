@@ -30,19 +30,27 @@ class CoursesController extends GetxController {
   // Section colors for UI
   final Map<String, List<Color>> sectionColors = {
     'popular': [
-      const Color(0xFF6C5CE7),
-      const Color(0xFFa29bfe),
-      const Color(0xFF81ecec),
+      AppColors.courseColor1,
+      AppColors.courseColor3,
+      AppColors.courseColor5,
+      AppColors.courseColor2,
+      AppColors.courseColor4,
     ],
     'hard': [
-      const Color(0xFFe17055),
-      const Color(0xFFfdcb6e),
-      const Color(0xFFffeaa7),
+      AppColors.courseColor2,
+      AppColors.courseColor4,
+      AppColors.courseColor6,
+      AppColors.courseColor1,
+      AppColors.courseColor3,
+      AppColors.courseColor5,
     ],
     'soft': [
-      const Color(0xFF00cec9),
-      const Color(0xFF55efc4),
-      const Color(0xFF81ecec),
+      AppColors.courseColor6,
+      AppColors.courseColor5,
+      AppColors.courseColor1,
+      AppColors.courseColor4,
+      AppColors.courseColor2,
+      AppColors.courseColor3,
     ],
   };
 
@@ -314,7 +322,9 @@ class CoursesController extends GetxController {
         points: 400,
         thumbnail: getRandomThumbnail(),
       ),
+      
     ]);
+
 
     // Add some dummy teacher courses
     _teacherCourses.assignAll([
@@ -372,6 +382,7 @@ class CoursesController extends GetxController {
         ],
       ),
     ]);
+
   }
 
   Future<void> uploadCourse({

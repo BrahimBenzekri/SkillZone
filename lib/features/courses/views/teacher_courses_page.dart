@@ -15,62 +15,58 @@ class TeacherCoursesPage extends GetView<CoursesController> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 40),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              children: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios_new_rounded,
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: AppColors.textColorLight,
+                  size: 25,
+                ),
+                onPressed: () => Get.back(),
+              ),
+              const SizedBox(width: 16),
+              Text.rich(
+                TextSpan(
+                  text: 'My ',
+                  style: const TextStyle(
                     color: AppColors.textColorLight,
-                    size: 25,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
                   ),
-                  onPressed: () => Get.back(),
-                ),
-                const SizedBox(width: 16),
-                Text.rich(
-                  TextSpan(
-                    text: 'My ',
-                    style: const TextStyle(
-                      color: AppColors.textColorLight,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: 'Courses',
-                        style: TextStyle(
-                          foreground: Paint()
-                            ..shader = const LinearGradient(
-                              colors: [
-                                AppColors.primaryColor,
-                                AppColors.secondaryColor,
-                              ],
-                            ).createShader(
-                              const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),
-                            ),
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  children: [
+                    TextSpan(
+                      text: 'Courses',
+                      style: TextStyle(
+                        foreground: Paint()
+                          ..shader = const LinearGradient(
+                            colors: [
+                              AppColors.primaryColor,
+                              AppColors.secondaryColor,
+                            ],
+                          ).createShader(
+                            const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),
+                          ),
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           
           // Upload Course Button
-          Padding(
+          if(controller.teacherCourses.isNotEmpty) Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: ElevatedButton.icon(
               onPressed: () => Get.toNamed(AppRoutes.uploadCourse),
               icon: const Icon(Icons.add),
-              label: const Text('Upload New Course'),
+              label: const Text('Upload Another Course'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryColor,
                 foregroundColor: Colors.white,
@@ -95,44 +91,47 @@ class TeacherCoursesPage extends GetView<CoursesController> {
               
               if (teacherCourses.isEmpty) {
                 return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.school_outlined,
-                        size: 80,
-                        color: AppColors.textColorInactive,
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'No courses uploaded yet',
-                        style: TextStyle(
-                          color: AppColors.textColorLight,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Start sharing your knowledge by uploading a course',
-                        style: TextStyle(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.school_outlined,
+                          size: 80,
                           color: AppColors.textColorInactive,
-                          fontSize: 14,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 24),
-                      ElevatedButton.icon(
-                        onPressed: () => Get.toNamed(AppRoutes.uploadCourse),
-                        icon: const Icon(Icons.add),
-                        label: const Text('Upload Your First Course'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primaryColor.withValues(alpha: 0.2),
-                          foregroundColor: AppColors.primaryColor,
-                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'No courses uploaded yet',
+                          style: TextStyle(
+                            color: AppColors.textColorLight,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Start sharing your knowledge by uploading a course',
+                          style: TextStyle(
+                            color: AppColors.textColorInactive,
+                            fontSize: 14,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 24),
+                        ElevatedButton.icon(
+                          onPressed: () => Get.toNamed(AppRoutes.uploadCourse),
+                          icon: const Icon(Icons.add),
+                          label: const Text('Upload Your First Course'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryColor.withValues(alpha: 0.2),
+                            foregroundColor: AppColors.primaryColor,
+                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }
@@ -169,7 +168,7 @@ class TeacherCoursesPage extends GetView<CoursesController> {
       child: InkWell(
         onTap: () => Get.toNamed(
           AppRoutes.courseDetails,
-          arguments: course,
+          arguments: {'course': course,'backgroundColor': AppColors.courseColor1},
         ),
         borderRadius: BorderRadius.circular(16),
         child: Column(

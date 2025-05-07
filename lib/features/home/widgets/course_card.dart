@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:skillzone/core/routes/app_routes.dart';
 // import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/courses/controllers/courses_controller.dart';
@@ -22,7 +23,7 @@ class CourseCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Get.toNamed(
-          '/course-details',
+          AppRoutes.courseDetails,
           arguments: {
             'course': course,
             'backgroundColor': backgroundColor,
