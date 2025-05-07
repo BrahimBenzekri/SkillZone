@@ -14,6 +14,7 @@ class Course {
   final RxBool isLiked;
   final String thumbnail;
   final List<Lesson> lessons;
+  double? progress;
 
   Course({
     required this.id,
@@ -27,12 +28,13 @@ class Course {
     bool isLiked = false,
     required this.thumbnail,
     this.lessons = const [],
+    this.progress,
   }) : isLiked = isLiked.obs;
 
   int get completedLessons =>
       lessons.where((lesson) => lesson.isCompleted).length;
   int get totalLessons => lessons.length;
-  double get progress =>
+  double get courseProgress =>
       totalLessons > 0 ? completedLessons / totalLessons : 0.0;
 
   // Convert duration to readable format
