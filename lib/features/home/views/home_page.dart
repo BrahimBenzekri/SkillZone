@@ -12,7 +12,7 @@ import '../widgets/course_card.dart';
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-  final controller = Get.put(CoursesController());
+  final controller = Get.put(CoursesController(), permanent: true);
 
   Widget _buildCoursesList(
       String section, List<Course> courses, List<Color> colors) {

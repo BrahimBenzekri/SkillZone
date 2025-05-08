@@ -22,7 +22,6 @@ import 'package:skillzone/features/profile/views/edit_avatar_page.dart';
 import 'package:skillzone/features/quiz/controllers/quiz_controller.dart';
 import 'package:skillzone/features/quiz/views/quiz_page.dart';
 import 'package:skillzone/features/quiz/views/quiz_results_page.dart';
-import 'package:skillzone/features/search/views/search_page.dart';
 import 'package:skillzone/features/splash/views/splash_screen.dart';
 
 class AppPages {
@@ -70,10 +69,6 @@ class AppPages {
     GetPage(
       name: AppRoutes.home,
       page: () => HomePage(),
-    ),
-    GetPage(
-      name: AppRoutes.search,
-      page: () => const SearchPage(),
     ),
     GetPage(
       name: AppRoutes.points,
