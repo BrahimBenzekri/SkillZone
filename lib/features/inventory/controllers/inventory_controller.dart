@@ -207,19 +207,42 @@ class InventoryController extends GetxController {
   
   // Enroll in a course
   void enrollInCourse(String courseId) {
-    if (!enrolledCourseIds.contains(courseId)) {
-      enrolledCourseIds.add(courseId);
-      
-      // Initialize progress tracking for this course
-      final course = _getCourseById(courseId);
-      if (course != null) {
-        completedLessons[courseId] = <String, bool>{}.obs;
-        for (final lesson in course.lessons) {
-          completedLessons[courseId]![lesson.id] = false;
-        }
-        courseProgress[courseId] = 0.0.obs;
-      }
+    // Check if already enrolled
+    if (enrolledCourseIds.contains(courseId)) {
+      // Show message that user is already enrolled
+      Get.snackbar(
+        'Already Enrolled',
+        'You are already enrolled in this course',
+        backgroundColor: AppColors.secondaryColor,
+        colorText: AppColors.backgroundColor,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(16),
+      );
+      return;
     }
+    
+    // If not enrolled, proceed with enrollment
+    enrolledCourseIds.add(courseId);
+    
+    // Initialize progress tracking for this course
+    final course = _getCourseById(courseId);
+    if (course != null) {
+      completedLessons[courseId] = <String, bool>{}.obs;
+      for (final lesson in course.lessons) {
+        completedLessons[courseId]![lesson.id] = false;
+      }
+      courseProgress[courseId] = 0.0.obs;
+    }
+    Get.back();
+    // Show success message
+    Get.snackbar(
+      'Success',
+      'You have enrolled in this course',
+      backgroundColor: AppColors.primaryColor,
+      colorText: AppColors.backgroundColor,
+      snackPosition: SnackPosition.BOTTOM,
+      margin: const EdgeInsets.all(16),
+    );
   }
   
   // Unenroll from a course

@@ -205,15 +205,11 @@ class CourseDetailsPage extends StatelessWidget {
                                 onPressed: () {
                                   // Enroll in the course
                                   Get.find<InventoryController>().enrollInCourse(course.id);
-                                  Get.back(); // Return to previous screen
-                                  Get.snackbar(
-                                    'Success',
-                                    'You have enrolled in ${course.title}',
-                                    backgroundColor: AppColors.primaryColor,
-                                    colorText: Colors.white,
-                                    snackPosition: SnackPosition.BOTTOM,
-                                    margin: const EdgeInsets.all(16),
-                                  );
+                                  // No need to show a snackbar here as it's handled in the controller
+                                  // Only go back if this is a new enrollment
+                                  if (!Get.find<InventoryController>().enrolledCourseIds.contains(course.id)) {
+                                    Get.back(); // Return to previous screen
+                                  }
                                 },
                                 child: const Text(
                                   'Enroll Now',
@@ -296,15 +292,6 @@ class CourseDetailsPage extends StatelessWidget {
                                 onPressed: () {
                                   // Enroll in the course
                                   Get.find<InventoryController>().enrollInCourse(course.id);
-                                  Get.back(); // Return to previous screen
-                                  Get.snackbar(
-                                    'Success',
-                                    'You have enrolled in ${course.title}',
-                                    backgroundColor: AppColors.primaryColor,
-                                    colorText: Colors.white,
-                                    snackPosition: SnackPosition.BOTTOM,
-                                    margin: const EdgeInsets.all(16),
-                                  );
                                 },
                                 child: const Text(
                                   'Enroll Now',
@@ -480,6 +467,19 @@ class CourseDetailsPage extends StatelessWidget {
   }
 
   void _showEnrollPrompt(BuildContext context, course) {
+    // Check if already enrolled first
+    if (Get.find<InventoryController>().enrolledCourseIds.contains(course.id)) {
+      Get.snackbar(
+        'Already Enrolled',
+        'You are already enrolled in this course',
+        backgroundColor: AppColors.secondaryColor,
+        colorText: AppColors.backgroundColor,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(16),
+      );
+      return;
+    }
+
     Get.dialog(
       AlertDialog(
         backgroundColor: AppColors.bottomBarColor,
@@ -514,14 +514,6 @@ class CourseDetailsPage extends StatelessWidget {
               Get.back(); // Close dialog
               // Enroll in the course
               Get.find<InventoryController>().enrollInCourse(course.id);
-              Get.snackbar(
-                'Success',
-                'You have enrolled in ${course.title}',
-                backgroundColor: AppColors.primaryColor,
-                colorText: Colors.white,
-                snackPosition: SnackPosition.BOTTOM,
-                margin: const EdgeInsets.all(16),
-              );
             },
             child: const Text('Enroll Now'),
           ),
