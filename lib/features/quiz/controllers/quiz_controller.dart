@@ -262,6 +262,21 @@ class QuizController extends GetxController {
       currentQuestionIndex.value == (currentQuiz.value?.questions.length ?? 1) - 1;
 
   @override
+  void onInit() {
+    super.onInit();
+    
+    // Check if courseId is passed in arguments
+    if (Get.arguments != null && Get.arguments is Map) {
+      final args = Get.arguments as Map;
+      if (args.containsKey('courseId')) {
+        final courseId = args['courseId'] as String;
+        print('DEBUG: Starting quiz for course: $courseId');
+        startQuiz(courseId);
+      }
+    }
+  }
+
+  @override
   void onClose() {
     _timer?.cancel();
     super.onClose();

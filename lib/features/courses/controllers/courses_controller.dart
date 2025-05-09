@@ -443,7 +443,7 @@ class CoursesController extends GetxController {
             title: 'Understanding Communication Basics',
             duration: const Duration(minutes: 30),
             videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
-            isCompleted: false,
+            isCompleted: true,
           ),
           Lesson(
             number: 2,
@@ -451,7 +451,7 @@ class CoursesController extends GetxController {
             title: 'Verbal Communication Techniques',
             duration: const Duration(minutes: 45),
             videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
-            isCompleted: false,
+            isCompleted: true,
           ),
           Lesson(
             number: 3,
@@ -459,7 +459,7 @@ class CoursesController extends GetxController {
             title: 'Non-verbal Communication',
             duration: const Duration(minutes: 35),
             videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
-            isCompleted: false,
+            isCompleted: true,
           ),
           Lesson(
             number: 4,
@@ -467,7 +467,7 @@ class CoursesController extends GetxController {
             title: 'Active Listening Skills',
             duration: const Duration(minutes: 40),
             videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
-            isCompleted: false,
+            isCompleted: true,
           ),
         ];
       case 'h1': // Flutter Advanced Concepts

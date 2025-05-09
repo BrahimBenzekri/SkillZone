@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/inventory/controllers/inventory_controller.dart';
 import '../controllers/course_details_controller.dart';
@@ -388,6 +389,86 @@ class CourseDetailsPage extends StatelessWidget {
                           isLocked: !isEnrolled,
                           courseId: course.id,
                         )),
+
+                    // Add Quiz Button (only show if enrolled)
+                    if (isEnrolled) ...[
+                      const SizedBox(height: 32),
+                      
+                      // Quiz Button
+                      Obx(() {
+                        final progress = Get.find<InventoryController>().getCourseProgress(course.id);
+                        final allLessonsCompleted = progress >= 1.0;
+                        
+                        return SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: (){
+                              if (allLessonsCompleted) {
+                                Get.toNamed(
+                                  AppRoutes.quiz, 
+                                  arguments: {'courseId': course.id}
+                                );
+                              }else{
+                                Get.snackbar(
+                                  'Complete All Lessons',
+                                  'You need to complete all lessons before taking the quiz',
+                                  backgroundColor: AppColors.errorColor,
+                                  colorText: AppColors.backgroundColor,
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  margin: const EdgeInsets.all(16),
+                                );
+                              }
+                            },
+                            icon: Icon(
+                              Icons.quiz_rounded,
+                              color: allLessonsCompleted ? AppColors.backgroundColor : AppColors.textColorInactive,
+                            ),
+                            label: Text(
+                              'Take Quiz',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: allLessonsCompleted ? AppColors.backgroundColor : AppColors.textColorInactive,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: allLessonsCompleted 
+                                  ? AppColors.primaryColor 
+                                  : AppColors.bottomBarColor,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: allLessonsCompleted ? 2 : 0,
+                            ),
+                          ),
+                        );
+                      }),
+                      
+                      // Add a message explaining why the button is disabled
+                      Obx(() {
+                        final progress = Get.find<InventoryController>().getCourseProgress(course.id);
+                        final allLessonsCompleted = progress >= 1.0;
+                        
+                        if (!allLessonsCompleted) {
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              'Complete all lessons to unlock the quiz',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: AppColors.textColorInactive,
+                                fontSize: 14,
+                              ),
+                            ),
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      }),
+                      
+                      const SizedBox(height: 16),
+                    ],
                   ],
                 ),
               ),

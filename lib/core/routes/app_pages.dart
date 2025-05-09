@@ -104,6 +104,7 @@ class AppPages {
       binding: BindingsBuilder(() {
         Get.put(QuizController());
       }),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: AppRoutes.quizResults,
