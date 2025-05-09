@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
+import 'package:skillzone/features/inventory/controllers/inventory_controller.dart';
 import '../controllers/course_details_controller.dart';
 import '../models/course_type.dart';
 import '../widgets/lesson_card.dart';
 
 class CourseDetailsPage extends StatelessWidget {
   final controller = Get.put(CourseDetailsController());
+  final InventoryController inventoryController = Get.find<InventoryController>();
   final Color backgroundColor;
+  final bool isEnrolled;
 
   CourseDetailsPage({super.key})
-      : backgroundColor = (Get.arguments as Map)['backgroundColor'] as Color {
+      : backgroundColor = (Get.arguments as Map)['backgroundColor'] as Color,
+        isEnrolled = (Get.arguments as Map)['isEnrolled'] as bool? ?? false {
     final String courseId = Get.parameters['id'] ?? '';
     controller.loadCourseDetails(courseId);
   }
@@ -56,8 +60,8 @@ class CourseDetailsPage extends StatelessWidget {
           );
         }
             
-        final course = controller.course.value;
-        if (course == null) return const SizedBox();
+      final course = controller.course.value;
+      if (course == null) return const SizedBox();
             
       return Column(
         children: [
@@ -83,7 +87,7 @@ class CourseDetailsPage extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [
                         Colors.transparent,
-                        Colors.black.withValues(alpha:0.8),
+                        Colors.black.withValues(alpha: 0.8),
                       ],
                     ),
                   ),
@@ -108,13 +112,13 @@ class CourseDetailsPage extends StatelessWidget {
                 ),
                 // Back Button
                 Positioned(
-                    top : 30,
+                  top: 30,
+                  left: 0,
                   child: IconButton(
                     icon: const Icon(
                       Icons.arrow_back_ios_new_rounded,
                       color: AppColors.textColorLight,
                       size: 24,
-                      
                     ),
                     onPressed: () => Get.back(),
                   ),
@@ -152,123 +156,216 @@ class CourseDetailsPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
             
-                    // Access Information
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppColors.bottomBarColor,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          if (course.type == CourseType.hard) ...[
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '\$${course.price}',
-                                  style: const TextStyle(
-                                    color: AppColors.primaryColor,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'or ${course.points} points',
-                                  style: const TextStyle(
-                                    color: AppColors.textColorInactive,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primaryColor.withValues(alpha:0.1),
-                                elevation: 0,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 24,
-                                  vertical: 12,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              onPressed: () {
-                                // todo: Implement enrollment
-                              },
-                              child: const Text(
-                                'Enroll Now',
-                                style: TextStyle(
-                                  color: AppColors.primaryColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ] else ...[
-                            Expanded(
-                              child: Row(
+                    // Access Information - Show only if not enrolled
+                    if (!isEnrolled) ...[
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AppColors.bottomBarColor,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (course.type == CourseType.hard) ...[
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primaryColor.withValues(alpha:0.1),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Icon(
-                                      Icons.stars_rounded,
+                                  Text(
+                                    '\$${course.price}',
+                                    style: const TextStyle(
                                       color: AppColors.primaryColor,
-                                      size: 24,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  const SizedBox(width: 16),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              '+${course.points}',
-                                              style: const TextStyle(
-                                                color: AppColors.primaryColor,
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 4),
-                                            const Text(
-                                              'POINTS',
-                                              style: TextStyle(
-                                                color: AppColors.primaryColor,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                                letterSpacing: 1.2,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 4),
-                                        const Text(
-                                          'Complete all lessons to earn points',
-                                          style: TextStyle(
-                                            color: AppColors.textColorInactive,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ],
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'or ${course.points} points',
+                                    style: const TextStyle(
+                                      color: AppColors.textColorInactive,
+                                      fontSize: 12,
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primaryColor.withValues(alpha: 0.1),
+                                  elevation: 0,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24,
+                                    vertical: 12,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  // Enroll in the course
+                                  Get.find<InventoryController>().enrollInCourse(course.id);
+                                  Get.back(); // Return to previous screen
+                                  Get.snackbar(
+                                    'Success',
+                                    'You have enrolled in ${course.title}',
+                                    backgroundColor: AppColors.primaryColor,
+                                    colorText: Colors.white,
+                                    snackPosition: SnackPosition.BOTTOM,
+                                    margin: const EdgeInsets.all(16),
+                                  );
+                                },
+                                child: const Text(
+                                  'Enroll Now',
+                                  style: TextStyle(
+                                    color: AppColors.primaryColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ] else ...[
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.primaryColor.withValues(alpha: 0.1),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.stars_rounded,
+                                        color: AppColors.primaryColor,
+                                        size: 24,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                '+${course.points}',
+                                                style: const TextStyle(
+                                                  color: AppColors.primaryColor,
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 4),
+                                              const Text(
+                                                'POINTS',
+                                                style: TextStyle(
+                                                  color: AppColors.primaryColor,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                  letterSpacing: 1.2,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 4),
+                                          const Text(
+                                            'Complete all lessons to earn points',
+                                            style: TextStyle(
+                                              color: AppColors.textColorInactive,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primaryColor.withValues(alpha: 0.1),
+                                  elevation: 0,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24,
+                                    vertical: 12,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  // Enroll in the course
+                                  Get.find<InventoryController>().enrollInCourse(course.id);
+                                  Get.back(); // Return to previous screen
+                                  Get.snackbar(
+                                    'Success',
+                                    'You have enrolled in ${course.title}',
+                                    backgroundColor: AppColors.primaryColor,
+                                    colorText: Colors.white,
+                                    snackPosition: SnackPosition.BOTTOM,
+                                    margin: const EdgeInsets.all(16),
+                                  );
+                                },
+                                child: const Text(
+                                  'Enroll Now',
+                                  style: TextStyle(
+                                    color: AppColors.primaryColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ],
-                        ],
+                        ),
                       ),
-                    ),
+                    ] else ...[
+                      // Show progress if enrolled
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AppColors.bottomBarColor,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Your Progress',
+                              style: TextStyle(
+                                color: AppColors.textColorLight,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            // Get progress directly from inventory controller
+                            Obx(() {
+                              final progress = Get.find<InventoryController>().getCourseProgress(course.id);
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  LinearProgressIndicator(
+                                    value: progress,
+                                    backgroundColor: AppColors.backgroundColor,
+                                    valueColor: AlwaysStoppedAnimation<Color>(backgroundColor),
+                                    minHeight: 8,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    '${(progress * 100).toInt()}% Complete',
+                                    style: const TextStyle(
+                                      color: AppColors.textColorInactive,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+                          ],
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 24),
             
                     // Lessons Header
@@ -285,7 +382,11 @@ class CourseDetailsPage extends StatelessWidget {
                     // Lessons List
                     ...course.lessons.map((lesson) => LessonCard(
                           lesson: lesson,
-                          onTap: () => controller.startLesson(lesson),
+                          onTap: isEnrolled 
+                              ? () => controller.startLesson(course.id, lesson)
+                              : () => _showEnrollPrompt(context, course),
+                          isLocked: !isEnrolled,
+                          courseId: course.id,
                         )),
                   ],
                 ),
@@ -295,6 +396,57 @@ class CourseDetailsPage extends StatelessWidget {
         ],
       );
             }));
+  }
+
+  void _showEnrollPrompt(BuildContext context, course) {
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: AppColors.bottomBarColor,
+        title: const Text(
+          'Enroll Required',
+          style: TextStyle(
+            color: AppColors.textColorLight,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: const Text(
+          'You need to enroll in this course to access the lessons.',
+          style: TextStyle(
+            color: AppColors.textColorLight,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(
+                color: AppColors.textColorInactive,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryColor,
+            ),
+            onPressed: () {
+              Get.back(); // Close dialog
+              // Enroll in the course
+              Get.find<InventoryController>().enrollInCourse(course.id);
+              Get.snackbar(
+                'Success',
+                'You have enrolled in ${course.title}',
+                backgroundColor: AppColors.primaryColor,
+                colorText: Colors.white,
+                snackPosition: SnackPosition.BOTTOM,
+                margin: const EdgeInsets.all(16),
+              );
+            },
+            child: const Text('Enroll Now'),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildStat(IconData icon, String value, String label) {

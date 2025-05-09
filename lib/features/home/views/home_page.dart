@@ -41,6 +41,7 @@ class HomePage extends StatelessWidget {
               course: course,
               backgroundColor: controller.sectionColors[section]![
                   index % controller.sectionColors[section]!.length],
+              isEnrolled: false,
             );
           },
         );

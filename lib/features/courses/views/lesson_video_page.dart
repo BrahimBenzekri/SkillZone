@@ -1,11 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:chewie/chewie.dart';
+import 'package:skillzone/features/inventory/controllers/inventory_controller.dart';
 import 'package:video_player/video_player.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import '../models/lesson.dart';
 
 class LessonVideoPage extends StatefulWidget {
+
   const LessonVideoPage({super.key});
 
   @override
@@ -15,14 +19,14 @@ class LessonVideoPage extends StatefulWidget {
 class _LessonVideoPageState extends State<LessonVideoPage> {
   late VideoPlayerController _videoPlayerController;
   ChewieController? _chewieController;
-  late Lesson lesson;
+  final Lesson lesson = Get.arguments['lesson'];
+  final String courseId = Get.arguments['courseId'] ?? '';
   bool isLoading = true;
   String? errorMessage;
 
   @override
   void initState() {
     super.initState();
-    lesson = Get.arguments as Lesson;
     _initializePlayer();
   }
 
@@ -82,21 +86,6 @@ class _LessonVideoPageState extends State<LessonVideoPage> {
     }
   }
 
-  // String _getDirectGoogleDriveUrl(String url) {
-  //   // Extract file ID from Google Drive URL
-  //   // Example input: https://drive.google.com/file/d/YOUR_FILE_ID/view
-  //   final RegExp regExp = RegExp(r"/d/([a-zA-Z0-9_-]+)");
-  //   final match = regExp.firstMatch(url);
-  //   final fileId = match?.group(1);
-    
-  //   if (fileId == null) {
-  //     throw Exception('Invalid Google Drive URL');
-  //   }
-    
-  //   // Return direct download URL
-  //   return 'https://drive.google.com/uc?export=download&id=$fileId';
-  // }
-
   @override
   void dispose() {
     _videoPlayerController.dispose();
@@ -106,6 +95,7 @@ class _LessonVideoPageState extends State<LessonVideoPage> {
 
   @override
   Widget build(BuildContext context) {
+    final inventoryController = Get.find<InventoryController>();
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
@@ -235,8 +225,25 @@ class _LessonVideoPageState extends State<LessonVideoPage> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
-                          // todo: Implement mark as complete functionality
+                        onPressed: () async {
+                          log('DEBUG: Mark as Complete button pressed');
+                          
+                          // Mark the lesson as completed
+                          inventoryController.markLessonAsCompleted(courseId, lesson.id);
+                          
+                          log('DEBUG: Showing snackbar and navigating back');
+                          
+                          // Show success message
+                          Get.snackbar(
+                            'Lesson Completed',
+                            'Great job! You\'ve completed this lesson.',
+                            backgroundColor: AppColors.primaryColor,
+                            colorText: Colors.white,
+                            snackPosition: SnackPosition.BOTTOM,
+                            margin: const EdgeInsets.all(16),
+                          );
+                          
+                          // Navigate back
                           Get.back();
                         },
                         style: ElevatedButton.styleFrom(

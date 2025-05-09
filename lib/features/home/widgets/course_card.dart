@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
-// import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/courses/controllers/courses_controller.dart';
 import 'package:skillzone/features/courses/models/course.dart';
@@ -11,11 +10,14 @@ import 'package:skillzone/features/courses/models/course.dart';
 class CourseCard extends StatelessWidget {
   final Course course;
   final Color backgroundColor;
+  final bool isEnrolled;
 
   const CourseCard({
     super.key,
     required this.course,
     required this.backgroundColor,
+    required this.isEnrolled,
+
   });
 
   @override
@@ -27,6 +29,7 @@ class CourseCard extends StatelessWidget {
           arguments: {
             'course': course,
             'backgroundColor': backgroundColor,
+            'isEnrolled': isEnrolled, // From home page, not enrolled
           },
         );
       }
@@ -43,7 +46,7 @@ class CourseCard extends StatelessWidget {
           children: [
             // Thumbnail
             Positioned(
-              right: 20,
+              right: isEnrolled || course.isLiked.value ? 50 : 20,
               top: 40,
               child: SizedBox(
                 height: 80, // 3/2 of card height

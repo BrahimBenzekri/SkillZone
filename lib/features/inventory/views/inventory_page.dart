@@ -118,6 +118,7 @@ class InventoryPage extends StatelessWidget {
             return CourseCard(
               course: course,
               backgroundColor: color,
+              isEnrolled: false,
             );
           },
         ),
@@ -145,6 +146,7 @@ class InventoryPage extends StatelessWidget {
             return CourseCard(
               course: course,
               backgroundColor: color,
+              isEnrolled: true,
             );
           },
         ),

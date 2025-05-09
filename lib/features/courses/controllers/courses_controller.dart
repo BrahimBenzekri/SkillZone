@@ -106,9 +106,9 @@ class CoursesController extends GetxController {
     hasError.value = false;
 
     try {
+      _loadDummyData();
       await Future.delayed(
           const Duration(seconds: 5)); // Simulate network delay
-      _loadDummyData();
     } catch (e) {
       hasError.value = true;
       errorMessage.value = 'Failed to load courses: $e';
@@ -122,14 +122,6 @@ class CoursesController extends GetxController {
     course.isLiked.toggle();
     // When backend is ready:
     // dio.post('/api/courses/${course.id}/toggle-like');
-  }
-
-  // Filter courses by search term
-  List<Course> searchCourses(String query) {
-    final lowercaseQuery = query.toLowerCase();
-    return [...softSkillsCourses, ...hardSkillsCourses]
-        .where((course) => course.title.toLowerCase().contains(lowercaseQuery))
-        .toList();
   }
 
   // Get user's liked courses
@@ -156,6 +148,7 @@ class CoursesController extends GetxController {
         type: CourseType.soft,
         points: 100,
         thumbnail: getRandomThumbnail(),
+        lessons: _getDummyLessonsForCourse('s1'),
       ),
       Course(
         id: 's2',
@@ -237,6 +230,7 @@ class CoursesController extends GetxController {
         points: 500,
         price: 199,
         thumbnail: getRandomThumbnail(),
+        lessons: _getDummyLessonsForCourse('h1'),
       ),
       Course(
         id: 'h2',
@@ -435,6 +429,84 @@ class CoursesController extends GetxController {
       );
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  // Add a method to get dummy lessons for a course
+  List<Lesson> _getDummyLessonsForCourse(String courseId) {
+    switch (courseId) {
+      case 's1': // Effective Communication Skills
+        return [
+          Lesson(
+            number: 1,
+            id: 's1l1',
+            title: 'Understanding Communication Basics',
+            duration: const Duration(minutes: 30),
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+            isCompleted: false,
+          ),
+          Lesson(
+            number: 2,
+            id: 's1l2',
+            title: 'Verbal Communication Techniques',
+            duration: const Duration(minutes: 45),
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+            isCompleted: false,
+          ),
+          Lesson(
+            number: 3,
+            id: 's1l3',
+            title: 'Non-verbal Communication',
+            duration: const Duration(minutes: 35),
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+            isCompleted: false,
+          ),
+          Lesson(
+            number: 4,
+            id: 's1l4',
+            title: 'Active Listening Skills',
+            duration: const Duration(minutes: 40),
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+            isCompleted: false,
+          ),
+        ];
+      case 'h1': // Flutter Advanced Concepts
+        return [
+          Lesson(
+            number: 1,
+            id: 'h1l1',
+            title: 'Advanced State Management',
+            duration: const Duration(minutes: 60),
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+            isCompleted: false,
+          ),
+          Lesson(
+            number: 2,
+            id: 'h1l2',
+            title: 'Custom Widgets and Inheritance',
+            duration: const Duration(minutes: 55),
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+            isCompleted: false,
+          ),
+          Lesson(
+            number: 3,
+            id: 'h1l3',
+            title: 'Performance Optimization Techniques',
+            duration: const Duration(minutes: 50),
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+            isCompleted: false,
+          ),
+          Lesson(
+            number: 4,
+            id: 'h1l4',
+            title: 'Advanced Animation and Gestures',
+            duration: const Duration(minutes: 65),
+            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+            isCompleted: false,
+          ),
+        ];
+      default:
+        return [];
     }
   }
 }
