@@ -82,10 +82,18 @@ class LessonCard extends StatelessWidget {
                 final isCompleted = Get.find<InventoryController>().isLessonCompleted(courseId, lesson.id);
                 
                 if (isCompleted) {
-                  return const Icon(
-                    Icons.check_circle,
-                    color: AppColors.primaryColor,
-                    size: 24,
+                 return Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.check_rounded,
+                      color: AppColors.primaryColor,
+                      size: 24,
+                    ),
                   );
                 } else if (isLocked) {
                   return const Icon(

@@ -41,12 +41,12 @@ class InventoryPage extends StatelessWidget {
                 child: Obx(() => Row(
                   children: [
                     _buildTabButton(
-                      title: 'Liked Courses',
+                      title: 'Enrolled Courses',
                       isSelected: inventoryController.selectedTab.value == 0,
                       onTap: () => inventoryController.changeTab(0),
                     ),
                     _buildTabButton(
-                      title: 'Enrolled Courses',
+                      title: 'Liked Courses',
                       isSelected: inventoryController.selectedTab.value == 1,
                       onTap: () => inventoryController.changeTab(1),
                     ),
@@ -59,9 +59,9 @@ class InventoryPage extends StatelessWidget {
             Expanded(
               child: Obx(() {
                 if (inventoryController.selectedTab.value == 0) {
-                  return _buildLikedCoursesList();
-                } else {
                   return _buildEnrolledCoursesList();
+                } else {
+                  return _buildLikedCoursesList();
                 }
               }),
             ),
