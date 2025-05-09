@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/courses/controllers/courses_controller.dart';
 import 'package:skillzone/features/courses/models/course.dart';
 import 'package:skillzone/features/courses/models/lesson.dart';
@@ -136,6 +138,19 @@ class InventoryController extends GetxController {
     log('DEBUG: New progress for course $courseId: $newProgress');
     
     log('DEBUG: markLessonAsCompleted completed successfully');
+                          
+    log('DEBUG: Showing snackbar and navigating back');
+    // Navigate back
+    Get.back();
+    // Show success message
+    Get.snackbar(
+      'Lesson Completed',
+      'Great job! You\'ve completed this lesson.',
+      backgroundColor: AppColors.primaryColor,
+      colorText: AppColors.backgroundColor,
+      margin: const EdgeInsets.all(16),
+    );
+    
   }
   
   // Calculate and update course progress

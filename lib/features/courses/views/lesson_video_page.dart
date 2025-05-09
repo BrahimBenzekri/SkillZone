@@ -230,21 +230,6 @@ class _LessonVideoPageState extends State<LessonVideoPage> {
                           
                           // Mark the lesson as completed
                           inventoryController.markLessonAsCompleted(courseId, lesson.id);
-                          
-                          log('DEBUG: Showing snackbar and navigating back');
-                          
-                          // Show success message
-                          Get.snackbar(
-                            'Lesson Completed',
-                            'Great job! You\'ve completed this lesson.',
-                            backgroundColor: AppColors.primaryColor,
-                            colorText: Colors.white,
-                            snackPosition: SnackPosition.BOTTOM,
-                            margin: const EdgeInsets.all(16),
-                          );
-                          
-                          // Navigate back
-                          Get.back();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryColor,
