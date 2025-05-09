@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'dart:async';
 import '../models/quiz.dart';
@@ -270,7 +272,7 @@ class QuizController extends GetxController {
       final args = Get.arguments as Map;
       if (args.containsKey('courseId')) {
         final courseId = args['courseId'] as String;
-        print('DEBUG: Starting quiz for course: $courseId');
+        log('DEBUG: Starting quiz for course: $courseId');
         startQuiz(courseId);
       }
     }

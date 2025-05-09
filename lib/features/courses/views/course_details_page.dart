@@ -451,8 +451,8 @@ class CourseDetailsPage extends StatelessWidget {
                         final allLessonsCompleted = progress >= 1.0;
                         
                         if (!allLessonsCompleted) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
+                          return const Padding(
+                            padding: EdgeInsets.only(top: 8.0),
                             child: Text(
                               'Complete all lessons to unlock the quiz',
                               textAlign: TextAlign.center,

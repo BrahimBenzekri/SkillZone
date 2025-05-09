@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,6 +8,7 @@ import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/core/utils/error_helper.dart';
 import 'package:skillzone/features/courses/controllers/courses_controller.dart';
 import 'package:skillzone/features/courses/models/lesson.dart';
+import 'package:video_player/video_player.dart';
 
 import '../models/course_type.dart';
 
@@ -17,12 +20,10 @@ class UploadCoursePage extends GetView<CoursesController> {
     final titleController = TextEditingController();
     final descriptionController = TextEditingController();
     final priceController = TextEditingController();
-    final durationController = TextEditingController();
     final pointsController = TextEditingController();
     
     // For lessons
     final lessonTitleController = TextEditingController();
-    final lessonDurationController = TextEditingController();
     
     // RxList to store lessons
     final lessons = <Lesson>[].obs;
@@ -38,6 +39,18 @@ class UploadCoursePage extends GetView<CoursesController> {
     
     // Observable for course type
     final courseType = Rx<CourseType>(CourseType.soft);
+    
+    // Calculate total course duration from lessons
+    final totalDuration = Rx<Duration>(Duration.zero);
+    
+    // Update total duration whenever lessons change
+    ever(lessons, (_) {
+      Duration total = Duration.zero;
+      for (var lesson in lessons) {
+        total += lesson.duration;
+      }
+      totalDuration.value = total;
+    });
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
@@ -84,8 +97,9 @@ class UploadCoursePage extends GetView<CoursesController> {
                     titleController: titleController,
                     descriptionController: descriptionController,
                     priceController: priceController,
-                    durationController: durationController,
                     pointsController: pointsController,
+                    courseType: courseType,
+                    totalDuration: totalDuration,
                   ),
                   const SizedBox(height: 40),
                   
@@ -130,33 +144,32 @@ class UploadCoursePage extends GetView<CoursesController> {
                       if (isAddingLesson.value)
                         _buildLessonForm(
                           lessonTitleController: lessonTitleController,
-                          lessonDurationController: lessonDurationController,
                           selectedVideoPath: selectedVideoPath,
                           isUploadingLesson: isUploadingLesson,
                           onAddLesson: () {
                             if (lessonTitleController.text.isNotEmpty && 
-                                lessonDurationController.text.isNotEmpty &&
                                 selectedVideoPath.value.isNotEmpty) {
                               // Simulate video upload
                               isUploadingLesson.value = true;
                               
                               Future.delayed(const Duration(seconds: 3), () {
+                                // Calculate duration from video (for now using a random value between 5-20 minutes)
+                                // In a real app, you would extract this from the video metadata
+                                final videoDuration = Duration(minutes: 5 + (DateTime.now().millisecond % 16));
+                                
                                 // Add the lesson
                                 lessons.add(
                                   Lesson(
                                     id: 'l${lessons.length + 1}',
                                     title: lessonTitleController.text,
                                     number: lessons.length + 1,
-                                    duration: Duration(
-                                      minutes: int.tryParse(lessonDurationController.text) ?? 0
-                                    ),
+                                    duration: videoDuration,
                                     videoUrl: selectedVideoPath.value,
                                   ),
                                 );
                                 
                                 // Reset form
                                 lessonTitleController.clear();
-                                lessonDurationController.clear();
                                 selectedVideoPath.value = '';
                                 isUploadingLesson.value = false;
                                 
@@ -175,7 +188,6 @@ class UploadCoursePage extends GetView<CoursesController> {
                           onCancel: () {
                             isAddingLesson.value = false;
                             lessonTitleController.clear();
-                            lessonDurationController.clear();
                             selectedVideoPath.value = '';
                           },
                         ),
@@ -203,7 +215,6 @@ class UploadCoursePage extends GetView<CoursesController> {
                         // Validate and upload course
                         if (titleController.text.isEmpty || 
                             descriptionController.text.isEmpty || 
-                            durationController.text.isEmpty ||
                             pointsController.text.isEmpty) {
                             ErrorHelper.showError(title: "Error", message: "Please fill all required fields!");
                           return;
@@ -221,13 +232,11 @@ class UploadCoursePage extends GetView<CoursesController> {
                           return;
                         }
                         
-                        // Upload course
+                        // Upload course with calculated duration
                         controller.uploadCourse(
                           title: titleController.text,
                           description: descriptionController.text,
-                          duration: Duration(
-                            minutes: int.tryParse(durationController.text) ?? 0
-                          ),
+                          duration: totalDuration.value,
                           price: courseType.value == CourseType.hard ? int.tryParse(priceController.text) : null,
                           points: int.tryParse(pointsController.text) ?? 100,
                           type: courseType.value,
@@ -263,12 +272,10 @@ class UploadCoursePage extends GetView<CoursesController> {
     required TextEditingController titleController,
     required TextEditingController descriptionController,
     required TextEditingController priceController,
-    required TextEditingController durationController,
     required TextEditingController pointsController,
+    required Rx<CourseType> courseType,
+    required Rx<Duration> totalDuration,
   }) {
-    // Create an observable for course type selection
-    final courseType = Rx<CourseType>(CourseType.soft);
-    
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -390,80 +397,76 @@ class UploadCoursePage extends GetView<CoursesController> {
           ),
           const SizedBox(height: 20),
           
-          // Points and Duration Row
-          Row(
+          // Points and Price Row
+          Obx(() => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Points field (1/3 width)
-              SizedBox(
-                width: MediaQuery.of(Get.context!).size.width * 0.28,
-                child: TextFormField(
-                  controller: pointsController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Points',
-                    labelStyle: TextStyle(color: AppColors.textColorLight),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.textColorLight),
+              // Points field - full width for soft skills, half width for hard skills
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Points field
+                  Expanded(
+                    child: TextFormField(
+                      controller: pointsController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Points',
+                        labelStyle: TextStyle(color: AppColors.textColorLight),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.textColorLight),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
+                        ),
+                        floatingLabelStyle: TextStyle(color: AppColors.primaryColor),
+                      ),
+                      style: const TextStyle(color: AppColors.textColorLight),
+                      cursorColor: AppColors.primaryColor,
                     ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
-                    ),
-                    floatingLabelStyle: TextStyle(color: AppColors.primaryColor),
                   ),
-                  style: const TextStyle(color: AppColors.textColorLight),
-                  cursorColor: AppColors.primaryColor,
-                ),
+                  
+                  // Price field (only for Hard Skills)
+                  if (courseType.value == CourseType.hard) ...[
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: TextFormField(
+                        controller: priceController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: 'Price (\$)',
+                          labelStyle: TextStyle(color: AppColors.textColorLight),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColors.textColorLight),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
+                          ),
+                          floatingLabelStyle: TextStyle(color: AppColors.primaryColor),
+                        ),
+                        style: const TextStyle(color: AppColors.textColorLight),
+                        cursorColor: AppColors.primaryColor,
+                      ),
+                    ),
+                  ],
+                ],
               ),
-              const SizedBox(width: 20),
-              // Duration field
-              Expanded(
-                child: TextFormField(
-                  controller: durationController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Duration (minutes)',
-                    labelStyle: TextStyle(color: AppColors.textColorLight),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.textColorLight),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
-                    ),
-                    floatingLabelStyle: TextStyle(color: AppColors.primaryColor),
+              
+              // Help text for points
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Text(
+                  courseType.value == CourseType.soft 
+                      ? 'Points users will earn by completing this course' 
+                      : 'Points required to unlock this course',
+                  style: const TextStyle(
+                    color: AppColors.textColorInactive,
+                    fontSize: 12,
                   ),
-                  style: const TextStyle(color: AppColors.textColorLight),
-                  cursorColor: AppColors.primaryColor,
                 ),
               ),
             ],
-          ),
-          
-          // Price field (only for Hard Skills)
-          Obx(() => courseType.value == CourseType.hard
-            ? Column(
-                children: [
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: priceController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Price (\$)',
-                      labelStyle: TextStyle(color: AppColors.textColorLight),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.textColorLight),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
-                      ),
-                      floatingLabelStyle: TextStyle(color: AppColors.primaryColor),
-                    ),
-                    style: const TextStyle(color: AppColors.textColorLight),
-                    cursorColor: AppColors.primaryColor,
-                  ),
-                ],
-              )
-            : const SizedBox.shrink()
-          ),
+          )),
         ],
       ),
     );
@@ -471,12 +474,13 @@ class UploadCoursePage extends GetView<CoursesController> {
   
   Widget _buildLessonForm({
     required TextEditingController lessonTitleController,
-    required TextEditingController lessonDurationController,
     required RxString selectedVideoPath,
     required RxBool isUploadingLesson,
     required VoidCallback onAddLesson,
     required VoidCallback onCancel,
   }) {
+    // RxInt to store calculated video duration in minutes
+    final calculatedDuration = 0.obs;
     
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
@@ -514,24 +518,6 @@ class UploadCoursePage extends GetView<CoursesController> {
             style: const TextStyle(color: AppColors.textColorLight),
             cursorColor: AppColors.primaryColor,
           ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: lessonDurationController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              labelText: 'Duration (minutes)',
-              labelStyle: TextStyle(color: AppColors.textColorLight),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: AppColors.textColorLight),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: AppColors.primaryColor, width: 2),
-              ),
-              floatingLabelStyle: TextStyle(color: AppColors.primaryColor),
-            ),
-            style: const TextStyle(color: AppColors.textColorLight),
-            cursorColor: AppColors.primaryColor,
-          ),
           const SizedBox(height: 20),
           
           // Video Upload Section
@@ -551,7 +537,7 @@ class UploadCoursePage extends GetView<CoursesController> {
                   // Gallery option
                   Expanded(
                     child: ElevatedButton.icon(
-                      onPressed: () => _pickVideoFromGallery(selectedVideoPath),
+                      onPressed: () => _pickVideoFromGallery(selectedVideoPath, calculatedDuration),
                       icon: const Icon(Icons.photo_library, size: 18),
                       label: const Text('Gallery'),
                       style: ElevatedButton.styleFrom(
@@ -565,7 +551,7 @@ class UploadCoursePage extends GetView<CoursesController> {
                   // File option
                   Expanded(
                     child: ElevatedButton.icon(
-                      onPressed: () => _pickVideoFromFiles(selectedVideoPath),
+                      onPressed: () => _pickVideoFromFiles(selectedVideoPath, calculatedDuration),
                       icon: const Icon(Icons.folder_open, size: 18),
                       label: const Text('Files'),
                       style: ElevatedButton.styleFrom(
@@ -577,29 +563,49 @@ class UploadCoursePage extends GetView<CoursesController> {
                   ),
                 ],
               )
-            : Row(
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(
-                    Icons.check_circle,
-                    color: Colors.green,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Video: ${selectedVideoPath.value.split('/').last}',
-                      style: const TextStyle(
-                        color: AppColors.textColorLight,
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Video: ${selectedVideoPath.value.split('/').last}',
+                          style: const TextStyle(
+                            color: AppColors.textColorLight,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.close,
+                          color: AppColors.textColorLight,
+                        ),
+                        onPressed: () {
+                          selectedVideoPath.value = '';
+                          calculatedDuration.value = 0;
+                        },
+                      ),
+                    ],
                   ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.close,
-                      color: AppColors.textColorLight,
+                  // Show calculated duration
+                  if (calculatedDuration.value > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        'Duration: ${calculatedDuration.value} minutes',
+                        style: const TextStyle(
+                          color: AppColors.textColorLight,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
-                    onPressed: () => selectedVideoPath.value = '',
-                  ),
                 ],
               )
           ),
@@ -637,7 +643,15 @@ class UploadCoursePage extends GetView<CoursesController> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: onAddLesson,
+                    onPressed: () {
+                      if (lessonTitleController.text.isNotEmpty && 
+                          selectedVideoPath.value.isNotEmpty) {
+                        // Call onAddLesson with the calculated duration
+                        onAddLesson();
+                      } else {
+                        ErrorHelper.showError(title: "Error", message: "Please fill all required fields and select a video");
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryColor,
                       foregroundColor: AppColors.bottomBarColor,
@@ -721,7 +735,7 @@ class UploadCoursePage extends GetView<CoursesController> {
   }
   
   // Method to pick video from gallery
-  Future<void> _pickVideoFromGallery(RxString selectedVideoPath) async {
+  Future<void> _pickVideoFromGallery(RxString selectedVideoPath, RxInt calculatedDuration) async {
     try {
       final ImagePicker picker = ImagePicker();
       final XFile? video = await picker.pickVideo(
@@ -731,6 +745,11 @@ class UploadCoursePage extends GetView<CoursesController> {
       
       if (video != null) {
         selectedVideoPath.value = video.path;
+        // Calculate duration
+        final videoPlayer =  VideoPlayerController.file(File(video.path));
+        await videoPlayer.initialize();
+        final duration = videoPlayer.value.duration ;
+        calculatedDuration.value = duration.inMinutes;
       }
     } catch (e) {
       ErrorHelper.showError(title: 'Unexpected Error', message: e.toString());
@@ -738,7 +757,7 @@ class UploadCoursePage extends GetView<CoursesController> {
   }
   
   // Method to pick video from files
-  Future<void> _pickVideoFromFiles(RxString selectedVideoPath) async {
+  Future<void> _pickVideoFromFiles(RxString selectedVideoPath, RxInt calculatedDuration) async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.video,
@@ -747,6 +766,11 @@ class UploadCoursePage extends GetView<CoursesController> {
       
       if (result != null && result.files.isNotEmpty) {
         selectedVideoPath.value = result.files.first.path!;
+        // Calculate duration
+        final videoPlayer =  VideoPlayerController.file(File(result.files.first.path!));
+        await videoPlayer.initialize();
+        final duration = videoPlayer.value.duration;
+        calculatedDuration.value = duration.inMinutes;
       }
     } catch (e) {
       ErrorHelper.showError(title: "Failed to pick video", message: e.toString());
