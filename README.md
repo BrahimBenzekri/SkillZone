@@ -25,14 +25,25 @@ Some features might be incomplete or subject to change as development progresses
 
 ## 📱 Screenshots
 
+<style>
+  table td {
+    border: none !important;
+  }
+</style>
+
 ### 🟡 Onboarding Flow
-<table style="border-collapse: collapse; border: none;">
-  <tr style="border: none;">
-    <td align="center" style="border: none;">
+<style>
+  table td {
+    border: none !important;
+  }
+</style>
+<table>
+  <tr>
+    <td align="center">
       <strong>Onboarding</strong><br>
       <img src="screenshots/onboarding.jpg" width="200"/>
     </td>
-    <td align="center" style="border: none;">
+    <td align="center">
       <strong>Welcome</strong><br>
       <img src="screenshots/welcome.jpg" width="200"/>
     </td>
@@ -40,27 +51,32 @@ Some features might be incomplete or subject to change as development progresses
 </table>
 
 ### 🔐 Authentication
-<table style="border-collapse: collapse; border: none;">
-  <tr style="border: none;">
-    <td align="center" style="border: none;">
+<style>
+  table td {
+    border: none !important;
+  }
+</style>
+<table>
+  <tr>
+    <td align="center">
       <strong>Login</strong><br>
       <img src="screenshots/login.jpg" width="200"/>
     </td>
-    <td align="center" style="border: none;">
+    <td align="center">
       <strong>Signup</strong><br>
       <img src="screenshots/signup.jpg" width="200"/>
     </td>
-    <td align="center" style="border: none;">
+    <td align="center">
       <strong>Email Verification</strong><br>
       <img src="screenshots/email_verification.jpg" width="200"/>
     </td>
   </tr>
-  <tr style="border: none;">
-    <td align="center" style="border: none;">
+  <tr>
+    <td align="center">
       <strong>Account Type</strong><br>
       <img src="screenshots/account_type.jpg" width="200"/>
     </td>
-    <td align="center" style="border: none;">
+    <td align="center">
       <strong>Interests</strong><br>
       <img src="screenshots/interests.jpg" width="200"/>
     </td>
@@ -68,27 +84,32 @@ Some features might be incomplete or subject to change as development progresses
 </table>
 
 ### 🏠 Main App Screens
-<table style="border-collapse: collapse; border: none;">
-  <tr style="border: none;">
-    <td align="center" style="border: none;">
+<style>
+  table td {
+    border: none !important;
+  }
+</style>
+<table>
+  <tr>
+    <td align="center">
       <strong>Home</strong><br>
       <img src="screenshots/home.jpg" width="200"/>
     </td>
-    <td align="center" style="border: none;">
+    <td align="center">
       <strong>Profile</strong><br>
       <img src="screenshots/profile.jpg" width="200"/>
     </td>
-    <td align="center" style="border: none;">
+    <td align="center">
       <strong>Edit Avatar</strong><br>
       <img src="screenshots/edit_avatar.jpg" width="200"/>
     </td>
   </tr>
-  <tr style="border: none;">
-    <td align="center" style="border: none;">
+  <tr>
+    <td align="center">
       <strong>Points & Level</strong><br>
       <img src="screenshots/points_and_level.jpg" width="200"/>
     </td>
-    <td align="center" style="border: none;">
+    <td align="center">
       <strong>Notifications</strong><br>
       <img src="screenshots/notifications.jpg" width="200"/>
     </td>
@@ -96,13 +117,18 @@ Some features might be incomplete or subject to change as development progresses
 </table>
 
 ### 📚 Course Types
-<table style="border-collapse: collapse; border: none;">
-  <tr style="border: none;">
-    <td align="center" style="border: none;">
+<style>
+  table td {
+    border: none !important;
+  }
+</style>
+<table>
+  <tr>
+    <td align="center">
       <strong>Soft Course</strong><br>
       <img src="screenshots/soft_course.jpg" width="200"/>
     </td>
-    <td align="center" style="border: none;">
+    <td align="center">
       <strong>Hard Course</strong><br>
       <img src="screenshots/hard_course.jpg" width="200"/>
     </td>
@@ -110,17 +136,22 @@ Some features might be incomplete or subject to change as development progresses
 </table>
 
 ### 🎥 Course Interaction
-<table style="border-collapse: collapse; border: none;">
-  <tr style="border: none;">
-    <td align="center" style="border: none;">
+<style>
+  table td {
+    border: none !important;
+  }
+</style>
+<table>
+  <tr>
+    <td align="center">
       <strong>Lesson Video</strong><br>
       <img src="screenshots/lesson_video.jpg" width="200"/>
     </td>
-    <td align="center" style="border: none;">
+    <td align="center">
       <strong>Quiz</strong><br>
       <img src="screenshots/quiz.jpg" width="200"/>
     </td>
-    <td align="center" style="border: none;">
+    <td align="center">
       <strong>Quiz Results</strong><br>
       <img src="screenshots/quiz_results.jpg" width="200"/>
     </td>
@@ -128,23 +159,28 @@ Some features might be incomplete or subject to change as development progresses
 </table>
 
 ### 📦 Course Management
-<table style="border-collapse: collapse; border: none;">
-  <tr style="border: none;">
-    <td align="center" style="border: none;">
+<style>
+  table td {
+    border: none !important;
+  }
+</style>
+<table>
+  <tr>
+    <td align="center">
       <strong>Enrolled Courses</strong><br>
       <img src="screenshots/enrolled_courses.jpg" width="200"/>
     </td>
-    <td align="center" style="border: none;">
+    <td align="center">
       <strong>Liked Courses</strong><br>
       <img src="screenshots/liked_courses.jpg" width="200"/>
     </td>
-    <td align="center" style="border: none;">
+    <td align="center">
       <strong>Course In Progress</strong><br>
       <img src="screenshots/course_in_progrss.jpg" width="200"/>
     </td>
   </tr>
-  <tr style="border: none;">
-    <td align="center" style="border: none;">
+  <tr>
+    <td align="center">
       <strong>Completed Course</strong><br>
       <img src="screenshots/completed_course.jpg" width="200"/>
     </td>
@@ -152,13 +188,18 @@ Some features might be incomplete or subject to change as development progresses
 </table>
 
 ### 🧑‍🏫 Instructor Features
-<table style="border-collapse: collapse; border: none;">
-  <tr style="border: none;">
-    <td align="center" style="border: none;">
+<style>
+  table td {
+    border: none !important;
+  }
+</style>
+<table>
+  <tr>
+    <td align="center">
       <strong>Upload Course</strong><br>
       <img src="screenshots/upload_course.jpg" width="200"/>
     </td>
-    <td align="center" style="border: none;">
+    <td align="center">
       <strong>Uploaded Courses</strong><br>
       <img src="screenshots/uploaded_courses.jpg" width="200"/>
     </td>
@@ -166,9 +207,14 @@ Some features might be incomplete or subject to change as development progresses
 </table>
 
 ### 💳 Payment
-<table style="border-collapse: collapse; border: none;">
-  <tr style="border: none;">
-    <td align="center" style="border: none;">
+<style>
+  table td {
+    border: none !important;
+  }
+</style>
+<table>
+  <tr>
+    <td align="center">
       <strong>Card Information</strong><br>
       <img src="screenshots/card_information.jpg" width="200"/>
     </td>
