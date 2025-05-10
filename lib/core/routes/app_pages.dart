@@ -5,6 +5,7 @@ import 'package:skillzone/features/auth/views/account_type_page.dart';
 import 'package:skillzone/features/auth/views/email_verification_page.dart';
 import 'package:skillzone/features/auth/views/login_page.dart';
 import 'package:skillzone/features/auth/views/signup_page.dart';
+import 'package:skillzone/features/card/views/card_page.dart';
 import 'package:skillzone/features/courses/views/course_details_page.dart';
 import 'package:skillzone/features/courses/views/lesson_video_page.dart';
 import 'package:skillzone/features/courses/views/teacher_courses_page.dart';
@@ -83,6 +84,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.teacherCourses,
       page: () => const TeacherCoursesPage()
+    ),
+    GetPage(
+      name: AppRoutes.cardInformation,
+      page: () => const CardPage(),
     ),
 
     // Course Pages
