@@ -192,31 +192,30 @@ Secure payment processing allows users to purchase additional points or premium 
 ## ✨ Features
 
 Current Implementation:
-- 📚 Comprehensive course catalog
-- 🎥 High-quality video lessons
-- 👤 User profiles and progress tracking
-- 🎨 Modern and intuitive UI design
-- 🌙 Custom fonts (Oddval and K2D)
-- 🎬 Advanced video player with custom controls
-- 📱 Responsive design for various screen sizes
-- 🌐 Cross-platform support (iOS, Android, Web)
-
-Planned Features:
-- 📝 Interactive quizzes
-- 🏆 Achievement system
-- 📊 Progress analytics
+- 📚 Comprehensive course catalog with distinct soft and hard skills sections
+- 🎥 High-quality video lessons with custom player controls
+- 👤 User profiles with customizable avatars and progress tracking
+- 🎮 Gamified learning with points system and level progression
+- 🎨 Modern and intuitive UI design with consistent theming
+- 🌙 Custom fonts (Oddval and K2D) for distinctive branding
+- 📱 Responsive design for various screen sizes and orientations
+- 🌐 Cross-platform support (iOS, Android, Web, macOS, Linux, Windows)
+- 👨‍🏫 Instructor tools for course creation and management
+- 💳 Secure payment processing for premium content
 
 ## 🛠️ Technical Details
 
 ### Built With
-- Flutter
-- GetX for state management
-- Chewie for video playback
-- Custom theming and styling
+- Flutter for cross-platform development
+- GetX for state management and navigation
+- Chewie and Video Player for media playback
+- Get Storage for local data persistence
+- File Picker and Image Picker for media uploads
+- Custom theming and styling throughout
 
 ### Font Families
-- Oddval (SemiBold, SemiBold Italic)
-- K2D (ExtraBold)
+- Oddval (SemiBold, SemiBold Italic) for headings and emphasis
+- K2D (ExtraBold) for titles and navigation elements
 
 ### Supported Platforms
 - iOS
@@ -229,10 +228,11 @@ Planned Features:
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Flutter SDK
-- Dart SDK
+- Flutter SDK (version 3.5.4 or higher)
+- Dart SDK (version 3.5.4 or higher)
 - Android Studio / Xcode (for mobile development)
 - VS Code or preferred IDE
+- Git for version control
 
 ### Installation
 
@@ -251,7 +251,13 @@ cd skillzone
 flutter pub get
 ```
 
-4. Run the app
+4. Create a .env file in the root directory with required environment variables
+```
+API_URL=your_api_url_here
+API_KEY=your_api_key_here
+```
+
+5. Run the app
 ```bash
 flutter run
 ```
@@ -261,17 +267,24 @@ flutter run
 ```
 lib/
 ├── assets/
-│   ├── fonts/
-│   ├── images/
-│   ├── svgs/
-│   └── logo/
+│   ├── fonts/       # Custom fonts (Oddval, K2D)
+│   ├── images/      # Static images and illustrations
+│   ├── svgs/        # Vector graphics and icons
+│   ├── videos/      # Sample video content
+│   └── logo/        # App logo in various resolutions
 ├── features/
-│   ├── navigation/
-│   ├── courses/
-│   └── profile/
+│   ├── auth/        # Authentication and user management
+│   ├── navigation/  # App navigation and routing
+│   ├── courses/     # Course listing and details
+│   ├── player/      # Video player and controls
+│   ├── quiz/        # Quiz functionality
+│   ├── profile/     # User profile management
+│   └── payment/     # Payment processing
 └── core/
-    ├── theme/
-    └── utils/
+    ├── theme/       # App theming and styling
+    ├── models/      # Data models
+    ├── services/    # API and backend services
+    └── utils/       # Helper functions and utilities
 ```
 
 ## 📄 License
@@ -288,11 +301,14 @@ As this is a college project in development, contributions are currently limited
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-
 ## 🙏 Acknowledgments
 
-* [Flutter](https://flutter.dev)
-* [GetX](https://pub.dev/packages/get)
+* [Flutter](https://flutter.dev) - UI toolkit for building natively compiled applications
+* [GetX](https://pub.dev/packages/get) - State management, navigation, and dependency injection
+* [Chewie](https://pub.dev/packages/chewie) - Video player with customizable controls
+* [Flutter SVG](https://pub.dev/packages/flutter_svg) - SVG rendering support
+* [Smooth Page Indicator](https://pub.dev/packages/smooth_page_indicator) - Page indicators for onboarding
+* [Percent Indicator](https://pub.dev/packages/percent_indicator) - Progress visualization
 
 ---
 ⭐️ If you found this project helpful, please give it a star!
