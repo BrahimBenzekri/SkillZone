@@ -171,7 +171,7 @@ class HomePage extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: 'Cool Guy',
+                              text: 'Brahim Benzekri',
                               style: TextStyle(
                                 color: AppColors.textColorLight,
                                 fontSize: 20,

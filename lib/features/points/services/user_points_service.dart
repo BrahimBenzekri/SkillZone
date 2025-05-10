@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 class UserPointsService extends GetxService {
   static const String pointsKey = 'user_points';
   final _storage = GetStorage();
-  final points = 990.obs;
+  final points = 0.obs;
 
   @override
   void onInit() {

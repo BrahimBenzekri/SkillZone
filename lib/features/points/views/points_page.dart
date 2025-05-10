@@ -6,9 +6,7 @@ import '../widgets/level_progress_bar.dart';
 
 class PointsPage extends StatelessWidget {
   PointsPage({super.key}) {
-    if (!Get.isRegistered<PointsController>()) {
-      Get.lazyPut(() => PointsController());
-    }
+    Get.put(PointsController());
   }
 
   PointsController get controller => Get.find<PointsController>();
