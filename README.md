@@ -25,134 +25,155 @@ Some features might be incomplete or subject to change as development progresses
 
 ## 📱 Screenshots
 
-<div align="center" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px;">
-  <!-- Onboarding & Authentication -->
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Onboarding</h3>
-    <img src="screenshots/onboarding.jpg" width="250" alt="Onboarding Screen">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Welcome</h3>
-    <img src="screenshots/welcome.jpg" width="250" alt="Welcome Screen">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Login</h3>
-    <img src="screenshots/login.jpg" width="250" alt="Login Screen">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Signup</h3>
-    <img src="screenshots/signup.jpg" width="250" alt="Signup Screen">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Email Verification</h3>
-    <img src="screenshots/email_verification.jpg" width="250" alt="Email Verification">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Account Type</h3>
-    <img src="screenshots/account_type.jpg" width="250" alt="Account Type">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Interests</h3>
-    <img src="screenshots/interests.jpg" width="250" alt="Interests Selection">
-  </div>
-  
-  <!-- Main App Screens -->
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Home</h3>
-    <img src="screenshots/home.jpg" width="250" alt="Home Screen">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Profile</h3>
-    <img src="screenshots/profile.jpg" width="250" alt="Profile Screen">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Edit Avatar</h3>
-    <img src="screenshots/edit_avatar.jpg" width="250" alt="Edit Avatar">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Points & Level</h3>
-    <img src="screenshots/points_and_level.jpg" width="250" alt="Points and Level">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Notifications</h3>
-    <img src="screenshots/notifications.jpg" width="250" alt="Notifications">
-  </div>
-  
-  <!-- Course Types -->
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Soft Course</h3>
-    <img src="screenshots/soft_course.jpg" width="250" alt="Soft Skills Course">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Hard Course</h3>
-    <img src="screenshots/hard_course.jpg" width="250" alt="Hard Skills Course">
-  </div>
-  
-  <!-- Course Interaction -->
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Lesson Video</h3>
-    <img src="screenshots/lesson_video.jpg" width="250" alt="Lesson Video Player">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Quiz</h3>
-    <img src="screenshots/quiz.jpg" width="250" alt="Quiz Screen">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Quiz Results</h3>
-    <img src="screenshots/quiz_results.jpg" width="250" alt="Quiz Results">
-  </div>
-  
-  <!-- Course Management -->
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Enrolled Courses</h3>
-    <img src="screenshots/enrolled_courses.jpg" width="250" alt="Enrolled Courses">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Liked Courses</h3>
-    <img src="screenshots/liked_courses.jpg" width="250" alt="Liked Courses">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Course In Progress</h3>
-    <img src="screenshots/course_in_progrss.jpg" width="250" alt="Course In Progress">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Completed Course</h3>
-    <img src="screenshots/completed_course.jpg" width="250" alt="Completed Course">
-  </div>
-  
-  <!-- Instructor Features -->
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Upload Course</h3>
-    <img src="screenshots/upload_course.jpg" width="250" alt="Upload Course">
-  </div>
-  
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Uploaded Courses</h3>
-    <img src="screenshots/uploaded_courses.jpg" width="250" alt="Uploaded Courses">
-  </div>
-  
-  <!-- Payment -->
-  <div style="display: flex; flex-direction: column; align-items: center; width: 250px;">
-    <h3>Card Information</h3>
-    <img src="screenshots/card_information.jpg" width="250" alt="Card Information">
-  </div>
-</div>
+### 🟡 Onboarding Flow
+<table>
+  <tr>
+    <td align="center">
+      <strong>Onboarding</strong><br>
+      <img src="screenshots/onboarding.jpg" width="200"/>
+    </td>
+    <td align="center">
+      <strong>Welcome</strong><br>
+      <img src="screenshots/welcome.jpg" width="200"/>
+    </td>
+  </tr>
+</table>
+
+### 🔐 Authentication
+<table>
+  <tr>
+    <td align="center">
+      <strong>Login</strong><br>
+      <img src="screenshots/login.jpg" width="200"/>
+    </td>
+    <td align="center">
+      <strong>Signup</strong><br>
+      <img src="screenshots/signup.jpg" width="200"/>
+    </td>
+    <td align="center">
+      <strong>Email Verification</strong><br>
+      <img src="screenshots/email_verification.jpg" width="200"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <strong>Account Type</strong><br>
+      <img src="screenshots/account_type.jpg" width="200"/>
+    </td>
+    <td align="center">
+      <strong>Interests</strong><br>
+      <img src="screenshots/interests.jpg" width="200"/>
+    </td>
+  </tr>
+</table>
+
+### 🏠 Main App Screens
+<table>
+  <tr>
+    <td align="center">
+      <strong>Home</strong><br>
+      <img src="screenshots/home.jpg" width="200"/>
+    </td>
+    <td align="center">
+      <strong>Profile</strong><br>
+      <img src="screenshots/profile.jpg" width="200"/>
+    </td>
+    <td align="center">
+      <strong>Edit Avatar</strong><br>
+      <img src="screenshots/edit_avatar.jpg" width="200"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <strong>Points & Level</strong><br>
+      <img src="screenshots/points_and_level.jpg" width="200"/>
+    </td>
+    <td align="center">
+      <strong>Notifications</strong><br>
+      <img src="screenshots/notifications.jpg" width="200"/>
+    </td>
+  </tr>
+</table>
+
+### 📚 Course Types
+<table>
+  <tr>
+    <td align="center">
+      <strong>Soft Course</strong><br>
+      <img src="screenshots/soft_course.jpg" width="200"/>
+    </td>
+    <td align="center">
+      <strong>Hard Course</strong><br>
+      <img src="screenshots/hard_course.jpg" width="200"/>
+    </td>
+  </tr>
+</table>
+
+### 🎥 Course Interaction
+<table>
+  <tr>
+    <td align="center">
+      <strong>Lesson Video</strong><br>
+      <img src="screenshots/lesson_video.jpg" width="200"/>
+    </td>
+    <td align="center">
+      <strong>Quiz</strong><br>
+      <img src="screenshots/quiz.jpg" width="200"/>
+    </td>
+    <td align="center">
+      <strong>Quiz Results</strong><br>
+      <img src="screenshots/quiz_results.jpg" width="200"/>
+    </td>
+  </tr>
+</table>
+
+### 📦 Course Management
+<table>
+  <tr>
+    <td align="center">
+      <strong>Enrolled Courses</strong><br>
+      <img src="screenshots/enrolled_courses.jpg" width="200"/>
+    </td>
+    <td align="center">
+      <strong>Liked Courses</strong><br>
+      <img src="screenshots/liked_courses.jpg" width="200"/>
+    </td>
+    <td align="center">
+      <strong>Course In Progress</strong><br>
+      <img src="screenshots/course_in_progrss.jpg" width="200"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <strong>Completed Course</strong><br>
+      <img src="screenshots/completed_course.jpg" width="200"/>
+    </td>
+  </tr>
+</table>
+
+### 🧑‍🏫 Instructor Features
+<table>
+  <tr>
+    <td align="center">
+      <strong>Upload Course</strong><br>
+      <img src="screenshots/upload_course.jpg" width="200"/>
+    </td>
+    <td align="center">
+      <strong>Uploaded Courses</strong><br>
+      <img src="screenshots/uploaded_courses.jpg" width="200"/>
+    </td>
+  </tr>
+</table>
+
+### 💳 Payment
+<table>
+  <tr>
+    <td align="center">
+      <strong>Card Information</strong><br>
+      <img src="screenshots/card_information.jpg" width="200"/>
+    </td>
+  </tr>
+</table>
 
 ## ✨ Features
 
