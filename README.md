@@ -26,7 +26,7 @@ Some features might be incomplete or subject to change as development progresses
 ## 📱 Screenshots
 
 ### 🟡 Onboarding Flow
-<table>
+<table style="border: none;">
   <tr>
     <td align="center">
       <strong>Onboarding</strong><br>
@@ -40,7 +40,7 @@ Some features might be incomplete or subject to change as development progresses
 </table>
 
 ### 🔐 Authentication
-<table>
+<table style="border: none;">
   <tr>
     <td align="center">
       <strong>Login</strong><br>
@@ -68,7 +68,7 @@ Some features might be incomplete or subject to change as development progresses
 </table>
 
 ### 🏠 Main App Screens
-<table>
+<table style="border: none;">
   <tr>
     <td align="center">
       <strong>Home</strong><br>
@@ -96,7 +96,7 @@ Some features might be incomplete or subject to change as development progresses
 </table>
 
 ### 📚 Course Types
-<table>
+<table style="border: none;">
   <tr>
     <td align="center">
       <strong>Soft Course</strong><br>
@@ -110,7 +110,7 @@ Some features might be incomplete or subject to change as development progresses
 </table>
 
 ### 🎥 Course Interaction
-<table>
+<table style="border: none;">
   <tr>
     <td align="center">
       <strong>Lesson Video</strong><br>
@@ -128,7 +128,7 @@ Some features might be incomplete or subject to change as development progresses
 </table>
 
 ### 📦 Course Management
-<table>
+<table style="border: none;">
   <tr>
     <td align="center">
       <strong>Enrolled Courses</strong><br>
@@ -152,7 +152,7 @@ Some features might be incomplete or subject to change as development progresses
 </table>
 
 ### 🧑‍🏫 Instructor Features
-<table>
+<table style="border: none;">
   <tr>
     <td align="center">
       <strong>Upload Course</strong><br>
@@ -166,7 +166,7 @@ Some features might be incomplete or subject to change as development progresses
 </table>
 
 ### 💳 Payment
-<table>
+<table style="border: none;">
   <tr>
     <td align="center">
       <strong>Card Information</strong><br>
