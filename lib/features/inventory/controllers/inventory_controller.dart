@@ -7,6 +7,7 @@ import 'package:skillzone/features/courses/models/course.dart';
 import 'package:skillzone/features/courses/models/course_type.dart';
 import 'package:skillzone/features/courses/models/lesson.dart';
 import 'package:skillzone/features/points/services/user_points_service.dart';
+import 'dart:developer' as dev;
 
 class InventoryController extends GetxController {
   // Tab selection (0 for Liked, 1 for Enrolled)
@@ -223,8 +224,11 @@ class InventoryController extends GetxController {
   
   // Handle course enrollment with points or payment
   Future<bool> enrollInCourse(String courseId) async {
+    dev.log('Starting enrollment process for courseId: $courseId', name: 'enrollInCourse');
+    
     // Check if already enrolled
     if (enrolledCourseIds.contains(courseId)) {
+      dev.log('User already enrolled in course: $courseId', name: 'enrollInCourse');
       Get.snackbar(
         'Already Enrolled',
         'You are already enrolled in this course',
@@ -239,6 +243,7 @@ class InventoryController extends GetxController {
     // Get the course
     final course = _getCourseById(courseId);
     if (course == null) {
+      dev.log('Course not found with ID: $courseId', name: 'enrollInCourse');
       Get.snackbar(
         'Error',
         'Course not found',
@@ -250,71 +255,71 @@ class InventoryController extends GetxController {
       return false;
     }
     
+    dev.log('Found course: ${course.title} (${course.id}), type: ${course.type}', name: 'enrollInCourse');
     final pointsService = Get.find<UserPointsService>();
+    dev.log('Current user points: ${pointsService.points.value}', name: 'enrollInCourse');
     
     if (course.type == CourseType.hard) {
+      dev.log('Processing hard skill course', name: 'enrollInCourse');
       // Show dialog to choose payment method
       final payWithPoints = await _showPaymentChoiceDialog(course);
+      dev.log('Payment dialog result: $payWithPoints', name: 'enrollInCourse');
       
       if (payWithPoints == null) {
         // User cancelled
+        dev.log('User cancelled enrollment', name: 'enrollInCourse');
         return false;
       } else if (payWithPoints) {
         // User chose to pay with points
+        dev.log('User chose to pay with points: ${course.points}', name: 'enrollInCourse');
         if (!pointsService.hasEnoughPoints(course.points)) {
-          Get.snackbar(
+          dev.log('Not enough points. Required: ${course.points}, Available: ${pointsService.points.value}', name: 'enrollInCourse');
+          Future.delayed(Duration.zero, () {Get.snackbar(
             'Not Enough Points',
             'You need ${course.points} points to unlock this course',
             backgroundColor: AppColors.errorColor,
             colorText: AppColors.backgroundColor,
             snackPosition: SnackPosition.BOTTOM,
             margin: const EdgeInsets.all(16),
-          );
+          );});
           return false;
         }
         
         // Deduct points
+        dev.log('Deducting ${course.points} points', name: 'enrollInCourse');
         await pointsService.deductPoints(course.points);
+        dev.log('Points after deduction: ${pointsService.points.value}', name: 'enrollInCourse');
       } else {
-        // User chose to pay with money - show payment not available message
-        Get.snackbar(
+        Future.delayed(Duration.zero, (){Get.snackbar(
           'Payment Not Available',
           'Payment functionality is not available in this demo',
           backgroundColor: AppColors.errorColor,
           colorText: AppColors.backgroundColor,
           snackPosition: SnackPosition.BOTTOM,
           margin: const EdgeInsets.all(16),
-        );
+        );});
+        // User chose to pay with money - show payment not available message
+        dev.log('User chose to pay with money: \$${course.price}', name: 'enrollInCourse');
         return false;
       }
     } else {
-      // Points-only course
-      if (!pointsService.hasEnoughPoints(course.points)) {
-        Get.snackbar(
-          'Not Enough Points',
-          'You need ${course.points} points to unlock this course',
-          backgroundColor: AppColors.errorColor,
-          colorText: AppColors.backgroundColor,
-          snackPosition: SnackPosition.BOTTOM,
-          margin: const EdgeInsets.all(16),
-        );
-        return false;
-      }
-      
-      // Deduct points
-      await pointsService.deductPoints(course.points);
+      // Soft skill course - free to enroll, will earn points upon completion
+      dev.log('Processing soft skill course (free enrollment)', name: 'enrollInCourse');
     }
     
-    
     // If we got here, enrollment is successful
+    dev.log('Enrollment successful, adding course to enrolled list', name: 'enrollInCourse');
     enrolledCourseIds.add(courseId);
     
     // Initialize progress tracking for this course
+    dev.log('Initializing progress tracking for course', name: 'enrollInCourse');
     completedLessons[courseId] = <String, bool>{}.obs;
     for (final lesson in course.lessons) {
       completedLessons[courseId]![lesson.id] = false;
+      dev.log('Initialized lesson ${lesson.id} as not completed', name: 'enrollInCourse');
     }
     courseProgress[courseId] = 0.0.obs;
+    dev.log('Set initial course progress to 0.0', name: 'enrollInCourse');
     
     Get.snackbar(
       'Success',
@@ -325,6 +330,7 @@ class InventoryController extends GetxController {
       margin: const EdgeInsets.all(16),
     );
     
+    dev.log('Enrollment process completed successfully', name: 'enrollInCourse');
     return true;
   }
 
