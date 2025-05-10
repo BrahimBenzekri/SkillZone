@@ -25,197 +25,165 @@ Some features might be incomplete or subject to change as development progresses
 
 ## 📱 Screenshots
 
-<style>
-  table td {
-    border: none !important;
-  }
-</style>
-
 ### 🟡 Onboarding Flow
-<style>
-  table td {
-    border: none !important;
-  }
-</style>
+The onboarding experience introduces new users to SkillZone's unique learning approach and value proposition, guiding them through the platform's core concepts before registration.
+
 <table>
   <tr>
     <td align="center">
-      <strong>Onboarding</strong><br>
+      <strong>Onboarding</strong><br><br>
       <img src="screenshots/onboarding.jpg" width="200"/>
     </td>
     <td align="center">
-      <strong>Welcome</strong><br>
+      <strong>Welcome</strong><br><br>
       <img src="screenshots/welcome.jpg" width="200"/>
     </td>
   </tr>
 </table>
 
 ### 🔐 Authentication
-<style>
-  table td {
-    border: none !important;
-  }
-</style>
+Our streamlined authentication process includes account creation, email verification, and personalization steps to tailor the learning experience to each user's preferences and goals.
+
 <table>
   <tr>
     <td align="center">
-      <strong>Login</strong><br>
+      <strong>Login</strong><br><br>
       <img src="screenshots/login.jpg" width="200"/>
     </td>
     <td align="center">
-      <strong>Signup</strong><br>
+      <strong>Signup</strong><br><br>
       <img src="screenshots/signup.jpg" width="200"/>
     </td>
     <td align="center">
-      <strong>Email Verification</strong><br>
+      <strong>Email Verification</strong><br><br>
       <img src="screenshots/email_verification.jpg" width="200"/>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <strong>Account Type</strong><br>
+      <strong>Account Type</strong><br><br>
       <img src="screenshots/account_type.jpg" width="200"/>
     </td>
     <td align="center">
-      <strong>Interests</strong><br>
+      <strong>Interests</strong><br><br>
       <img src="screenshots/interests.jpg" width="200"/>
     </td>
   </tr>
 </table>
 
 ### 🏠 Main App Screens
-<style>
-  table td {
-    border: none !important;
-  }
-</style>
+The core app experience features a clean, intuitive interface with personalized content recommendations, profile management, and progress tracking to keep users engaged and motivated.
+
 <table>
   <tr>
     <td align="center">
-      <strong>Home</strong><br>
+      <strong>Home</strong><br><br>
       <img src="screenshots/home.jpg" width="200"/>
     </td>
     <td align="center">
-      <strong>Profile</strong><br>
+      <strong>Profile</strong><br><br>
       <img src="screenshots/profile.jpg" width="200"/>
     </td>
     <td align="center">
-      <strong>Edit Avatar</strong><br>
+      <strong>Edit Avatar</strong><br><br>
       <img src="screenshots/edit_avatar.jpg" width="200"/>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <strong>Points & Level</strong><br>
+      <strong>Points & Level</strong><br><br>
       <img src="screenshots/points_and_level.jpg" width="200"/>
     </td>
     <td align="center">
-      <strong>Notifications</strong><br>
+      <strong>Notifications</strong><br><br>
       <img src="screenshots/notifications.jpg" width="200"/>
     </td>
   </tr>
 </table>
 
 ### 📚 Course Types
-<style>
-  table td {
-    border: none !important;
-  }
-</style>
 <table>
   <tr>
     <td align="center">
-      <strong>Soft Course</strong><br>
+      <strong>Soft Course</strong><br><br>
       <img src="screenshots/soft_course.jpg" width="200"/>
     </td>
     <td align="center">
-      <strong>Hard Course</strong><br>
+      <strong>Hard Course</strong><br><br>
       <img src="screenshots/hard_course.jpg" width="200"/>
     </td>
   </tr>
 </table>
 
 ### 🎥 Course Interaction
-<style>
-  table td {
-    border: none !important;
-  }
-</style>
+Our immersive learning experience includes high-quality video lessons, interactive quizzes, and immediate feedback to reinforce knowledge acquisition and track progress toward mastery.
+
 <table>
   <tr>
     <td align="center">
-      <strong>Lesson Video</strong><br>
+      <strong>Lesson Video</strong><br><br>
       <img src="screenshots/lesson_video.jpg" width="200"/>
     </td>
     <td align="center">
-      <strong>Quiz</strong><br>
+      <strong>Quiz</strong><br><br>
       <img src="screenshots/quiz.jpg" width="200"/>
     </td>
     <td align="center">
-      <strong>Quiz Results</strong><br>
+      <strong>Quiz Results</strong><br><br>
       <img src="screenshots/quiz_results.jpg" width="200"/>
     </td>
   </tr>
 </table>
 
 ### 📦 Course Management
-<style>
-  table td {
-    border: none !important;
-  }
-</style>
+Users can easily track their learning journey with dedicated sections for enrolled, liked, in-progress, and completed courses, ensuring they never lose sight of their educational goals.
+
 <table>
   <tr>
     <td align="center">
-      <strong>Enrolled Courses</strong><br>
+      <strong>Enrolled Courses</strong><br><br>
       <img src="screenshots/enrolled_courses.jpg" width="200"/>
     </td>
     <td align="center">
-      <strong>Liked Courses</strong><br>
+      <strong>Liked Courses</strong><br><br>
       <img src="screenshots/liked_courses.jpg" width="200"/>
     </td>
     <td align="center">
-      <strong>Course In Progress</strong><br>
+      <strong>Course In Progress</strong><br><br>
       <img src="screenshots/course_in_progrss.jpg" width="200"/>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <strong>Completed Course</strong><br>
+      <strong>Completed Course</strong><br><br>
       <img src="screenshots/completed_course.jpg" width="200"/>
     </td>
   </tr>
 </table>
 
 ### 🧑‍🏫 Instructor Features
-<style>
-  table td {
-    border: none !important;
-  }
-</style>
+SkillZone empowers educators with intuitive tools to create and manage courses, upload lessons, and track student engagement, making knowledge sharing accessible to experts in any field.
+
 <table>
   <tr>
     <td align="center">
-      <strong>Upload Course</strong><br>
+      <strong>Upload Course</strong><br><br>
       <img src="screenshots/upload_course.jpg" width="200"/>
     </td>
     <td align="center">
-      <strong>Uploaded Courses</strong><br>
+      <strong>Uploaded Courses</strong><br><br>
       <img src="screenshots/uploaded_courses.jpg" width="200"/>
     </td>
   </tr>
 </table>
 
 ### 💳 Payment
-<style>
-  table td {
-    border: none !important;
-  }
-</style>
+Secure payment processing allows users to purchase additional points or premium subscriptions, with transparent transaction history and card management.
+
 <table>
   <tr>
     <td align="center">
-      <strong>Card Information</strong><br>
+      <strong>Card Information</strong><br><br>
       <img src="screenshots/card_information.jpg" width="200"/>
     </td>
   </tr>
