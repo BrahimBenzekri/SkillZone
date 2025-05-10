@@ -1,8 +1,13 @@
 import 'package:get/get.dart';
 import '../models/level.dart';
+import '../services/user_points_service.dart';
 
 class PointsController extends GetxController {
-  final points = 0.obs;
+  final UserPointsService _pointsService = Get.find<UserPointsService>();
+  
+  // Use the points from the service instead of a local variable
+  RxInt get points => _pointsService.points;
+  
   final currentLevel = Rx<Level?>(null);
 
   final List<Level> levels = const [
@@ -49,11 +54,10 @@ class PointsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // todo: Fetch actual points from your backend/storage
-    points.value = 250; // Example initial points
     _updateLevel();
 
-    ever(points, (_) => _updateLevel());
+    // Update level whenever points change
+    ever(_pointsService.points, (_) => _updateLevel());
   }
 
   void _updateLevel() {

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
@@ -20,13 +19,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      log('Starting app initialization from splash screen...');
+
       final authController = Get.find<AuthController>();
       final route = await authController.determineInitialRoute();
-      log('Determined initial route: $route');
+
       Get.offAllNamed(route);
     } catch (e) {
-      log('Error during app initialization: $e');
+
       // Handle initialization error - perhaps navigate to a fallback route
     }
   }

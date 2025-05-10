@@ -202,10 +202,10 @@ class CourseDetailsPage extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   // Enroll in the course
-                                  Get.find<InventoryController>().enrollInCourse(course.id);
-                                  // No need to show a snackbar here as it's handled in the controller
+                                  await Get.find<InventoryController>().enrollInCourse(course.id);
+                                  
                                   // Only go back if this is a new enrollment
                                   if (!Get.find<InventoryController>().enrolledCourseIds.contains(course.id)) {
                                     Get.back(); // Return to previous screen
@@ -289,9 +289,9 @@ class CourseDetailsPage extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   // Enroll in the course
-                                  Get.find<InventoryController>().enrollInCourse(course.id);
+                                  await Get.find<InventoryController>().enrollInCourse(course.id);
                                 },
                                 child: const Text(
                                   'Enroll Now',

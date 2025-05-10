@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
@@ -49,13 +48,13 @@ class AuthController extends GetxController {
 
       if (isFirstLaunch) {
         await storage.write('isFirstLaunch', false);
-        log("First launch detected");
+
         return AppRoutes.welcome;
       }
 
       // If no tokens exist, go to login
       if (accessToken == null || refreshToken == null) {
-        log("No tokens found, navigating to login");
+
         return AppRoutes.login;
       }
 
@@ -64,12 +63,12 @@ class AuthController extends GetxController {
       if (isValid) {
         return AppRoutes.main;
       } else {
-        log("Tokens are invalid, clearing and navigating to login");
+
         await _clearAuthData();
         return AppRoutes.login;
       }
     } catch (e) {
-      log('Error in determineInitialRoute: $e');
+
       await _clearAuthData();
       return AppRoutes.login;
     }
@@ -77,14 +76,14 @@ class AuthController extends GetxController {
 
   Future<bool> _refreshTokens() async {
     try {
-      log('Starting token refresh process...');
+
       
       final refreshToken = storage.read<String>(refreshTokenKey);
       if (refreshToken == null) {
-        log('Refresh token not found in storage');
+
         return false;
       }
-      log('Found refresh token: $refreshToken');
+
 
       final response = await GetConnect().post(
         EnvConfig.refreshToken,
@@ -96,8 +95,8 @@ class AuthController extends GetxController {
         },
       );
 
-      log('Refresh token response status: ${response.statusCode}');
-      log('Refresh token response body: ${response.body}');
+
+
 
       if (response.statusCode == 200 && response.body != null) {
         final newAccessToken = response.body['access'];
@@ -118,7 +117,7 @@ class AuthController extends GetxController {
       }
       return false;
     } catch (e) {
-      log('Error refreshing tokens: $e');
+
       return false;
     }
   }
@@ -134,7 +133,7 @@ class AuthController extends GetxController {
       }
       return null;
     } catch (e) {
-      log('Error extracting auth data: $e');
+
       return null;
     }
   }
@@ -159,8 +158,8 @@ class AuthController extends GetxController {
             accessToken: authData['access'],
             refreshToken: authData['refresh'],
           );
-          log(accessToken!);
-          log(refreshToken!);
+
+
           Get.offAllNamed(AppRoutes.main);
         } else {
           throw 'Invalid response format';
@@ -237,11 +236,11 @@ class AuthController extends GetxController {
         Get.offAllNamed(AppRoutes.interests);
       } else {
         error.value = response.body['message'] ?? 'Verification failed';
-        log('Verification Error: ${response.body}');
+
       }
     } catch (e) {
       error.value = 'Connection error';
-      log('Verification Exception: $e');
+
     } finally {
       isLoading.value = false;
     }
@@ -261,11 +260,11 @@ class AuthController extends GetxController {
 
       if (response.statusCode != 200) {
         error.value = response.body['message'] ?? 'Failed to resend code';
-        log('Resend Code Error: ${response.body}');
+
       }
     } catch (e) {
       error.value = 'Connection error';
-      log('Resend Code Exception: $e');
+
     } finally {
       isLoading.value = false;
     }
@@ -349,11 +348,11 @@ class AuthController extends GetxController {
         },
       );
       
-      log("Logout response: ${response.body}");
+
 
       if (response.body["success"]) {
         await _clearAuthData();
-        log("Cleared the tokens from storage");
+
         Get.delete<AuthController>();
         Get.offAllNamed(AppRoutes.login);
       } else {

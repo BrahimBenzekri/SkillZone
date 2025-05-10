@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/courses/controllers/courses_controller.dart';
+import 'package:skillzone/features/points/services/user_points_service.dart';
 import 'package:skillzone/widgets/notification_icon.dart';
 import 'package:get/get.dart';
 import 'package:skillzone/widgets/profile_icon.dart';
@@ -92,14 +93,14 @@ class HomePage extends StatelessWidget {
                                 width: 16,
                               ),
                               const SizedBox(width: 8),
-                              const Text(
-                                '450 Pts',
-                                style: TextStyle(
+                              Obx(() => Text(
+                                '${Get.find<UserPointsService>().points.value} Pts',
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                 ),
-                              ),
+                              )),
                             ],
                           ),
                         ),

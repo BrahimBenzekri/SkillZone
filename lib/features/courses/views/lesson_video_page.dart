@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -226,7 +225,7 @@ class _LessonVideoPageState extends State<LessonVideoPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () async {
-                          log('DEBUG: Mark as Complete button pressed');
+
                           
                           // Mark the lesson as completed
                           inventoryController.markLessonAsCompleted(courseId, lesson.id);

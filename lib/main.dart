@@ -5,6 +5,7 @@ import 'package:skillzone/core/routes/app_pages.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/features/auth/controllers/auth_controller.dart';
+import 'package:skillzone/features/points/services/user_points_service.dart';
 
 Future<void> main() async {
   await GetStorage.init();
@@ -17,8 +18,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize AuthController permanently at app startup
+    // Initialize controllers and services permanently at app startup
     Get.put(AuthController(), permanent: true);
+    Get.put(UserPointsService(), permanent: true);
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,

@@ -1,6 +1,6 @@
-import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:skillzone/features/points/services/user_points_service.dart';
 import 'dart:async';
 import '../models/quiz.dart';
 import '../models/quiz_question.dart';
@@ -272,7 +272,7 @@ class QuizController extends GetxController {
       final args = Get.arguments as Map;
       if (args.containsKey('courseId')) {
         final courseId = args['courseId'] as String;
-        log('DEBUG: Starting quiz for course: $courseId');
+
         startQuiz(courseId);
       }
     }
@@ -332,6 +332,11 @@ class QuizController extends GetxController {
 
   void finishQuiz() {
     _timer?.cancel();
+    
+    // Award points to the user
+    final pointsService = Get.find<UserPointsService>();
+    pointsService.addPoints(score.value);
+    
     Get.offNamed('/quiz-results');
   }
 
