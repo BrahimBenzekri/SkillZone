@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/auth/controllers/auth_controller.dart';
-import 'package:skillzone/features/auth/models/user_type.dart';
 
 class AccountTypePage extends GetView<AuthController> {
   const AccountTypePage({super.key});
@@ -69,7 +68,7 @@ class AccountTypePage extends GetView<AuthController> {
                       title: 'Student',
                       description: 'Access courses, take quizzes, and earn points',
                       icon: Icons.school,
-                      onTap: () => _selectType(UserType.student),
+                      onTap: () => _selectType(false), // Student = false
                     ),
                     const SizedBox(height: 20),
                     _buildTypeCard(
@@ -77,7 +76,7 @@ class AccountTypePage extends GetView<AuthController> {
                       description: 'Create courses, manage content, and teach others',
                       icon: Icons.person_outline,
                       isTeacher: true,
-                      onTap: () => _selectType(UserType.teacher),
+                      onTap: () => _selectType(true), // Teacher = true
                     ),
                   ],
                 ),
@@ -176,7 +175,7 @@ class AccountTypePage extends GetView<AuthController> {
     );
   }
 
-  void _selectType(UserType type) {
+  void _selectType(bool isTeacherValue) {
     final signupData = controller.tempSignupData.value;
     controller.signup(
       firstName: signupData['firstName'],
@@ -184,7 +183,7 @@ class AccountTypePage extends GetView<AuthController> {
       username: signupData['username'] ?? "",
       email: signupData['email'] ?? "",
       password: signupData['password'] ?? "",
-      userType: type,
+      isTeacherValue: isTeacherValue,
     );
   }
 }

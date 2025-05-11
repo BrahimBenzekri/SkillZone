@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/auth/controllers/auth_controller.dart';
-import 'package:skillzone/features/auth/models/user_type.dart';
 
 class AccountTypeWidget extends StatelessWidget {
   final String email;
@@ -49,7 +48,7 @@ class AccountTypeWidget extends StatelessWidget {
                   username: username,
                   email: email,
                   password: password,
-                  userType: UserType.student,
+                  isTeacherValue: false, // Student
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryColor,
@@ -77,7 +76,7 @@ class AccountTypeWidget extends StatelessWidget {
                   username: username,
                   email: email,
                   password: password,
-                  userType: UserType.teacher,
+                  isTeacherValue: true, // Teacher
                 ),
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: AppColors.backgroundColor),

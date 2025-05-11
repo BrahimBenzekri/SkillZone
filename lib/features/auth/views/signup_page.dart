@@ -35,20 +35,6 @@ class SignupPage extends StatelessWidget {
       return false;
     }
 
-    // Validate username format
-    if (!ValidationHelper.isValidUsername(_usernameController.text)) {
-      ValidationHelper.showValidationError('Username can only contain letters, numbers, and underscores');
-      return false;
-    }
-
-    // Validate password strength
-    if (!ValidationHelper.isStrongPassword(_passwordController.text)) {
-      ValidationHelper.showValidationError(
-        'Password must be at least 8 characters and include uppercase, lowercase, and numbers'
-      );
-      return false;
-    }
-
     return true;
   }
 

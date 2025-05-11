@@ -1,21 +1,21 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/config/env_config.dart';
 import 'package:skillzone/core/utils/error_helper.dart';
 
-import '../models/user_type.dart';
-
 class AuthController extends GetxController {
   static const String accessTokenKey = 'access_token';
   static const String refreshTokenKey = 'refresh_token';
-  static const String userTypeKey = 'user_type';
+  static const String isTeacherKey = 'is_teacher'; // Key for storing teacher status
   
   final storage = GetStorage();
   final RxBool isLoading = false.obs;
   final RxString error = ''.obs;
   final RxString userEmail = ''.obs;
-  final Rx<UserType?> userType = Rx<UserType?>(null);
+  final RxBool isTeacher = false.obs; // Main property to track if user is a teacher
   final RxBool isLoggingOut = false.obs;
   final RxString logoutError = ''.obs;
   final Rx<Map<String, String>> tempSignupData = Rx<Map<String, String>>({
@@ -26,19 +26,18 @@ class AuthController extends GetxController {
     'password': '',
   });
 
-  // Add a property to track if the user is a teacher
-  final isTeacher = false.obs;
-
   @override
   void onInit() {
     super.onInit();
-    // Load user type from storage when controller initializes
-    final savedType = storage.read<String>(userTypeKey);
-    if (savedType != null) {
-      userType.value = UserType.values.firstWhere(
-        (type) => type.toString() == savedType,
-        orElse: () => UserType.student,
-      );
+    log('DEBUG: AuthController initializing');
+    
+    // Load isTeacher value from storage when controller initializes
+    final savedIsTeacher = storage.read<bool>(isTeacherKey);
+    if (savedIsTeacher != null) {
+      isTeacher.value = savedIsTeacher;
+      log('DEBUG: Loaded isTeacher from storage: ${isTeacher.value}');
+    } else {
+      log('DEBUG: No isTeacher value found in storage');
     }
   }
 
@@ -48,13 +47,11 @@ class AuthController extends GetxController {
 
       if (isFirstLaunch) {
         await storage.write('isFirstLaunch', false);
-
         return AppRoutes.welcome;
       }
 
       // If no tokens exist, go to login
       if (accessToken == null || refreshToken == null) {
-
         return AppRoutes.login;
       }
 
@@ -63,12 +60,10 @@ class AuthController extends GetxController {
       if (isValid) {
         return AppRoutes.main;
       } else {
-
         await _clearAuthData();
         return AppRoutes.login;
       }
     } catch (e) {
-
       await _clearAuthData();
       return AppRoutes.login;
     }
@@ -76,14 +71,10 @@ class AuthController extends GetxController {
 
   Future<bool> _refreshTokens() async {
     try {
-
-      
       final refreshToken = storage.read<String>(refreshTokenKey);
       if (refreshToken == null) {
-
         return false;
       }
-
 
       final response = await GetConnect().post(
         EnvConfig.refreshToken,
@@ -95,54 +86,59 @@ class AuthController extends GetxController {
         },
       );
 
-
-
-
       if (response.statusCode == 200 && response.body != null) {
         final newAccessToken = response.body['access'];
         final newRefreshToken = response.body['refresh'];
-        // final userType = UserType.values.firstWhere(
-        //   (type) => type.toString() == response.body['user_type'],
-        //   orElse: () => UserType.student,
-        // );
         
         if (newAccessToken != null && newRefreshToken != null) {
           await _saveAuthData(
             accessToken: newAccessToken,
             refreshToken: newRefreshToken,
-            // userType: userType,
           );
           return true;
         }
       }
       return false;
     } catch (e) {
-
       return false;
     }
   }
 
   Map<String, dynamic>? _extractAuthData(Response response) {
     try {
+      log('DEBUG: Extracting auth data from response');
+      
       if (response.body['status'] == true) {
         final data = response.body['data'];
+        log('DEBUG: Data extracted: ${data.keys}');
+        
+        // Extract isTeacher value if available
+        if (data['is_teacher'] != null) {
+          final isTeacherValue = data['is_teacher'] == true;
+          isTeacher.value = isTeacherValue;
+          log('DEBUG: isTeacher value extracted: ${isTeacher.value}');
+        }
+        
         return {
           'access': data['access'],
           'refresh': data['refresh'],
+          'is_teacher': data['is_teacher'],
         };
       }
       return null;
     } catch (e) {
-
+      log('DEBUG: Exception while extracting auth data: $e');
       return null;
     }
   }
 
   Future<void> login(String email, String password) async {
     try {
+      log('DEBUG: Login attempt started for email: $email');
       isLoading.value = true;
       error.value = '';
       userEmail.value = email;
+      
       final response = await GetConnect().post(
         EnvConfig.loginEndpoint,
         {
@@ -150,16 +146,17 @@ class AuthController extends GetxController {
           'password': password,
         },
       );
-
+      
       if (response.statusCode == 200) {
         final authData = _extractAuthData(response);
+        
         if (authData != null) {
           await _saveAuthData(
             accessToken: authData['access'],
             refreshToken: authData['refresh'],
+            isTeacherValue: authData['is_teacher'],
           );
-
-
+          
           Get.offAllNamed(AppRoutes.main);
         } else {
           throw 'Invalid response format';
@@ -184,13 +181,19 @@ class AuthController extends GetxController {
     required String username,
     required String email,
     required String password,
-    required UserType userType,
+    required bool isTeacherValue,
   }) async {
     try {
+      log('DEBUG: Signup started for email: $email, isTeacher: $isTeacherValue');
       isLoading.value = true;
       error.value = '';
       userEmail.value = email;
 
+      // Set the isTeacher flag
+      isTeacher.value = isTeacherValue;
+      log('DEBUG: isTeacher flag set to: ${isTeacher.value}');
+
+      log('DEBUG: Preparing signup request with firstName: $firstName, lastName: $lastName, username: $username');
       final response = await GetConnect().post(
         EnvConfig.registerEndpoint,
         {
@@ -201,21 +204,32 @@ class AuthController extends GetxController {
           'password': password,
           'password2': password,
           'accept_terms': true,
-          'user_type': userType.toString(),
+          'is_teacher': isTeacherValue,
         },
       );
-
+      
+      log('DEBUG: Signup response received with status code: ${response.statusCode}');
+      
       if (response.statusCode == 201) {
-        await storage.write(userTypeKey, userType.toString());
-        this.userType.value = userType;
+        log('DEBUG: Signup successful, saving isTeacher value: $isTeacherValue');
+        // Save isTeacher value to storage
+        await storage.write(isTeacherKey, isTeacherValue);
+        log('DEBUG: isTeacher value saved to storage: $isTeacherValue');
+        
+        log('DEBUG: Navigating to email verification page');
         Get.offAllNamed(AppRoutes.emailVerification);
       } else {
+        log('DEBUG: Signup failed with response: ${response.body}');
         error.value = response.body['message'] ?? 'Signup failed';
+        log('DEBUG: Error set to: ${error.value}');
       }
     } catch (e) {
+      log('DEBUG: Exception during signup: $e');
       error.value = 'Connection error, please wait while the server starts!';
+      log('DEBUG: Error set to: ${error.value}');
     } finally {
       isLoading.value = false;
+      log('DEBUG: Signup process completed, isLoading set to false');
     }
   }
 
@@ -236,11 +250,9 @@ class AuthController extends GetxController {
         Get.offAllNamed(AppRoutes.interests);
       } else {
         error.value = response.body['message'] ?? 'Verification failed';
-
       }
     } catch (e) {
       error.value = 'Connection error';
-
     } finally {
       isLoading.value = false;
     }
@@ -260,17 +272,15 @@ class AuthController extends GetxController {
 
       if (response.statusCode != 200) {
         error.value = response.body['message'] ?? 'Failed to resend code';
-
       }
     } catch (e) {
       error.value = 'Connection error';
-
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<void> updateUserType(UserType type) async {
+  Future<void> updateUserType(bool isTeacherValue) async {
     try {
       isLoading.value = true;
       error.value = '';
@@ -279,13 +289,13 @@ class AuthController extends GetxController {
         '${EnvConfig.apiUrl}/update-user-type/',
         {
           'email': userEmail.value,
-          'user_type': type.toString(),
+          'is_teacher': isTeacherValue,
         },
       );
 
       if (response.statusCode == 200) {
-        await storage.write(userTypeKey, type.toString());
-        userType.value = type;
+        await storage.write(isTeacherKey, isTeacherValue);
+        isTeacher.value = isTeacherValue;
       } else {
         throw response.body['message'] ?? 'Failed to update user type';
       }
@@ -293,7 +303,7 @@ class AuthController extends GetxController {
       error.value = e.toString();
       ErrorHelper.showAuthError(
         message: e.toString(),
-        onRetry: () => updateUserType(type),
+        onRetry: () => updateUserType(isTeacherValue),
       );
     } finally {
       isLoading.value = false;
@@ -304,14 +314,22 @@ class AuthController extends GetxController {
   Future<void> _saveAuthData({
     required String accessToken,
     required String refreshToken,
-    // required UserType userType,
+    bool? isTeacherValue,
   }) async {
     try {
+      log('DEBUG: Saving auth data to storage');
+      
       await storage.write(accessTokenKey, accessToken);
       await storage.write(refreshTokenKey, refreshToken);
-      await storage.write(userTypeKey, userType.toString());
-      // this.userType.value = userType;
+      
+      // Save isTeacher value if provided
+      if (isTeacherValue != null) {
+        isTeacher.value = isTeacherValue;
+        await storage.write(isTeacherKey, isTeacherValue);
+        log('DEBUG: isTeacher value saved: $isTeacherValue');
+      }
     } catch (e) {
+      log('DEBUG: Failed to save auth data: $e');
       throw Exception('Failed to save auth data');
     }
   }
@@ -320,15 +338,14 @@ class AuthController extends GetxController {
   Future<void> _clearAuthData() async {
     await storage.remove(accessTokenKey);
     await storage.remove(refreshTokenKey);
-    await storage.remove(userTypeKey);
-    userType.value = null;
+    await storage.remove(isTeacherKey);
+    isTeacher.value = false;
   }
 
   // Getter methods for stored data
   String? get accessToken => storage.read(accessTokenKey);
   String? get refreshToken => storage.read(refreshTokenKey);
-
-  bool get isStudent => userType.value?.isStudent ?? false;
+  bool get isStudent => !isTeacher.value;
 
   // Update logout method to clear stored data
   Future<void> logout() async {
@@ -347,12 +364,9 @@ class AuthController extends GetxController {
           'Content-Type': 'application/json',
         },
       );
-      
-
 
       if (response.body["success"]) {
         await _clearAuthData();
-
         Get.delete<AuthController>();
         Get.offAllNamed(AppRoutes.login);
       } else {

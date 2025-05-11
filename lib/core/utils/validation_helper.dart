@@ -10,21 +10,6 @@ class ValidationHelper {
     return emailRegex.hasMatch(email);
   }
 
-  // Username validation (alphanumeric and underscore only)
-  static bool isValidUsername(String username) {
-    final usernameRegex = RegExp(r'^[a-zA-Z0-9_]+$');
-    return usernameRegex.hasMatch(username);
-  }
-
-  // Password strength validation
-  static bool isStrongPassword(String password) {
-    // At least 8 characters, 1 uppercase, 1 lowercase, 1 number
-    final passwordRegex = RegExp(
-      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$',
-    );
-    return passwordRegex.hasMatch(password);
-  }
-
   // Show validation error
   static void showValidationError(String message) {
     Get.snackbar(
