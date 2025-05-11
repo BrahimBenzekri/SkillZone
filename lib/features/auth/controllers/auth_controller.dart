@@ -235,9 +235,12 @@ class AuthController extends GetxController {
 
   Future<void> verifyEmail(String code) async {
     try {
+      log('DEBUG: Starting email verification with code: $code');
       isLoading.value = true;
       error.value = '';
-
+      
+      log('DEBUG: User email for verification: ${userEmail.value}');
+      
       final response = await GetConnect().post(
         EnvConfig.verifyEmail,
         {
@@ -245,16 +248,26 @@ class AuthController extends GetxController {
           'code': code,
         },
       );
+      
+      log('DEBUG: Verification response received with status code: ${response.statusCode}');
+      log('DEBUG: Response body: ${response.body}');
 
       if (response.statusCode == 200) {
+        log('DEBUG: Email verification successful');
+        log('DEBUG: Navigating to interests page');
         Get.offAllNamed(AppRoutes.interests);
       } else {
+        log('DEBUG: Email verification failed');
         error.value = response.body['message'] ?? 'Verification failed';
+        log('DEBUG: Error set to: ${error.value}');
       }
     } catch (e) {
+      log('DEBUG: Exception during email verification: $e');
       error.value = 'Connection error';
+      log('DEBUG: Error set to: ${error.value}');
     } finally {
       isLoading.value = false;
+      log('DEBUG: Email verification process completed, isLoading set to false');
     }
   }
 

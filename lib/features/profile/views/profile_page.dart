@@ -157,13 +157,13 @@ class ProfilePage extends GetView<ProfileController> {
           subtitle: 'Learn more about SkillZone',
           onTap: () => Get.toNamed(AppRoutes.aboutApp),
         ),
-       _buildOptionTile(
-              icon: Icons.school,
-              title: 'My Courses',
-              subtitle: 'Manage your uploaded courses',
-              onTap: () => Get.toNamed(AppRoutes.teacherCourses),
-              iconColor: AppColors.primaryColor,
-            )
+      //  _buildOptionTile(
+      //         icon: Icons.school,
+      //         title: 'My Courses',
+      //         subtitle: 'Manage your uploaded courses',
+      //         onTap: () => Get.toNamed(AppRoutes.teacherCourses),
+      //         iconColor: AppColors.primaryColor,
+      //       )
       
       ],
     );

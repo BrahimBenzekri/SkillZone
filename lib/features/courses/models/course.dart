@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'course_type.dart';
 import 'lesson.dart';
@@ -9,7 +11,7 @@ class Course {
   final double rating;
   final Duration duration;
   final CourseType type;
-  final int? price; // null means free
+  final String? price; // null means free
   final int points; // points needed for hard skills or earned for soft skills
   final RxBool isLiked;
   final String thumbnail;
@@ -65,40 +67,45 @@ class Course {
     }
   }
 
-  // Convert to JSON for API communication
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'description': description,
-        'rating': rating,
-        'duration': duration.inMinutes,
-        'type': type.toString(),
-        'price': price,
-        'points': points,
-        'is_liked': isLiked.value,
-        'thumbnail': thumbnail,
-        'lessons': lessons.map((lesson) => lesson.toJson()).toList(),
-      };
-
   // Create from JSON for API communication
-  factory Course.fromJson(Map<String, dynamic> json) => Course(
+  factory Course.fromJson(Map<String, dynamic> json) {
+    try {
+      // Validate required fields
+      if (json['id'] == null) {
+        throw ArgumentError('Course ID is required');
+      }
+      
+      if (json['title'] == null) {
+        throw ArgumentError('Course title is required');
+      }
+      
+      // Extract course type with better error handling
+      CourseType courseType;
+      final typeStr = json['course_type'];
+      courseType = typeStr.toUpperCase().contains('HARD') 
+          ? CourseType.hard 
+          : CourseType.soft;
+
+      
+      
+      return Course(
         id: json['id'].toString(),
         title: json['title'],
-        description: json['description'] ?? '',
-        rating: (json['rating'] ?? 0.0).toDouble(),
-        duration: Duration(minutes: json['duration'] ?? 0),
-        type: json['type'].toString().toLowerCase().contains('hard') 
-            ? CourseType.hard 
-            : CourseType.soft,
+        description: json['description'],
+        rating: json['rating'],
+        duration: Duration(minutes: json['duration']),
+        type: courseType,
         price: json['price'],
-        points: json['points'] ?? 0,
-        isLiked: json['is_liked'] ?? false,
-        thumbnail: json['thumbnail'] ?? 'lib/assets/svgs/course1.svg',
-        lessons: (json['lessons'] as List?)
-                ?.map((e) => Lesson.fromJson(e))
-                .toList() ??
-            [],
+        points: json['points'],
+        isLiked: false,
+        thumbnail: '',
+        lessons: [],
       );
+    } catch (e) {
+      log('ERROR: Exception in Course.fromJson: $e');
+      rethrow; // Rethrow to be caught by the calling method
+    }
+  }
 
   Course copyWith({
     String? id,
@@ -107,7 +114,7 @@ class Course {
     double? rating,
     Duration? duration,
     CourseType? type,
-    int? price,
+    String ? price,
     int? points,
     bool? isLiked,
     String? thumbnail,

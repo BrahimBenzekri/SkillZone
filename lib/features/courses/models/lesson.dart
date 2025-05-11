@@ -20,7 +20,7 @@ class Lesson {
         title: json['title'],
         number: json['number'] ?? 1,
         duration: Duration(minutes: json['duration'] ?? 0),
-        isCompleted: json['is_completed'] ?? false,
+        isCompleted: false,
         videoUrl: json['video_url'],
       );
 

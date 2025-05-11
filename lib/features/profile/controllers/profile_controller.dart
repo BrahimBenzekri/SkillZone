@@ -13,7 +13,7 @@ class ProfileController extends GetxController {
   final storage = GetStorage();
   
   // User profile data
-  final username = 'Brahim Benzekri'.obs;
+  final username = 'Rania Kouda'.obs;
   final userEmail = 'cooluser@example.com'.obs;
   
   // Avatar settings

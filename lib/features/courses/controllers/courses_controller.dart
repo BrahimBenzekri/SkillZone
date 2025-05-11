@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:get/get.dart';
@@ -19,10 +20,6 @@ class CoursesController extends GetxController {
   
   // Add new observable for teacher's uploaded courses
   final _teacherCourses = <Course>[].obs;
-
-  // Add workers as class properties
-  late Worker _softSkillsWorker;
-  late Worker _hardSkillsWorker;
 
   // Loading states
   final isLoading = false.obs;
@@ -69,18 +66,7 @@ class CoursesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Initialize workers
-    _softSkillsWorker = ever(softSkillsCourses, (_) => _updatePopularCourses());
-    _hardSkillsWorker = ever(hardSkillsCourses, (_) => _updatePopularCourses());
     loadCourses();
-  }
-
-  @override
-  void onClose() {
-    // Dispose of workers
-    _softSkillsWorker.dispose();
-    _hardSkillsWorker.dispose();
-    super.onClose();
   }
 
   // Get freemium courses (free soft skills)
@@ -97,9 +83,17 @@ class CoursesController extends GetxController {
 
   // Add method to update popular courses
   void _updatePopularCourses() {
+    log('DEBUG: Updating popular courses');
     final allCourses = [...softSkillsCourses, ...hardSkillsCourses];
+    
+    // Sort by rating (highest first)
     allCourses.sort((a, b) => b.rating.compareTo(a.rating));
-    _popularCourses.assignAll(allCourses.take(5));
+    
+    // Take top 5 or fewer if not enough courses
+    final topCourses = allCourses.take(5).toList();
+    log('DEBUG: Selected ${topCourses.length} popular courses');
+    
+    _popularCourses.assignAll(topCourses);
   }
 
   // Load courses from API
@@ -108,70 +102,131 @@ class CoursesController extends GetxController {
     hasError.value = false;
 
     try {
+      log('DEBUG: Loading courses from API');
       // Create GetConnect instance for API calls
       final connect = GetConnect();
       
       // Add auth token to headers if user is logged in
       final authController = Get.find<AuthController>();
       final token = authController.accessToken;
-      final headers = token != null ? {'Authorization': 'Bearer $token'} : null;
+      log('DEBUG: Using access token: ${token != null ? 'Present' : 'Not present'}');
       
-      // Fetch soft skills courses
-      final softSkillsResponse = await connect.get(
-        '${EnvConfig.apiUrl}/courses?type=soft',
+      final headers = {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      };
+      
+      log('DEBUG: Sending API request to ${EnvConfig.getCourses}');
+      
+      // Properly await the API response
+      final Response allCoursesResponse = await connect.get(
+        EnvConfig.getCourses,
         headers: headers,
       );
       
-      // Fetch hard skills courses
-      final hardSkillsResponse = await connect.get(
-        '${EnvConfig.apiUrl}/courses?type=hard',
-        headers: headers,
-      );
+      log('DEBUG: API response received with status: ${allCoursesResponse.statusCode}');
       
-      // Fetch teacher courses if user is a teacher
-      final teacherCoursesResponse = authController.isTeacher.value 
-        ? await connect.get(
-            '${EnvConfig.apiUrl}/courses/teacher',
-            headers: headers,
-          )
-        : null;
-      
-      // Process responses
-      if (softSkillsResponse.statusCode == 200) {
-        final List<dynamic> softData = softSkillsResponse.body['data'] ?? [];
-        softSkillsCourses.assignAll(
-          softData.map((course) => Course.fromJson(course)).toList()
-        );
+      // Ensure response is valid before processing
+      if (allCoursesResponse.statusCode != 200) {
+        log('ERROR: Failed to fetch courses: ${allCoursesResponse.statusCode}');
+        throw 'Failed to fetch courses: ${allCoursesResponse.statusCode}';
       }
       
-      if (hardSkillsResponse.statusCode == 200) {
-        final List<dynamic> hardData = hardSkillsResponse.body['data'] ?? [];
-        hardSkillsCourses.assignAll(
-          hardData.map((course) => Course.fromJson(course)).toList()
-        );
+      // Validate response body exists
+      if (allCoursesResponse.body == null) {
+        log('ERROR: Empty response body');
+        throw 'Empty response body';
       }
       
-      if (teacherCoursesResponse != null && teacherCoursesResponse.statusCode == 200) {
-        final List<dynamic> teacherData = teacherCoursesResponse.body['data'] ?? [];
-        _teacherCourses.assignAll(
-          teacherData.map((course) => Course.fromJson(course)).toList()
-        );
+      log('DEBUG: Processing response body');
+      
+      // Safely extract courses data with null checks
+      final data = allCoursesResponse.body['data'];
+      if (data == null) {
+        log('ERROR: Missing data field in response');
+        throw 'Missing data field in response';
       }
       
-      // If API fails or returns empty data, use dummy data for development
+      final List<dynamic> coursesData = data['courses'] ?? [];
+      log('DEBUG: Extracted ${coursesData.length} courses from response');
+      
+      // Prepare temporary lists
+      final tempSoftSkills = <Course>[];
+      final tempHardSkills = <Course>[];
+      
+      // Process each course sequentially
+      for (var i = 0; i < coursesData.length; i++) {
+        final courseData = coursesData[i];
+        log('DEBUG: Processing course ${i+1}/${coursesData.length}');
+        
+        try {
+          // Ensure courseData is valid
+          if (courseData == null) {
+            log('ERROR: Null course data at index $i');
+            continue;
+          }
+          
+          log('DEBUG: Creating Course object from JSON');
+          final course = Course.fromJson(courseData);
+          log('DEBUG: Successfully created Course object: ${course.title}');
+          
+          // Create a new course with thumbnail set
+          final courseWithThumbnail = course.copyWith(
+            thumbnail: getRandomThumbnail()
+          );
+          
+          // Classify by type
+          if (courseWithThumbnail.type == CourseType.soft) {
+            tempSoftSkills.add(courseWithThumbnail);
+            log('DEBUG: Added to soft skills: ${courseWithThumbnail.title}');
+          } else {
+            tempHardSkills.add(courseWithThumbnail);
+            log('DEBUG: Added to hard skills: ${courseWithThumbnail.title}');
+          }
+
+          log('DEBUG: Course attributes:');
+          log('DEBUG: ID: ${courseWithThumbnail.id}');
+          log('DEBUG: Title: ${courseWithThumbnail.title}');
+          log('DEBUG: Description: ${courseWithThumbnail.description}');
+          log('DEBUG: Rating: ${courseWithThumbnail.rating}');
+          log('DEBUG: Duration: ${courseWithThumbnail.duration}');
+          log('DEBUG: Type: ${courseWithThumbnail.type}');
+          log('DEBUG: Price: ${courseWithThumbnail.price}');
+          log('DEBUG: Points: ${courseWithThumbnail.points}');
+          log('DEBUG: Thumbnail: ${courseWithThumbnail.thumbnail}');
+          log('DEBUG: Number of lessons: ${courseWithThumbnail.lessons.length}');
+        } catch (e) {
+          log('ERROR: Failed to process course at index $i: $e');
+          // Continue processing other courses
+        }
+      }
+      
+      log('DEBUG: Finished processing all courses');
+      log('DEBUG: Soft skills: ${tempSoftSkills.length}, Hard skills: ${tempHardSkills.length}');
+      
+      // Update lists all at once to minimize reactivity triggers
+      softSkillsCourses.assignAll(tempSoftSkills);
+      hardSkillsCourses.assignAll(tempHardSkills);
+      
+      log('DEBUG: Course lists updated');
+      
+      // Update popular courses based on fetched data
+      _updatePopularCourses();
+      
+      // If API returns empty data, use dummy data for development
       if (softSkillsCourses.isEmpty && hardSkillsCourses.isEmpty) {
+        log('DEBUG: No courses received, loading dummy data');
         _loadDummyData();
-      } else {
-        // Update popular courses based on fetched data
-        _updatePopularCourses();
       }
     } catch (e) {
+      log('ERROR: Error loading courses: $e');
       hasError.value = true;
       errorMessage.value = 'Failed to load courses: $e';
       // Load dummy data as fallback
       _loadDummyData();
     } finally {
       isLoading.value = false;
+      log('DEBUG: Course loading completed');
     }
   }
 
@@ -195,7 +250,14 @@ class CoursesController extends GetxController {
 
   // Private method to load dummy data
   void _loadDummyData() {
-    softSkillsCourses.assignAll([
+    log('DEBUG: Loading dummy data');
+    
+    // Create temporary lists
+    final tempSoftSkills = <Course>[];
+    final tempHardSkills = <Course>[];
+    
+    // Add soft skills courses
+    tempSoftSkills.addAll([
       Course(
         id: 's1',
         title: 'Effective Communication Skills',
@@ -276,7 +338,8 @@ class CoursesController extends GetxController {
       ),
     ]);
 
-    hardSkillsCourses.assignAll([
+    // Add hard skills courses
+    tempHardSkills.addAll([
       Course(
         id: 'h1',
         title: 'Flutter Advanced Concepts',
@@ -286,7 +349,7 @@ class CoursesController extends GetxController {
         duration: const Duration(hours: 8),
         type: CourseType.hard,
         points: 500,
-        price: 199,
+        price: '199',
         thumbnail: getRandomThumbnail(),
         lessons: _getDummyLessonsForCourse('h1'),
       ),
@@ -298,7 +361,7 @@ class CoursesController extends GetxController {
         rating: 4.6,
         duration: const Duration(hours: 10),
         type: CourseType.hard,
-        price: 99,
+        price: '99',
         points: 400,
         thumbnail: getRandomThumbnail(),
       ),
@@ -310,7 +373,7 @@ class CoursesController extends GetxController {
         rating: 4.9,
         duration: const Duration(hours: 12),
         type: CourseType.hard,
-        price: 149,
+        price: '149',
         points: 600,
         thumbnail: getRandomThumbnail(),
       ),
@@ -323,7 +386,7 @@ class CoursesController extends GetxController {
         duration: const Duration(hours: 8),
         type: CourseType.hard,
         points: 800,
-        price: 199,
+        price: '199',
         thumbnail: getRandomThumbnail(),
       ),
       Course(
@@ -334,7 +397,7 @@ class CoursesController extends GetxController {
         rating: 4.8,
         duration: const Duration(hours: 15),
         type: CourseType.hard,
-        price: 129,
+        price: '129',
         points: 700,
         thumbnail: getRandomThumbnail(),
       ),
@@ -346,7 +409,7 @@ class CoursesController extends GetxController {
         rating: 4.7,
         duration: const Duration(hours: 20),
         type: CourseType.hard,
-        price: 199,
+        price: '199',
         points: 900,
         thumbnail: getRandomThumbnail(),
       ),
@@ -359,7 +422,7 @@ class CoursesController extends GetxController {
         duration: const Duration(hours: 16),
         type: CourseType.hard,
         points: 750,
-        price: 149,
+        price: '149',
         thumbnail: getRandomThumbnail(),
       ),
       Course(
@@ -370,7 +433,7 @@ class CoursesController extends GetxController {
         rating: 4.5,
         duration: const Duration(hours: 10),
         type: CourseType.hard,
-        price: 89,
+        price: '89',
         points: 400,
         thumbnail: getRandomThumbnail(),
       ),
@@ -387,7 +450,7 @@ class CoursesController extends GetxController {
         rating: 4.2,
         duration: const Duration(hours: 5, minutes: 30),
         type: CourseType.hard,
-        price: 79,
+        price: '79',
         points: 300,
         thumbnail: getRandomThumbnail(),
         lessons: [
@@ -441,7 +504,7 @@ class CoursesController extends GetxController {
     required String title,
     required String description,
     required Duration duration,
-    int? price,
+    String? price,
     required int points,
     CourseType type = CourseType.hard,
     List<Lesson> lessons = const [],
@@ -485,6 +548,9 @@ class CoursesController extends GetxController {
       
       // Add to teacher's courses
       _teacherCourses.add(newCourse);
+      
+      // Update popular courses
+      _updatePopularCourses();
       
       Get.back();
       Get.snackbar(
@@ -581,12 +647,13 @@ class CoursesController extends GetxController {
     required String title,
     required String description,
     required Duration duration,
-    int? price,
+    String? price,
     required int points,
     required CourseType type,
     required List<Lesson> lessons,
   }) async {
     try {
+      log('DEBUG: Uploading course to API: $title');
       final connect = GetConnect();
       final authController = Get.find<AuthController>();
       final token = authController.accessToken;
@@ -607,11 +674,13 @@ class CoursesController extends GetxController {
         'title': title,
         'description': description,
         'duration': duration.inMinutes,
-        'type': type.toString(),
+        'type': type == CourseType.hard ? 'hard' : 'soft',
         'price': price,
         'points': points,
         'lessons': lessonsJson,
       };
+      
+      log('DEBUG: Sending course data: $courseData');
       
       // Send API request
       final response = await connect.post(
@@ -623,9 +692,14 @@ class CoursesController extends GetxController {
         },
       );
       
+      log('DEBUG: Upload response status: ${response.statusCode}');
+      
       if (response.statusCode != 201) {
+        log('DEBUG: Upload failed: ${response.body}');
         throw response.body['message'] ?? 'Failed to upload course';
       }
+      
+      log('DEBUG: Course uploaded successfully');
       
       // If successful, add the new course to the appropriate lists
       final newCourse = Course.fromJson(response.body['data']);
@@ -639,6 +713,9 @@ class CoursesController extends GetxController {
       // Add to teacher's courses
       _teacherCourses.add(newCourse);
       
+      // Update popular courses
+      _updatePopularCourses();
+      
       Get.back();
       Get.snackbar(
         'Success',
@@ -647,10 +724,12 @@ class CoursesController extends GetxController {
         colorText: AppColors.backgroundColor,
       );
     } catch (e) {
+      log('DEBUG: Error uploading course: $e');
       ErrorHelper.showError(
         title: 'Error',
         message: 'Failed to upload course: $e',
       );
+      rethrow; // Re-throw to be caught by the calling method
     }
   }
 }
