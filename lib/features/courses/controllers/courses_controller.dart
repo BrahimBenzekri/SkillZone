@@ -3,9 +3,11 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/core/utils/error_helper.dart';
+import 'package:skillzone/core/config/env_config.dart';
 import '../models/course.dart';
 import '../models/course_type.dart';
 import '../models/lesson.dart';
+import 'package:skillzone/features/auth/controllers/auth_controller.dart';
 
 class CoursesController extends GetxController {
   // Observable lists for both course types
@@ -106,12 +108,68 @@ class CoursesController extends GetxController {
     hasError.value = false;
 
     try {
-      _loadDummyData();
-      await Future.delayed(
-          const Duration(seconds: 5)); // Simulate network delay
+      // Create GetConnect instance for API calls
+      final connect = GetConnect();
+      
+      // Add auth token to headers if user is logged in
+      final authController = Get.find<AuthController>();
+      final token = authController.accessToken;
+      final headers = token != null ? {'Authorization': 'Bearer $token'} : null;
+      
+      // Fetch soft skills courses
+      final softSkillsResponse = await connect.get(
+        '${EnvConfig.apiUrl}/courses?type=soft',
+        headers: headers,
+      );
+      
+      // Fetch hard skills courses
+      final hardSkillsResponse = await connect.get(
+        '${EnvConfig.apiUrl}/courses?type=hard',
+        headers: headers,
+      );
+      
+      // Fetch teacher courses if user is a teacher
+      final teacherCoursesResponse = authController.isTeacher.value 
+        ? await connect.get(
+            '${EnvConfig.apiUrl}/courses/teacher',
+            headers: headers,
+          )
+        : null;
+      
+      // Process responses
+      if (softSkillsResponse.statusCode == 200) {
+        final List<dynamic> softData = softSkillsResponse.body['data'] ?? [];
+        softSkillsCourses.assignAll(
+          softData.map((course) => Course.fromJson(course)).toList()
+        );
+      }
+      
+      if (hardSkillsResponse.statusCode == 200) {
+        final List<dynamic> hardData = hardSkillsResponse.body['data'] ?? [];
+        hardSkillsCourses.assignAll(
+          hardData.map((course) => Course.fromJson(course)).toList()
+        );
+      }
+      
+      if (teacherCoursesResponse != null && teacherCoursesResponse.statusCode == 200) {
+        final List<dynamic> teacherData = teacherCoursesResponse.body['data'] ?? [];
+        _teacherCourses.assignAll(
+          teacherData.map((course) => Course.fromJson(course)).toList()
+        );
+      }
+      
+      // If API fails or returns empty data, use dummy data for development
+      if (softSkillsCourses.isEmpty && hardSkillsCourses.isEmpty) {
+        _loadDummyData();
+      } else {
+        // Update popular courses based on fetched data
+        _updatePopularCourses();
+      }
     } catch (e) {
       hasError.value = true;
       errorMessage.value = 'Failed to load courses: $e';
+      // Load dummy data as fallback
+      _loadDummyData();
     } finally {
       isLoading.value = false;
     }
@@ -391,7 +449,20 @@ class CoursesController extends GetxController {
     try {
       isLoading.value = true;
       
-      // Create new course
+      // Try to upload to API first
+      await uploadCourseToApi(
+        title: title,
+        description: description,
+        duration: duration,
+        price: price,
+        points: points,
+        type: type,
+        lessons: lessons,
+      );
+      
+      // If API fails, fall back to local implementation
+    } catch (e) {
+      // Create new course locally
       final newCourse = Course(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         title: title,
@@ -418,21 +489,16 @@ class CoursesController extends GetxController {
       Get.back();
       Get.snackbar(
         'Success',
-        'Course uploaded successfully',
+        'Course uploaded successfully (local only)',
         backgroundColor: AppColors.primaryColor,
         colorText: AppColors.backgroundColor,
-      );
-    } catch (e) {
-      ErrorHelper.showError(
-        title: 'Error',
-        message: 'Failed to upload course: $e',
       );
     } finally {
       isLoading.value = false;
     }
   }
 
-  // Add a method to get dummy lessons for a course
+  // Add method to get dummy lessons for a course
   List<Lesson> _getDummyLessonsForCourse(String courseId) {
     switch (courseId) {
       case 's1': // Effective Communication Skills
@@ -507,6 +573,84 @@ class CoursesController extends GetxController {
         ];
       default:
         return [];
+    }
+  }
+
+  // Add method to upload course to API
+  Future<void> uploadCourseToApi({
+    required String title,
+    required String description,
+    required Duration duration,
+    int? price,
+    required int points,
+    required CourseType type,
+    required List<Lesson> lessons,
+  }) async {
+    try {
+      final connect = GetConnect();
+      final authController = Get.find<AuthController>();
+      final token = authController.accessToken;
+      
+      if (token == null) {
+        throw 'User not authenticated';
+      }
+      
+      // Convert lessons to JSON
+      final lessonsJson = lessons.map((lesson) => {
+        'title': lesson.title,
+        'duration': lesson.duration.inMinutes,
+        'video_url': lesson.videoUrl,
+      }).toList();
+      
+      // Prepare course data
+      final courseData = {
+        'title': title,
+        'description': description,
+        'duration': duration.inMinutes,
+        'type': type.toString(),
+        'price': price,
+        'points': points,
+        'lessons': lessonsJson,
+      };
+      
+      // Send API request
+      final response = await connect.post(
+        '${EnvConfig.apiUrl}/courses',
+        courseData,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+      
+      if (response.statusCode != 201) {
+        throw response.body['message'] ?? 'Failed to upload course';
+      }
+      
+      // If successful, add the new course to the appropriate lists
+      final newCourse = Course.fromJson(response.body['data']);
+      
+      if (type == CourseType.hard) {
+        hardSkillsCourses.add(newCourse);
+      } else {
+        softSkillsCourses.add(newCourse);
+      }
+      
+      // Add to teacher's courses
+      _teacherCourses.add(newCourse);
+      
+      Get.back();
+      Get.snackbar(
+        'Success',
+        'Course uploaded successfully',
+        backgroundColor: AppColors.primaryColor,
+        colorText: AppColors.backgroundColor,
+      );
+    } catch (e) {
+      ErrorHelper.showError(
+        title: 'Error',
+        message: 'Failed to upload course: $e',
+      );
     }
   }
 }

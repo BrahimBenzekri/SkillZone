@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/auth/controllers/auth_controller.dart';
+import 'package:skillzone/core/utils/validation_helper.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -12,6 +13,23 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final RxBool _obscurePassword = true.obs;
+
+  // Add this method to validate login form
+  bool _validateLoginForm() {
+    // Check if any field is empty
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      ValidationHelper.showValidationError('Please enter both email and password');
+      return false;
+    }
+
+    // Validate email format
+    if (!ValidationHelper.isValidEmail(_emailController.text)) {
+      ValidationHelper.showValidationError('Please enter a valid email address');
+      return false;
+    }
+
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,10 +163,15 @@ class LoginPage extends StatelessWidget {
                           child: Obx(() => ElevatedButton(
                                 onPressed: _authController.isLoading.value
                                     ? (){}
-                                    : () => _authController.login(
-                                          _emailController.text,
-                                          _passwordController.text,
-                                        ),
+                                    : (){ 
+                                      
+                                      if (!_validateLoginForm()) {
+                                          return;
+                                      }
+                                      _authController.login(
+                                        _emailController.text,
+                                        _passwordController.text,
+                                      );},
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primaryColor,
                                   padding: const EdgeInsets.symmetric(vertical: 16),

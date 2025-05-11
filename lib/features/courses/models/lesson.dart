@@ -16,12 +16,12 @@ class Lesson {
   });
 
   factory Lesson.fromJson(Map<String, dynamic> json) => Lesson(
-        id: json['id'],
+        id: json['id'].toString(),
         title: json['title'],
-        number: json['number'],
-        duration: Duration(minutes: json['duration']),
-        isCompleted: json['isCompleted'] ?? false,
-        videoUrl: json['videoUrl'],
+        number: json['number'] ?? 1,
+        duration: Duration(minutes: json['duration'] ?? 0),
+        isCompleted: json['is_completed'] ?? false,
+        videoUrl: json['video_url'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -29,7 +29,7 @@ class Lesson {
         'title': title,
         'number': number,
         'duration': duration.inMinutes,
-        'isCompleted': isCompleted,
-        'videoUrl': videoUrl,
+        'is_completed': isCompleted,
+        'video_url': videoUrl,
       };
 }

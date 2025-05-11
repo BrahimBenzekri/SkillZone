@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/auth/controllers/auth_controller.dart';
+import 'package:skillzone/core/utils/validation_helper.dart';
 
 class SignupPage extends StatelessWidget {
   SignupPage({super.key});
@@ -15,6 +16,41 @@ class SignupPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final RxBool _obscurePassword = true.obs;
+
+  // Add this method to validate all form fields
+  bool _validateForm() {
+    // Check if any field is empty
+    if (_firstNameController.text.isEmpty ||
+        _lastNameController.text.isEmpty ||
+        _usernameController.text.isEmpty ||
+        _emailController.text.isEmpty ||
+        _passwordController.text.isEmpty) {
+      ValidationHelper.showValidationError('Please fill in all fields');
+      return false;
+    }
+
+    // Validate email format
+    if (!ValidationHelper.isValidEmail(_emailController.text)) {
+      ValidationHelper.showValidationError('Please enter a valid email address');
+      return false;
+    }
+
+    // Validate username format
+    if (!ValidationHelper.isValidUsername(_usernameController.text)) {
+      ValidationHelper.showValidationError('Username can only contain letters, numbers, and underscores');
+      return false;
+    }
+
+    // Validate password strength
+    if (!ValidationHelper.isStrongPassword(_passwordController.text)) {
+      ValidationHelper.showValidationError(
+        'Password must be at least 8 characters and include uppercase, lowercase, and numbers'
+      );
+      return false;
+    }
+
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -266,6 +302,11 @@ class SignupPage extends StatelessWidget {
                                 onPressed: _authController.isLoading.value
                                     ? null
                                     : () {
+                                        // Validate form before proceeding
+                                        if (!_validateForm()) {
+                                          return;
+                                        }
+                                        
                                         // Store the user data in the controller for later use
                                         _authController.tempSignupData.value = {
                                           'firstName': _firstNameController.text,

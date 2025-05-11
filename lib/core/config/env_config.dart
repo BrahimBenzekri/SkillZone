@@ -9,4 +9,5 @@ class EnvConfig {
   static String get verifyEmail => '$apiUrl/verify-email/';
   static String get logout => '$apiUrl/logout/';
   static String get refreshToken => '$apiBaseUrl/api/token/refresh/';
+  static String get getCourses => '$apiUrl/courses/';
 }

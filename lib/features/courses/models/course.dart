@@ -75,26 +75,25 @@ class Course {
         'type': type.toString(),
         'price': price,
         'points': points,
-        'isLiked': isLiked.value,
+        'is_liked': isLiked.value,
         'thumbnail': thumbnail,
-        'lessons': lessons.map((e) => e.toJson()).toList(),
+        'lessons': lessons.map((lesson) => lesson.toJson()).toList(),
       };
 
   // Create from JSON for API communication
   factory Course.fromJson(Map<String, dynamic> json) => Course(
-        id: json['id'],
+        id: json['id'].toString(),
         title: json['title'],
         description: json['description'] ?? '',
-        rating: json['rating'].toDouble(),
-        duration: Duration(minutes: json['duration']),
-        type: CourseType.values.firstWhere(
-          (e) => e.toString() == json['type'],
-          orElse: () => CourseType.soft,
-        ),
+        rating: (json['rating'] ?? 0.0).toDouble(),
+        duration: Duration(minutes: json['duration'] ?? 0),
+        type: json['type'].toString().toLowerCase().contains('hard') 
+            ? CourseType.hard 
+            : CourseType.soft,
         price: json['price'],
-        points: json['points'],
-        isLiked: json['isLiked'],
-        thumbnail: json['thumbnail'],
+        points: json['points'] ?? 0,
+        isLiked: json['is_liked'] ?? false,
+        thumbnail: json['thumbnail'] ?? 'lib/assets/svgs/course1.svg',
         lessons: (json['lessons'] as List?)
                 ?.map((e) => Lesson.fromJson(e))
                 .toList() ??
