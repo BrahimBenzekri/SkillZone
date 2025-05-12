@@ -237,7 +237,7 @@ class UploadCoursePage extends GetView<CoursesController> {
                           title: titleController.text,
                           description: descriptionController.text,
                           duration: totalDuration.value,
-                          price: courseType.value == CourseType.hard ? priceController.text : null,
+                          price: priceController.text,
                           points: int.tryParse(pointsController.text) ?? 100,
                           type: courseType.value,
                           lessons: lessons.toList(),

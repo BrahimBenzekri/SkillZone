@@ -184,7 +184,7 @@ class CourseCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          course.price != null ? '\$${course.price}' : 'Free',
+                          course.price == '0.00' ? 'Free' : '\$${course.price}',
                           style: TextStyle(
                             color: backgroundColor,
                             fontSize: 12,

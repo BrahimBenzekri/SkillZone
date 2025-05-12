@@ -275,7 +275,7 @@ class CoursesController extends GetxController {
         type: CourseType.soft,
         points: 100,
         thumbnail: getRandomThumbnail(),
-        lessons: _getDummyLessonsForCourse('s1'),
+        lessons: _getDummyLessonsForCourse('s1'), price: '0.00',
       ),
       Course(
         id: 's2',
@@ -286,7 +286,7 @@ class CoursesController extends GetxController {
         duration: const Duration(hours: 3),
         type: CourseType.soft,
         points: 150,
-        thumbnail: getRandomThumbnail(),
+        thumbnail: getRandomThumbnail(), price: '0.00',
       ),
       Course(
         id: 's3',
@@ -297,7 +297,7 @@ class CoursesController extends GetxController {
         duration: const Duration(hours: 1, minutes: 45),
         type: CourseType.soft,
         points: 80,
-        thumbnail: getRandomThumbnail(),
+        thumbnail: getRandomThumbnail(), price: '0.00',
       ),
       Course(
         id: 's4',
@@ -308,7 +308,7 @@ class CoursesController extends GetxController {
         duration: const Duration(hours: 2, minutes: 15),
         type: CourseType.soft,
         points: 120,
-        thumbnail: getRandomThumbnail(),
+        thumbnail: getRandomThumbnail(), price: '0.00',
       ),
       Course(
         id: 's5',
@@ -319,7 +319,7 @@ class CoursesController extends GetxController {
         duration: const Duration(hours: 4),
         type: CourseType.soft,
         points: 200,
-        thumbnail: getRandomThumbnail(),
+        thumbnail: getRandomThumbnail(), price: '0.00',
       ),
       Course(
         id: 's6',
@@ -330,7 +330,7 @@ class CoursesController extends GetxController {
         duration: const Duration(hours: 2),
         type: CourseType.soft,
         points: 100,
-        thumbnail: getRandomThumbnail(),
+        thumbnail: getRandomThumbnail(), price: '0.00',
       ),
       Course(
         id: 's7',
@@ -341,7 +341,7 @@ class CoursesController extends GetxController {
         duration: const Duration(hours: 1, minutes: 30),
         type: CourseType.soft,
         points: 75,
-        thumbnail: getRandomThumbnail(),
+        thumbnail: getRandomThumbnail(), price: '0.00',
       ),
     ]);
 
@@ -501,7 +501,7 @@ class CoursesController extends GetxController {
             duration: const Duration(minutes: 45),
             videoUrl: 'https://example.com/videos/active-listening',
           ),
-        ],
+        ], price: '0.00',
       ),
     ]);
 
@@ -511,7 +511,7 @@ class CoursesController extends GetxController {
     required String title,
     required String description,
     required Duration duration,
-    String? price,
+    required String price,
     required int points,
     CourseType type = CourseType.hard,
     List<Lesson> lessons = const [],

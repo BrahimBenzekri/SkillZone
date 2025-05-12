@@ -11,7 +11,7 @@ class Course {
   final double rating;
   final Duration duration;
   final CourseType type;
-  final String? price; // null means free
+  final String price; // null means free
   final int points; // points needed for hard skills or earned for soft skills
   final RxBool isLiked;
   final String thumbnail;
@@ -25,7 +25,7 @@ class Course {
     required this.rating,
     required this.duration,
     required this.type,
-    this.price,
+    required this.price,
     required this.points,
     bool isLiked = false,
     required this.thumbnail,
@@ -59,8 +59,8 @@ class Course {
     if (type == CourseType.soft) {
       return 'Free • Earn $points points';
     } else {
-      if (price != null) {
-        return '\$${price.toString()}';
+      if (price == "0.00") {
+        return '\$$price';
       } else {
         return '${points.toString()} points';
       }
