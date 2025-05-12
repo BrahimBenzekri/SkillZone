@@ -135,8 +135,6 @@ class ProfilePage extends GetView<ProfileController> {
   }
 
   Widget _buildProfileOptions() {
-    // final authController = Get.find<AuthController>();
-    
     return Column(
       children: [
         _buildOptionTile(
@@ -155,16 +153,15 @@ class ProfilePage extends GetView<ProfileController> {
           icon: Icons.info,
           title: 'About the app',
           subtitle: 'Learn more about SkillZone',
-          onTap: () => Get.toNamed(AppRoutes.aboutApp),
+          onTap: () => controller.launchAboutAppUrl(),
         ),
-      //  _buildOptionTile(
-      //         icon: Icons.school,
-      //         title: 'My Courses',
-      //         subtitle: 'Manage your uploaded courses',
-      //         onTap: () => Get.toNamed(AppRoutes.teacherCourses),
-      //         iconColor: AppColors.primaryColor,
-      //       )
-      
+       _buildOptionTile(
+              icon: Icons.school,
+              title: 'My Courses',
+              subtitle: 'Manage your uploaded courses',
+              onTap: () => Get.toNamed(AppRoutes.teacherCourses),
+              iconColor: AppColors.primaryColor,
+            )
       ],
     );
   }

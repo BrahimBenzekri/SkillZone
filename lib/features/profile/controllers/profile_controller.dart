@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileController extends GetxController {
   // Storage keys
   static const String avatarImageKey = 'avatar_image';
-  static const String avatarColorIndexKey = 'avatar_color_index'; // Changed key name
+  static const String avatarColorIndexKey = 'avatar_color_index';
   static const String usernameKey = 'username';
   static const String userEmailKey = 'user_email';
   
@@ -18,7 +19,10 @@ class ProfileController extends GetxController {
   
   // Avatar settings
   final selectedAvatarImage = 'lib/assets/images/avatar13.png'.obs;
-  final selectedAvatarColorIndex = 0.obs; // Store index instead of color
+  final selectedAvatarColorIndex = 0.obs;
+  
+  // About app URL
+  final String aboutAppUrl = 'https://skillzone.netlify.app/';
   
   // Available avatars and colors
   final List<String> availableAvatars = [
@@ -51,6 +55,24 @@ class ProfileController extends GetxController {
   
   // Computed property to get the selected color from the index
   Color get selectedAvatarColor => availableColors[selectedAvatarColorIndex.value];
+  
+  // Launch URL method
+  Future<void> launchAboutAppUrl() async {
+    final Uri url = Uri.parse(aboutAppUrl);
+    try {
+      if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
+        throw 'Could not launch $url';
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Could not open the about page: $e',
+        backgroundColor: AppColors.errorColor,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
   
   @override
   void onInit() {
