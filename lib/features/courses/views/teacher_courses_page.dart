@@ -166,10 +166,16 @@ class TeacherCoursesPage extends GetView<CoursesController> {
         ],
       ),
       child: InkWell(
-        onTap: () => Get.toNamed(
-          AppRoutes.courseDetails,
-          arguments: {'course': course,'backgroundColor': AppColors.courseColor1},
-        ),
+        onTap: () async {
+          // Fetch lessons for this course if needed
+          // await controller.updateCourseWithLessons(course.id);
+          
+          // Navigate to course details
+          Get.toNamed(
+            AppRoutes.courseDetails,
+            arguments: {'course': course, 'backgroundColor': AppColors.courseColor1},
+          );
+        },
         borderRadius: BorderRadius.circular(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

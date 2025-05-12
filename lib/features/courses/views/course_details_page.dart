@@ -17,7 +17,7 @@ class CourseDetailsPage extends StatelessWidget {
   CourseDetailsPage({super.key})
       : backgroundColor = (Get.arguments as Map)['backgroundColor'] as Color,
         isEnrolled = (Get.arguments as Map)['isEnrolled'] as bool? ?? false {
-    final String courseId = Get.parameters['id'] ?? '';
+    final String courseId = Get.arguments['id'];
     controller.loadCourseDetails(courseId);
   }
 

@@ -14,6 +14,9 @@ class CoursesController extends GetxController {
   // Observable lists for both course types
   final softSkillsCourses = <Course>[].obs;
   final hardSkillsCourses = <Course>[].obs;
+  
+  // Add new observable for all courses
+  final _allCourses = <Course>[].obs;
 
   // Add new observable for popular courses
   final _popularCourses = <Course>[].obs;
@@ -80,6 +83,9 @@ class CoursesController extends GetxController {
   
   // Get teacher's uploaded courses
   List<Course> get teacherCourses => _teacherCourses;
+
+  // Get all courses
+  List<Course> get allCourses => _allCourses;
 
   // Add method to update popular courses
   void _updatePopularCourses() {
@@ -150,9 +156,8 @@ class CoursesController extends GetxController {
       final List<dynamic> coursesData = data['courses'] ?? [];
       log('DEBUG: Extracted ${coursesData.length} courses from response');
       
-      // Prepare temporary lists
-      final tempSoftSkills = <Course>[];
-      final tempHardSkills = <Course>[];
+      // Prepare temporary list for all courses
+      final tempAllCourses = <Course>[];
       
       // Process each course sequentially
       for (var i = 0; i < coursesData.length; i++) {
@@ -175,46 +180,27 @@ class CoursesController extends GetxController {
             thumbnail: getRandomThumbnail()
           );
           
-          // Classify by type
-          if (courseWithThumbnail.type == CourseType.soft) {
-            tempSoftSkills.add(courseWithThumbnail);
-            log('DEBUG: Added to soft skills: ${courseWithThumbnail.title}');
-          } else {
-            tempHardSkills.add(courseWithThumbnail);
-            log('DEBUG: Added to hard skills: ${courseWithThumbnail.title}');
-          }
-
-          log('DEBUG: Course attributes:');
-          log('DEBUG: ID: ${courseWithThumbnail.id}');
-          log('DEBUG: Title: ${courseWithThumbnail.title}');
-          log('DEBUG: Description: ${courseWithThumbnail.description}');
-          log('DEBUG: Rating: ${courseWithThumbnail.rating}');
-          log('DEBUG: Duration: ${courseWithThumbnail.duration}');
-          log('DEBUG: Type: ${courseWithThumbnail.type}');
-          log('DEBUG: Price: ${courseWithThumbnail.price}');
-          log('DEBUG: Points: ${courseWithThumbnail.points}');
-          log('DEBUG: Thumbnail: ${courseWithThumbnail.thumbnail}');
-          log('DEBUG: Number of lessons: ${courseWithThumbnail.lessons.length}');
+          // Add to all courses list
+          tempAllCourses.add(courseWithThumbnail);
         } catch (e) {
           log('ERROR: Failed to process course at index $i: $e');
-          // Continue processing other courses
         }
       }
       
       log('DEBUG: Finished processing all courses');
-      log('DEBUG: Soft skills: ${tempSoftSkills.length}, Hard skills: ${tempHardSkills.length}');
+      log('DEBUG: All courses: ${tempAllCourses.length}');
       
-      // Update lists all at once to minimize reactivity triggers
-      softSkillsCourses.assignAll(tempSoftSkills);
-      hardSkillsCourses.assignAll(tempHardSkills);
+      // Update all courses list
+      _allCourses.assignAll(tempAllCourses);
       
-      log('DEBUG: Course lists updated');
+      // Update soft skills and hard skills lists by filtering from all courses
+      _updateCategoryLists();
       
       // Update popular courses based on fetched data
       _updatePopularCourses();
       
       // If API returns empty data, use dummy data for development
-      if (softSkillsCourses.isEmpty && hardSkillsCourses.isEmpty) {
+      if (_allCourses.isEmpty) {
         log('DEBUG: No courses received, loading dummy data');
         _loadDummyData();
       }
@@ -228,6 +214,27 @@ class CoursesController extends GetxController {
       isLoading.value = false;
       log('DEBUG: Course loading completed');
     }
+  }
+
+  // Add method to update category lists from all courses
+  void _updateCategoryLists() {
+    log('DEBUG: Updating category lists from all courses');
+    
+    // Filter soft skills courses
+    final tempSoftSkills = _allCourses.where((course) => 
+      course.type == CourseType.soft
+    ).toList();
+    
+    // Filter hard skills courses
+    final tempHardSkills = _allCourses.where((course) => 
+      course.type == CourseType.hard
+    ).toList();
+    
+    // Update lists
+    softSkillsCourses.assignAll(tempSoftSkills);
+    hardSkillsCourses.assignAll(tempHardSkills);
+    
+    log('DEBUG: Category lists updated - Soft skills: ${tempSoftSkills.length}, Hard skills: ${tempHardSkills.length}');
   }
 
   // Toggle course like status
@@ -732,4 +739,191 @@ class CoursesController extends GetxController {
       rethrow; // Re-throw to be caught by the calling method
     }
   }
+
+  // Add method to fetch lessons for a specific course
+  Future<void> fetchLessonsForCourse(String courseId) async {
+    try {
+      log('DEBUG: Fetching lessons for course ID: $courseId');
+      
+      // Create GetConnect instance for API calls
+      final connect = GetConnect();
+      
+      // Add auth token to headers if user is logged in
+      final authController = Get.find<AuthController>();
+      final token = authController.accessToken;
+      
+      final headers = {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      };
+      
+      // Fetch lessons for the course
+      final response = await connect.get(
+        EnvConfig.getLessonsForCourse(courseId),
+        headers: headers,
+      );
+      
+      log('DEBUG: Lessons API response status: ${response.statusCode}');
+      
+      if (response.statusCode != 200) {
+        log('ERROR: Failed to fetch lessons: ${response.statusCode}');
+        throw 'Failed to fetch lessons: ${response.statusCode}';
+      }
+      
+      if (response.body == null) {
+        log('ERROR: Empty response body for lessons');
+        throw 'Empty response body for lessons';
+      }
+      
+      // Extract lessons data
+      final data = response.body['data'];
+      if (data == null) {
+        log('ERROR: Missing data field in lessons response');
+        throw 'Missing data field in lessons response';
+      }
+      
+      final List<dynamic> lessonsData = data['lessons'] ?? [];
+      log('DEBUG: Extracted ${lessonsData.length} lessons from response');
+      
+      // Parse lessons
+      final lessons = <Lesson>[];
+      for (var i = 0; i < lessonsData.length; i++) {
+        final lessonData = lessonsData[i];
+        log('DEBUG: Processing lesson ${i+1}/${lessonsData.length}');
+        
+        try {
+          if (lessonData == null) {
+            log('ERROR: Null lesson data at index $i');
+            continue;
+          }
+          
+          final lesson = Lesson.fromJson(lessonData);
+          lessons.add(lesson);
+          log('DEBUG: Added lesson: ${lesson.title}');
+        } catch (e) {
+          log('ERROR: Failed to process lesson at index $i: $e');
+        }
+      }
+      
+      log('DEBUG: Successfully fetched ${lessons.length} lessons for course $courseId');
+
+      // Find the course in all courses list
+      final allCoursesIndex = _allCourses.indexWhere((c) => c.id == courseId);
+      
+      if (allCoursesIndex >= 0) {
+        // Get the current course
+        final currentCourse = _allCourses[allCoursesIndex];
+        
+        // Create updated course with lessons
+        final updatedCourse = currentCourse.copyWith(lessons: lessons);
+        
+        // Update in all courses list
+        _allCourses[allCoursesIndex] = updatedCourse;
+        log('DEBUG: Updated course in all courses list with ${lessons.length} lessons');
+        
+        // Update category lists to ensure they reference the updated course
+        _updateCategoryLists();
+        
+        // Also update in popular courses if present
+        final popularIndex = _popularCourses.indexWhere((c) => c.id == courseId);
+        if (popularIndex >= 0) {
+          _popularCourses[popularIndex] = updatedCourse;
+          log('DEBUG: Updated popular course with lessons');
+        }
+        
+        // Also update in teacher courses if present
+        final teacherIndex = _teacherCourses.indexWhere((c) => c.id == courseId);
+        if (teacherIndex >= 0) {
+          _teacherCourses[teacherIndex] = updatedCourse;
+          log('DEBUG: Updated teacher course with lessons');
+        }
+        
+        // Log the updated course details
+        logCourseAttributes(_allCourses[allCoursesIndex]);
+      } else {
+        log('ERROR: Course not found with ID: $courseId in all courses list');
+      }
+      
+    } catch (e) {
+      log('ERROR: Error fetching lessons: $e');
+      // Return empty list on error
+      return;
+    }
+  }
+
+  // Method to log all course attributes
+  void logCourseAttributes(Course course) {
+    log('DEBUG: Logging course attributes:');
+    log('DEBUG: ID: ${course.id}');
+    log('DEBUG: Title: ${course.title}');
+    log('DEBUG: Description: ${course.description}');
+    log('DEBUG: Rating: ${course.rating}');
+    log('DEBUG: Duration: ${course.duration}');
+    log('DEBUG: Type: ${course.type}');
+    log('DEBUG: Price: ${course.price}');
+    log('DEBUG: Points: ${course.points}');
+    log('DEBUG: Thumbnail: ${course.thumbnail}');
+    log('DEBUG: Number of lessons: ${course.lessons.length}');
+    log('DEBUG: Is liked: ${course.isLiked.value}');
+  }
+
+  // Update course with fetched lessons
+  // Future<void> updateCourseWithLessons(String courseId) async {
+  //   try {
+  //     // Find the course in both lists
+  //     Course? course = softSkillsCourses.firstWhereOrNull((c) => c.id == courseId);
+  //     bool isSoftSkill = course != null;
+      
+  //     course ??= hardSkillsCourses.firstWhereOrNull((c) => c.id == courseId);
+      
+  //     if (course == null) {
+  //       log('ERROR: Course not found with ID: $courseId');
+  //       return;
+  //     }
+      
+  //     // Only fetch if lessons are empty
+  //     if (course.lessons.isEmpty) {
+  //       log('DEBUG: Course has no lessons, fetching from API');
+  //       final lessons = await fetchLessonsForCourse(courseId);
+        
+  //       if (lessons.isNotEmpty) {
+  //         // Create updated course with lessons
+  //         final updatedCourse = course.copyWith(lessons: lessons);
+          
+  //         // Update the appropriate list
+  //         if (isSoftSkill) {
+  //           final index = softSkillsCourses.indexWhere((c) => c.id == courseId);
+  //           if (index >= 0) {
+  //             softSkillsCourses[index] = updatedCourse;
+  //             log('DEBUG: Updated soft skills course with lessons');
+  //           }
+  //         } else {
+  //           final index = hardSkillsCourses.indexWhere((c) => c.id == courseId);
+  //           if (index >= 0) {
+  //             hardSkillsCourses[index] = updatedCourse;
+  //             log('DEBUG: Updated hard skills course with lessons');
+  //           }
+  //         }
+          
+  //         // Also update in popular courses if present
+  //         final popularIndex = _popularCourses.indexWhere((c) => c.id == courseId);
+  //         if (popularIndex >= 0) {
+  //           _popularCourses[popularIndex] = updatedCourse;
+  //           log('DEBUG: Updated popular course with lessons');
+  //         }
+          
+  //         // Also update in teacher courses if present
+  //         final teacherIndex = _teacherCourses.indexWhere((c) => c.id == courseId);
+  //         if (teacherIndex >= 0) {
+  //           _teacherCourses[teacherIndex] = updatedCourse;
+  //           log('DEBUG: Updated teacher course with lessons');
+  //         }
+  //       }
+  //     } else {
+  //       log('DEBUG: Course already has ${course.lessons.length} lessons, skipping fetch');
+  //     }
+  //   } catch (e) {
+  //     log('ERROR: Error updating course with lessons: $e');
+  //   }
+  // }
 }

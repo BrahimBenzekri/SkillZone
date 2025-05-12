@@ -10,4 +10,5 @@ class EnvConfig {
   static String get logout => '$apiUrl/logout/';
   static String get refreshToken => '$apiBaseUrl/api/token/refresh/';
   static String get getCourses => '$apiBaseUrl/api/v1/courses/';
+  static String getLessonsForCourse(String courseId) => '$apiBaseUrl/api/v1/courses/$courseId/lessons';
 }

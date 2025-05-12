@@ -15,7 +15,7 @@ class Course {
   final int points; // points needed for hard skills or earned for soft skills
   final RxBool isLiked;
   final String thumbnail;
-  final List<Lesson> lessons;
+  List<Lesson> lessons;
   double? progress;
 
   Course({

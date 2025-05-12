@@ -23,17 +23,21 @@ class CourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        // Fetch lessons for this course if needed
+        final coursesController = Get.find<CoursesController>();
+        await coursesController.fetchLessonsForCourse(course.id);
+        
+        // Navigate to course details
         Get.toNamed(
           AppRoutes.courseDetails,
           arguments: {
-            'course': course,
+            'id': course.id,
             'backgroundColor': backgroundColor,
-            'isEnrolled': isEnrolled, // From home page, not enrolled
+            'isEnrolled': isEnrolled,
           },
         );
-      }
-      ,
+      },
       child: Container(
         width: 225,
         height: 150,
