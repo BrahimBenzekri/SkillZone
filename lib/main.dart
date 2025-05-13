@@ -4,7 +4,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:skillzone/core/routes/app_pages.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
-import 'package:skillzone/features/points/services/user_points_service.dart';
 import 'package:skillzone/features/profile/services/user_profile_service.dart';
 
 Future<void> main() async {
@@ -12,9 +11,7 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env");
   
   // Initialize services
-  Get.put(UserPointsService(), permanent: true);
   Get.put(UserProfileService(), permanent: true);
-  
   runApp(const MainApp());
 }
 

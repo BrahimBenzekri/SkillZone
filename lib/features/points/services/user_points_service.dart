@@ -10,7 +10,7 @@ class UserPointsService extends GetxService {
   void onInit() {
     super.onInit();
     // Load points from storage
-    points.value = _storage.read(pointsKey) ?? 990;
+    points.value = _storage.read(pointsKey) ?? 0;
   }
 
   // Add points (when completing courses, quizzes, etc.)

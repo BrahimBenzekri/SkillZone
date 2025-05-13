@@ -194,6 +194,8 @@ class AuthController extends GetxController {
       log('DEBUG: isTeacher flag set to: ${isTeacher.value}');
 
       log('DEBUG: Preparing signup request with firstName: $firstName, lastName: $lastName, username: $username');
+      log('DEBUG: Preparing signup request with email: $email, password: $password, isTeacher: $isTeacherValue');
+      log('DEBUG:Sending request to endpoint: ${EnvConfig.registerEndpoint}');
       final response = await GetConnect().post(
         EnvConfig.registerEndpoint,
         {
@@ -204,11 +206,12 @@ class AuthController extends GetxController {
           'password': password,
           'password2': password,
           'accept_terms': true,
-          'is_teacher': isTeacherValue,
+          'is_teacher': isTeacherValue
         },
       );
       
-      log('DEBUG: Signup response received with status code: ${response.statusCode}');
+      
+      log('DEBUG: Signup response received with body: ${response.body}');
       
       if (response.statusCode == 201) {
         log('DEBUG: Signup successful, saving isTeacher value: $isTeacherValue');

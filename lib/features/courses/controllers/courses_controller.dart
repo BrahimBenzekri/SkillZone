@@ -122,7 +122,7 @@ class CoursesController extends GetxController {
         'Content-Type': 'application/json'
       };
       
-      log('DEBUG: Sending API request to ${EnvConfig.getCourses}');
+      // log('DEBUG: Sending API request to ${EnvConfig.getCourses}');
       
       // Properly await the API response
       final Response allCoursesResponse = await connect.get(
@@ -130,7 +130,7 @@ class CoursesController extends GetxController {
         headers: headers,
       );
       
-      log('DEBUG: API response received with status: ${allCoursesResponse.statusCode}');
+      // log('DEBUG: API response received with status: ${allCoursesResponse.statusCode}');
       
       // Ensure response is valid before processing
       if (allCoursesResponse.statusCode != 200) {
@@ -162,7 +162,7 @@ class CoursesController extends GetxController {
       // Process each course sequentially
       for (var i = 0; i < coursesData.length; i++) {
         final courseData = coursesData[i];
-        log('DEBUG: Processing course ${i+1}/${coursesData.length}');
+        // log('DEBUG: Processing course ${i+1}/${coursesData.length}');
         
         try {
           // Ensure courseData is valid
@@ -171,9 +171,9 @@ class CoursesController extends GetxController {
             continue;
           }
           
-          log('DEBUG: Creating Course object from JSON');
+          // log('DEBUG: Creating Course object from JSON');
           final course = Course.fromJson(courseData);
-          log('DEBUG: Successfully created Course object: ${course.title}');
+          // log('DEBUG: Successfully created Course object: ${course.title}');
           
           // Create a new course with thumbnail set
           final courseWithThumbnail = course.copyWith(

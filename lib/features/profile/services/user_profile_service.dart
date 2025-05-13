@@ -12,12 +12,14 @@ class UserProfileService extends GetxService {
   static const String usernameKey = 'username';
   static const String avatarImageKey = 'avatar_image';
   static const String avatarColorIndexKey = 'avatar_color_index';
+  static const String isTeacherKey = 'is_teacher';
+  static const String pointsKey = 'user_points';
   
   final storage = GetStorage();
   
     // Initialize controllers and services permanently at app startup
   final AuthController _authController = Get.put(AuthController(), permanent: true);
-  final UserPointsService _pointsService = Get.find<UserPointsService>();
+  final UserPointsService _pointsService = Get.put(UserPointsService(), permanent: true);
   
   // User profile data
   final firstName = ''.obs;
@@ -34,7 +36,7 @@ class UserProfileService extends GetxService {
   @override
   void onInit() {
     super.onInit();
-    loadProfileData();
+    fetchProfileData();
   }
   
   // Fetch profile data from API and store locally
@@ -48,6 +50,8 @@ class UserProfileService extends GetxService {
         return;
       }
       
+      log('DEBUG: Making API request to ${EnvConfig.profileUrl}');
+      log('DEBUG: Token: $token');
       final response = await GetConnect().get(
         EnvConfig.profileUrl,
         headers: {
@@ -56,26 +60,35 @@ class UserProfileService extends GetxService {
         },
       );
       
+      log('DEBUG: API response status: ${response.statusCode}');
+      
       if (response.statusCode == 200 && response.body != null) {
-        final data = response.body['data'];
+        log('DEBUG: Response body: ${response.body}');
+        final data = response.body;
         
         // Update observable values
         firstName.value = data['first_name'] ?? '';
         lastName.value = data['last_name'] ?? '';
         username.value = data['username'] ?? '';
+        _pointsService.points.value = data['points'] ?? 0;
+
+        log('DEBUG: Updated profile values - firstName: ${firstName.value}, lastName: ${lastName.value}, username: ${username.value}');
         
         // Save to storage
         await storage.write(firstNameKey, firstName.value);
         await storage.write(lastNameKey, lastName.value);
         await storage.write(usernameKey, username.value);
+        await storage.write(pointsKey, _pointsService.points.value);
         
-        log('DEBUG: Profile data updated successfully');
+        log('DEBUG: Profile data saved to storage successfully');
       } else {
         log('DEBUG: Failed to fetch profile data: ${response.statusCode}');
+        log('DEBUG: Response body: ${response.body}');
       }
     } catch (e) {
       log('DEBUG: Error fetching profile data: $e');
       // Fall back to local data
+      log('DEBUG: Falling back to local profile data');
       loadProfileData();
     }
   }
