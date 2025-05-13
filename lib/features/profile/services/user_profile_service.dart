@@ -51,14 +51,9 @@ class UserProfileService extends GetxService {
       }
       
       log('DEBUG: Making API request to ${EnvConfig.profileUrl}');
-      log('DEBUG: Token: $token');
-      final response = await GetConnect().get(
-        EnvConfig.profileUrl,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-      );
+      
+      // Use centralized API service
+      final response = await EnvConfig.apiService.get(EnvConfig.profileUrl);
       
       log('DEBUG: API response status: ${response.statusCode}');
       

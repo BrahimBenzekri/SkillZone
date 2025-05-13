@@ -76,14 +76,13 @@ class AuthController extends GetxController {
         return false;
       }
 
-      final response = await GetConnect().post(
+      // Use centralized API service
+      final response = await EnvConfig.apiService.post(
         EnvConfig.refreshToken,
         {
           'refresh': refreshToken
         },
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        requiresAuth: false
       );
 
       if (response.statusCode == 200 && response.body != null) {
@@ -134,17 +133,19 @@ class AuthController extends GetxController {
 
   Future<void> login(String email, String password) async {
     try {
-      log('DEBUG: Login attempt started for email: $email');
       isLoading.value = true;
       error.value = '';
-      userEmail.value = email;
       
-      final response = await GetConnect().post(
+      log('DEBUG: Attempting login with email: $email');
+      
+      // Use centralized API service
+      final response = await EnvConfig.apiService.post(
         EnvConfig.loginEndpoint,
         {
           'email': email,
           'password': password,
         },
+        requiresAuth: false
       );
       
       if (response.statusCode == 200) {
@@ -184,19 +185,17 @@ class AuthController extends GetxController {
     required bool isTeacherValue,
   }) async {
     try {
-      log('DEBUG: Signup started for email: $email, isTeacher: $isTeacherValue');
       isLoading.value = true;
       error.value = '';
       userEmail.value = email;
-
-      // Set the isTeacher flag
-      isTeacher.value = isTeacherValue;
-      log('DEBUG: isTeacher flag set to: ${isTeacher.value}');
-
+    
+      
       log('DEBUG: Preparing signup request with firstName: $firstName, lastName: $lastName, username: $username');
       log('DEBUG: Preparing signup request with email: $email, password: $password, isTeacher: $isTeacherValue');
       log('DEBUG:Sending request to endpoint: ${EnvConfig.registerEndpoint}');
-      final response = await GetConnect().post(
+      
+      // Use centralized API service
+      final response = await EnvConfig.apiService.post(
         EnvConfig.registerEndpoint,
         {
           'first_name': firstName,
@@ -208,8 +207,8 @@ class AuthController extends GetxController {
           'accept_terms': true,
           'is_teacher': isTeacherValue
         },
+        requiresAuth: false
       );
-      
       
       log('DEBUG: Signup response received with body: ${response.body}');
       
@@ -244,12 +243,14 @@ class AuthController extends GetxController {
       
       log('DEBUG: User email for verification: ${userEmail.value}');
       
-      final response = await GetConnect().post(
+      // Use centralized API service
+      final response = await EnvConfig.apiService.post(
         EnvConfig.verifyEmail,
         {
           'email': userEmail.value,
           'code': code,
         },
+        requiresAuth: false
       );
       
       log('DEBUG: Verification response received with status code: ${response.statusCode}');
@@ -370,15 +371,12 @@ class AuthController extends GetxController {
         throw 'No refresh token found';
       }
 
-      final response = await GetConnect().post(
+      // Use centralized API service
+      final response = await EnvConfig.apiService.post(
         EnvConfig.logout,
         {
           'refresh_token': refreshToken
-        },
-        headers: {
-          'Authorization': 'Bearer $accessToken',
-          'Content-Type': 'application/json',
-        },
+        }
       );
 
       if (response.body["success"]) {

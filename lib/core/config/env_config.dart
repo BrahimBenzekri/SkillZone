@@ -1,4 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
+import 'package:skillzone/core/services/api_service.dart';
 
 class EnvConfig {
   static String get apiBaseUrl => dotenv.env['API_BASE_URL'] ?? '';
@@ -12,4 +14,7 @@ class EnvConfig {
   static String get refreshToken => '$apiBaseUrl/api/token/refresh/';
   static String get getCourses => '$apiBaseUrl/api/v1/courses/';
   static String getLessonsForCourse(String courseId) => '$apiBaseUrl/api/v1/courses/$courseId/lessons';
+  
+  // Helper method to get the API service
+  static ApiService get apiService => Get.find<ApiService>();
 }

@@ -109,26 +109,9 @@ class CoursesController extends GetxController {
 
     try {
       log('DEBUG: Loading courses from API');
-      // Create GetConnect instance for API calls
-      final connect = GetConnect();
       
-      // Add auth token to headers if user is logged in
-      final authController = Get.find<AuthController>();
-      final token = authController.accessToken;
-      log('DEBUG: Using access token: ${token != null ? 'Present' : 'Not present'}');
-      
-      final headers = {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json'
-      };
-      
-      // log('DEBUG: Sending API request to ${EnvConfig.getCourses}');
-      
-      // Properly await the API response
-      final Response allCoursesResponse = await connect.get(
-        EnvConfig.getCourses,
-        headers: headers,
-      );
+      // Use centralized API service instead of creating new GetConnect
+      final allCoursesResponse = await EnvConfig.apiService.get(EnvConfig.getCourses);
       
       // log('DEBUG: API response received with status: ${allCoursesResponse.statusCode}');
       
@@ -661,7 +644,6 @@ class CoursesController extends GetxController {
   }) async {
     try {
       log('DEBUG: Uploading course to API: $title');
-      final connect = GetConnect();
       final authController = Get.find<AuthController>();
       final token = authController.accessToken;
       
@@ -689,14 +671,10 @@ class CoursesController extends GetxController {
       
       log('DEBUG: Sending course data: $courseData');
       
-      // Send API request
-      final response = await connect.post(
+      // Use centralized API service
+      final response = await EnvConfig.apiService.post(
         '${EnvConfig.apiUrl}/courses',
-        courseData,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
+        courseData
       );
       
       log('DEBUG: Upload response status: ${response.statusCode}');
@@ -745,22 +723,9 @@ class CoursesController extends GetxController {
     try {
       log('DEBUG: Fetching lessons for course ID: $courseId');
       
-      // Create GetConnect instance for API calls
-      final connect = GetConnect();
-      
-      // Add auth token to headers if user is logged in
-      final authController = Get.find<AuthController>();
-      final token = authController.accessToken;
-      
-      final headers = {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json'
-      };
-      
-      // Fetch lessons for the course
-      final response = await connect.get(
-        EnvConfig.getLessonsForCourse(courseId),
-        headers: headers,
+      // Use centralized API service
+      final response = await EnvConfig.apiService.get(
+        EnvConfig.getLessonsForCourse(courseId)
       );
       
       log('DEBUG: Lessons API response status: ${response.statusCode}');

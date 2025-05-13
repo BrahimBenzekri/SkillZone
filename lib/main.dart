@@ -5,12 +5,14 @@ import 'package:skillzone/core/routes/app_pages.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/features/profile/services/user_profile_service.dart';
+import 'package:skillzone/core/services/api_service.dart';
 
 Future<void> main() async {
   await GetStorage.init();
   await dotenv.load(fileName: ".env");
   
   // Initialize services
+  await Get.putAsync(() => ApiService().init(), permanent: true);
   Get.put(UserProfileService(), permanent: true);
   runApp(const MainApp());
 }
