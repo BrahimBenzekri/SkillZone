@@ -1,0 +1,121 @@
+import 'dart:developer';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:skillzone/core/config/env_config.dart';
+import 'package:skillzone/features/auth/controllers/auth_controller.dart';
+import 'package:skillzone/features/points/services/user_points_service.dart';
+
+class UserProfileService extends GetxService {
+  // Storage keys
+  static const String firstNameKey = 'user_first_name';
+  static const String lastNameKey = 'user_last_name';
+  static const String usernameKey = 'username';
+  static const String avatarImageKey = 'avatar_image';
+  static const String avatarColorIndexKey = 'avatar_color_index';
+  
+  final storage = GetStorage();
+  
+    // Initialize controllers and services permanently at app startup
+  final AuthController _authController = Get.put(AuthController(), permanent: true);
+  final UserPointsService _pointsService = Get.find<UserPointsService>();
+  
+  // User profile data
+  final firstName = ''.obs;
+  final lastName = ''.obs;
+  final username = ''.obs;
+  final selectedAvatarImage = 'lib/assets/images/avatar13.png'.obs;
+  final selectedAvatarColorIndex = 0.obs;
+  
+  // Computed properties
+  String get fullName => '${firstName.value} ${lastName.value}'.trim();
+  bool get isTeacher => _authController.isTeacher.value;
+  int get points => _pointsService.points.value;
+  
+  @override
+  void onInit() {
+    super.onInit();
+    loadProfileData();
+  }
+  
+  // Fetch profile data from API and store locally
+  Future<void> fetchProfileData() async {
+    try {
+      log('DEBUG: Fetching user profile data');
+      final token = _authController.accessToken;
+      
+      if (token == null) {
+        log('DEBUG: No access token available');
+        return;
+      }
+      
+      final response = await GetConnect().get(
+        EnvConfig.profileUrl,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+      
+      if (response.statusCode == 200 && response.body != null) {
+        final data = response.body['data'];
+        
+        // Update observable values
+        firstName.value = data['first_name'] ?? '';
+        lastName.value = data['last_name'] ?? '';
+        username.value = data['username'] ?? '';
+        
+        // Save to storage
+        await storage.write(firstNameKey, firstName.value);
+        await storage.write(lastNameKey, lastName.value);
+        await storage.write(usernameKey, username.value);
+        
+        log('DEBUG: Profile data updated successfully');
+      } else {
+        log('DEBUG: Failed to fetch profile data: ${response.statusCode}');
+      }
+    } catch (e) {
+      log('DEBUG: Error fetching profile data: $e');
+      // Fall back to local data
+      loadProfileData();
+    }
+  }
+  
+  // Load profile data from local storage
+  void loadProfileData() {
+    try {
+      firstName.value = storage.read<String>(firstNameKey) ?? '';
+      lastName.value = storage.read<String>(lastNameKey) ?? '';
+      username.value = storage.read<String>(usernameKey) ?? 'User';
+      
+      // Load avatar settings
+      final savedAvatarImage = storage.read<String>(avatarImageKey);
+      if (savedAvatarImage != null && savedAvatarImage.isNotEmpty) {
+        selectedAvatarImage.value = savedAvatarImage;
+      }
+      
+      final savedColorIndex = storage.read<int>(avatarColorIndexKey);
+      if (savedColorIndex != null && savedColorIndex >= 0) {
+        selectedAvatarColorIndex.value = savedColorIndex;
+      }
+      
+      log('DEBUG: Loaded profile data from storage');
+    } catch (e) {
+      log('DEBUG: Error loading profile data: $e');
+    }
+  }
+  
+  // Save avatar settings
+  Future<void> saveAvatarSettings(String avatarPath, int colorIndex) async {
+    try {
+      selectedAvatarImage.value = avatarPath;
+      selectedAvatarColorIndex.value = colorIndex;
+      
+      await storage.write(avatarImageKey, avatarPath);
+      await storage.write(avatarColorIndexKey, colorIndex);
+      
+      log('DEBUG: Avatar settings saved');
+    } catch (e) {
+      log('DEBUG: Error saving avatar settings: $e');
+    }
+  }
+}

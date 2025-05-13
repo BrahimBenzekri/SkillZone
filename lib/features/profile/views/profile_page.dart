@@ -4,6 +4,7 @@ import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/auth/controllers/auth_controller.dart';
 import 'package:skillzone/features/profile/controllers/profile_controller.dart';
+import 'package:skillzone/features/profile/services/user_profile_service.dart';
 import 'package:skillzone/widgets/notification_icon.dart';
 import 'package:skillzone/features/auth/widgets/logout_confirmation_dialog.dart';
 
@@ -15,6 +16,7 @@ class ProfilePage extends GetView<ProfileController> {
     // Make sure ProfileController is initialized
     Get.put(ProfileController(), permanent: true);
     final AuthController authController = Get.find<AuthController>();
+    final UserProfileService profileService = Get.find<UserProfileService>();
 
     return Scaffold(
         backgroundColor: AppColors.backgroundColor,
@@ -52,21 +54,28 @@ class ProfilePage extends GetView<ProfileController> {
                   ),
                 ),
                 child: Image.asset(
-                controller.selectedAvatarImage.value,
+                  profileService.selectedAvatarImage.value,
                 ),
               )),
               const SizedBox(
                 height: 5,
               ),
               Obx(() => Text(
-                controller.username.value,
+                profileService.username.value,
                 style: TextStyle(
                   color: controller.selectedAvatarColor,
                   fontSize: 22,
                 ),
               )),
+              Obx(() => Text(
+                profileService.fullName,
+                style: const TextStyle(
+                  color: AppColors.textColorLight,
+                  fontSize: 16,
+                ),
+              )),
               const SizedBox(
-                height: 50,
+                height: 40,
               ),
               _buildProfileOptions(),
               const SizedBox(
@@ -135,6 +144,8 @@ class ProfilePage extends GetView<ProfileController> {
   }
 
   Widget _buildProfileOptions() {
+    final UserProfileService profileService = Get.find<UserProfileService>();
+    
     return Column(
       children: [
         _buildOptionTile(
@@ -155,13 +166,15 @@ class ProfilePage extends GetView<ProfileController> {
           subtitle: 'Learn more about SkillZone',
           onTap: () => controller.launchAboutAppUrl(),
         ),
-       _buildOptionTile(
-              icon: Icons.school,
-              title: 'My Courses',
-              subtitle: 'Manage your uploaded courses',
-              onTap: () => Get.toNamed(AppRoutes.teacherCourses),
-              iconColor: AppColors.primaryColor,
-            )
+        // Only show My Courses option for teachers
+        if (profileService.isTeacher)
+          _buildOptionTile(
+            icon: Icons.school,
+            title: 'My Courses',
+            subtitle: 'Manage your uploaded courses',
+            onTap: () => Get.toNamed(AppRoutes.teacherCourses),
+            iconColor: AppColors.primaryColor,
+          )
       ],
     );
   }

@@ -4,12 +4,17 @@ import 'package:get_storage/get_storage.dart';
 import 'package:skillzone/core/routes/app_pages.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
-import 'package:skillzone/features/auth/controllers/auth_controller.dart';
 import 'package:skillzone/features/points/services/user_points_service.dart';
+import 'package:skillzone/features/profile/services/user_profile_service.dart';
 
 Future<void> main() async {
   await GetStorage.init();
   await dotenv.load(fileName: ".env");
+  
+  // Initialize services
+  Get.put(UserPointsService(), permanent: true);
+  Get.put(UserProfileService(), permanent: true);
+  
   runApp(const MainApp());
 }
 
@@ -18,9 +23,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize controllers and services permanently at app startup
-    Get.put(AuthController(), permanent: true);
-    Get.put(UserPointsService(), permanent: true);
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,

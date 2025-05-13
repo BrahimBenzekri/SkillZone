@@ -3,6 +3,7 @@ import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/courses/controllers/courses_controller.dart';
 import 'package:skillzone/features/points/services/user_points_service.dart';
+import 'package:skillzone/features/profile/services/user_profile_service.dart';
 import 'package:skillzone/widgets/notification_icon.dart';
 import 'package:get/get.dart';
 import 'package:skillzone/widgets/profile_icon.dart';
@@ -14,6 +15,8 @@ class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   final controller = Get.put(CoursesController(), permanent: true);
+  final profileService = Get.find<UserProfileService>();
+  final pointsService = Get.find<UserPointsService>();
 
   Widget _buildCoursesList(
       String section, List<Course> courses, List<Color> colors) {
@@ -94,7 +97,7 @@ class HomePage extends StatelessWidget {
                               ),
                               const SizedBox(width: 8),
                               Obx(() => Text(
-                                '${Get.find<UserPointsService>().points.value} Pts',
+                                '${profileService.points} Pts',
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 12,
@@ -158,12 +161,12 @@ class HomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Welcome Message
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text.rich(
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Obx(() => Text.rich(
                         TextSpan(
                           children: [
-                            TextSpan(
+                            const TextSpan(
                               text: 'Welcome back,\n',
                               style: TextStyle(
                                 color: AppColors.primaryColor,
@@ -171,15 +174,17 @@ class HomePage extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: 'Brahim Benzekri',
-                              style: TextStyle(
+                              text: profileService.firstName.value.isNotEmpty 
+                                  ? profileService.firstName.value 
+                                  : profileService.username.value,
+                              style: const TextStyle(
                                 color: AppColors.textColorLight,
                                 fontSize: 20,
                               ),
                             ),
                           ],
                         ),
-                      ),
+                      )),
                     ),
                     const SizedBox(height: 30),
 
