@@ -29,6 +29,12 @@ class UserPointsService extends GetxService {
     return false;
   }
 
+  // Update points to a specific value (e.g., from API response)
+  Future<void> updatePoints(int newPointsValue) async {
+    points.value = newPointsValue;
+    await _savePoints();
+  }
+
   // Save points to persistent storage
   Future<void> _savePoints() async {
     await _storage.write(pointsKey, points.value);

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skillzone/core/config/env_config.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
+import 'package:skillzone/core/utils/error_helper.dart';
 import 'package:skillzone/features/courses/controllers/courses_controller.dart';
 import 'package:skillzone/features/courses/models/course.dart';
 import 'package:skillzone/features/courses/models/course_type.dart';
@@ -254,7 +255,6 @@ class InventoryController extends GetxController {
     // Get the course
     final course = _getCourseById(courseId);
     if (course == null) {
- 
       Get.snackbar(
         'Error',
         'Course not found',
@@ -268,7 +268,6 @@ class InventoryController extends GetxController {
     
  
     final pointsService = Get.find<UserPointsService>();
- 
     
     if (course.type == CourseType.hard) {
  
@@ -296,9 +295,28 @@ class InventoryController extends GetxController {
           return false;
         }
         
-        // Deduct points
- 
-        await pointsService.deductPoints(course.points);
+        // Send Unlock course request to API
+        try {
+          final response = await EnvConfig.apiService.post(
+            EnvConfig.unlockCourse(courseId),
+            {},
+          );
+          
+          if (response.statusCode != 200) {
+            throw 'Failed to unlock course: ${response.body}';
+          }
+          log('DEBUG: Unlock course response: ${response.body}');
+          // Update user points in the service and storage
+          final remainingPoints = response.body['data']['points_remaining'];
+          await pointsService.updatePoints(remainingPoints);
+          log('DEBUG: Updated user points: $remainingPoints');
+        } catch (e) {
+          log('DEBUG: Error unlocking course: $e');
+          ErrorHelper.showError(
+            title: 'Error',
+            message: 'Failed to unlock course: $e',
+          );
+        }
  
       } else {
         Future.delayed(Duration.zero, (){Get.snackbar(
@@ -315,7 +333,24 @@ class InventoryController extends GetxController {
       }
     } else {
       // Soft skill course - free to enroll, will earn points upon completion
- 
+      // Send unlock request to api
+      try {
+          final response = await EnvConfig.apiService.post(
+            EnvConfig.unlockCourse(courseId),
+            {},
+          );
+          
+          if (response.statusCode != 200) {
+            throw 'Failed to unlock course: ${response.body}';
+          }
+          log('DEBUG: Unlock course response: ${response.body}');
+        } catch (e) {
+          log('DEBUG: Error unlocking course: $e');
+          ErrorHelper.showError(
+            title: 'Error',
+            message: 'Failed to unlock course: $e',
+          );
+        }
     }
     
     // If we got here, enrollment is successful
@@ -330,7 +365,6 @@ class InventoryController extends GetxController {
  
     }
     courseProgress[courseId] = 0.0.obs;
- 
     
     Get.snackbar(
       'Success',
