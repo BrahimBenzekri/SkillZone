@@ -113,7 +113,7 @@ class InventoryPage extends StatelessWidget {
           separatorBuilder: (context, index) => const SizedBox(height: 16),
           itemCount: likedCourses.length,
           itemBuilder: (context, index) {
-            final course = likedCourses[index];
+            final course = coursesController.allCourses.firstWhere((course) => course.id == likedCourses[index]);
             final color = coursesController.sectionColors['popular']![index % coursesController.sectionColors['popular']!.length];
             return CourseCard(
               course: course,

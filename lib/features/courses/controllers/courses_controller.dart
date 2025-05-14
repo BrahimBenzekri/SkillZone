@@ -70,15 +70,15 @@ class CoursesController extends GetxController {
   final _storageService = Get.find<StorageService>();
   
   // Set to store liked course IDs
-  final _likedCourseIds = <String>{}.obs;
+  final _likedCourseIds = <String>[].obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    // Load courses from API
+    await loadCourses();
     // Load liked courses from storage
     _loadLikedCoursesFromStorage();
-    // Load courses from API
-    loadCourses();
   }
   
   // Load liked courses from storage
@@ -86,22 +86,35 @@ class CoursesController extends GetxController {
     try {
       final likedIds = _storageService.getLikedCourses();
       _likedCourseIds.clear();
-      _likedCourseIds.addAll(likedIds.toSet());
+      _likedCourseIds.addAll(likedIds);
       log('DEBUG: Loaded ${_likedCourseIds.length} liked courses from storage');
+
+      updateCoursesLikedStatus();
     } catch (e) {
       log('ERROR: Failed to load liked courses from storage: $e');
     }
   }
+
+  // Function to update _likedCourseIds when a course is liked or unliked
+  void updateLikedCourses(String courseId, bool isLiked) {
+    if (isLiked) {
+      _likedCourseIds.add(courseId);
+    } else {
+      _likedCourseIds.remove(courseId);
+    }
+    _saveLikedCoursesToStorage();
+    log('DEBUG: Updated liked courses. Total liked: ${_likedCourseIds.length}');
+  }
   
   // Save liked courses to storage
-  // Future<void> _saveLikedCoursesToStorage() async {
-  //   try {
-  //     await _storageService.saveLikedCourses(_likedCourseIds.toList());
-  //     log('DEBUG: Saved ${_likedCourseIds.length} liked courses to storage');
-  //   } catch (e) {
-  //     log('ERROR: Failed to save liked courses to storage: $e');
-  //   }
-  // }
+  Future<void> _saveLikedCoursesToStorage() async {
+    try {
+      await _storageService.saveLikedCourses(_likedCourseIds.toList());
+      log('DEBUG: Saved ${_likedCourseIds.length} liked courses to storage');
+    } catch (e) {
+      log('ERROR: Failed to save liked courses to storage: $e');
+    }
+  }
 
   // Get freemium courses (free soft skills)
   List<Course> get freemiumCourses => softSkillsCourses;
@@ -254,14 +267,23 @@ class CoursesController extends GetxController {
   // Toggle course like status
   void toggleLike(Course course) {
     course.isLiked.toggle();
-    // When backend is ready:
-    // dio.post('/api/courses/${course.id}/toggle-like');
+    // Update liked courses in storage
+    updateLikedCourses(course.id, course.isLiked.value);
+  }
+
+  // Function to update courses' liked status after fetching from storage
+  void updateCoursesLikedStatus() {
+    for (var course in _allCourses) {
+      course.isLiked.value = _likedCourseIds.contains(course.id);
+    }
+    log('DEBUG: Updated liked status for ${_allCourses.length} courses');
   }
 
   // Get user's liked courses
-  List<Course> get likedCourses => [...softSkillsCourses, ...hardSkillsCourses]
-      .where((course) => course.isLiked.value)
-      .toList();
+  List<String> get likedCourses => _allCourses
+    .where((course) => course.isLiked.value)
+    .map((course) => course.id)
+    .toList();
 
   // Helper function to get random thumbnail
   String getRandomThumbnail() {
