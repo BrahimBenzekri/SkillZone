@@ -1,16 +1,15 @@
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:skillzone/core/services/storage_service.dart';
 
 class UserPointsService extends GetxService {
-  static const String pointsKey = 'user_points';
-  final _storage = GetStorage();
+  final _storageService = Get.find<StorageService>();
   final points = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
     // Load points from storage
-    points.value = _storage.read(pointsKey) ?? 0;
+    points.value = _storageService.read<int>(StorageService.userPointsKey) ?? 0;
   }
 
   // Add points (when completing courses, quizzes, etc.)
@@ -37,7 +36,7 @@ class UserPointsService extends GetxService {
 
   // Save points to persistent storage
   Future<void> _savePoints() async {
-    await _storage.write(pointsKey, points.value);
+    await _storageService.savePoints(points.value);
   }
 
   // Check if user has enough points

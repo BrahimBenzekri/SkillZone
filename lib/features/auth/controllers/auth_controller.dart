@@ -1,17 +1,14 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/config/env_config.dart';
+import 'package:skillzone/core/services/storage_service.dart';
 import 'package:skillzone/core/utils/error_helper.dart';
 
 class AuthController extends GetxController {
-  static const String accessTokenKey = 'access_token';
-  static const String refreshTokenKey = 'refresh_token';
-  static const String isTeacherKey = 'is_teacher'; // Key for storing teacher status
-  
-  final storage = GetStorage();
+  // Use constants from StorageService
+  final _storageService = Get.find<StorageService>();
   final RxBool isLoading = false.obs;
   final RxString error = ''.obs;
   final RxString userEmail = ''.obs;
@@ -32,7 +29,7 @@ class AuthController extends GetxController {
     log('DEBUG: AuthController initializing');
     
     // Load isTeacher value from storage when controller initializes
-    final savedIsTeacher = storage.read<bool>(isTeacherKey);
+    final savedIsTeacher = _storageService.read<bool>(StorageService.isTeacherKey);
     if (savedIsTeacher != null) {
       isTeacher.value = savedIsTeacher;
       log('DEBUG: Loaded isTeacher from storage: ${isTeacher.value}');
@@ -43,10 +40,10 @@ class AuthController extends GetxController {
 
   Future<String> determineInitialRoute() async {
     try {
-      final isFirstLaunch = storage.read<bool>('isFirstLaunch') ?? true;
+      final isFirstLaunch = _storageService.read<bool>('isFirstLaunch') ?? true;
 
       if (isFirstLaunch) {
-        await storage.write('isFirstLaunch', false);
+        await _storageService.write('isFirstLaunch', false);
         return AppRoutes.welcome;
       }
 
@@ -71,7 +68,7 @@ class AuthController extends GetxController {
 
   Future<bool> _refreshTokens() async {
     try {
-      final refreshToken = storage.read<String>(refreshTokenKey);
+      final refreshToken = _storageService.read<String>(StorageService.refreshTokenKey);
       if (refreshToken == null) {
         return false;
       }
@@ -215,7 +212,7 @@ class AuthController extends GetxController {
       if (response.statusCode == 201) {
         log('DEBUG: Signup successful, saving isTeacher value: $isTeacherValue');
         // Save isTeacher value to storage
-        await storage.write(isTeacherKey, isTeacherValue);
+        await _storageService.write(StorageService.isTeacherKey, isTeacherValue);
         log('DEBUG: isTeacher value saved to storage: $isTeacherValue');
         
         log('DEBUG: Navigating to email verification page');
@@ -311,7 +308,7 @@ class AuthController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        await storage.write(isTeacherKey, isTeacherValue);
+        await _storageService.write(StorageService.isTeacherKey, isTeacherValue);
         isTeacher.value = isTeacherValue;
       } else {
         throw response.body['message'] ?? 'Failed to update user type';
@@ -336,14 +333,16 @@ class AuthController extends GetxController {
     try {
       log('DEBUG: Saving auth data to storage');
       
-      await storage.write(accessTokenKey, accessToken);
-      await storage.write(refreshTokenKey, refreshToken);
+      await _storageService.saveAuthData(
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        isTeacher: isTeacherValue,
+      );
       
-      // Save isTeacher value if provided
+      // Update isTeacher value if provided
       if (isTeacherValue != null) {
         isTeacher.value = isTeacherValue;
-        await storage.write(isTeacherKey, isTeacherValue);
-        log('DEBUG: isTeacher value saved: $isTeacherValue');
+        log('DEBUG: isTeacher value updated: $isTeacherValue');
       }
     } catch (e) {
       log('DEBUG: Failed to save auth data: $e');
@@ -353,15 +352,14 @@ class AuthController extends GetxController {
 
   // Helper method to clear auth data
   Future<void> _clearAuthData() async {
-    await storage.remove(accessTokenKey);
-    await storage.remove(refreshTokenKey);
-    await storage.remove(isTeacherKey);
+    await _storageService.clearAuthData();
+    await _storageService.remove(StorageService.isTeacherKey);
     isTeacher.value = false;
   }
 
   // Getter methods for stored data
-  String? get accessToken => storage.read(accessTokenKey);
-  String? get refreshToken => storage.read(refreshTokenKey);
+  String? get accessToken => _storageService.read<String>(StorageService.accessTokenKey);
+  String? get refreshToken => _storageService.read<String>(StorageService.refreshTokenKey);
   bool get isStudent => !isTeacher.value;
 
   // Update logout method to clear stored data

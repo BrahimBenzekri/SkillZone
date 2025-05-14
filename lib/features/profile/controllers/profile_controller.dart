@@ -1,13 +1,13 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:skillzone/features/profile/services/user_profile_service.dart';
 
 class ProfileController extends GetxController {
   final UserProfileService _profileService = Get.find<UserProfileService>();
-  final storage = GetStorage();
+  // final StorageService _storageService = Get.find<StorageService>();
   
   // About app URL
   final String aboutAppUrl = 'https://skillzone.netlify.app/';
@@ -72,6 +72,7 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    log('DEBUG: ProfileController initialized');
     // Refresh profile data from API
     _profileService.fetchProfileData();
   }
@@ -92,10 +93,15 @@ class ProfileController extends GetxController {
   // Save avatar settings
   void saveAvatarSettings() async {
     try {
+      log('DEBUG: Saving avatar settings from controller');
       await _profileService.saveAvatarSettings(
         selectedAvatarImage.value,
         selectedAvatarColorIndex.value
       );
+      
+      // Force UI update by refreshing the values
+      selectedAvatarImage.refresh();
+      selectedAvatarColorIndex.refresh();
       
       Get.snackbar(
         'Success',

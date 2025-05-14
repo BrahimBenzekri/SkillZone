@@ -1,25 +1,15 @@
 import 'dart:developer';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:skillzone/core/config/env_config.dart';
 import 'package:skillzone/features/auth/controllers/auth_controller.dart';
 import 'package:skillzone/features/points/services/user_points_service.dart';
+import 'package:skillzone/core/services/storage_service.dart';
 
 class UserProfileService extends GetxService {
-  // Storage keys
-  static const String firstNameKey = 'user_first_name';
-  static const String lastNameKey = 'user_last_name';
-  static const String usernameKey = 'username';
-  static const String avatarImageKey = 'avatar_image';
-  static const String avatarColorIndexKey = 'avatar_color_index';
-  static const String isTeacherKey = 'is_teacher';
-  static const String pointsKey = 'user_points';
-  
-  final storage = GetStorage();
-  
-    // Initialize controllers and services permanently at app startup
+  // Initialize controllers and services permanently at app startup
   final AuthController _authController = Get.put(AuthController(), permanent: true);
   final UserPointsService _pointsService = Get.put(UserPointsService(), permanent: true);
+  final StorageService _storageService = Get.find<StorageService>();
   
   // User profile data
   final firstName = ''.obs;
@@ -36,8 +26,10 @@ class UserProfileService extends GetxService {
   @override
   void onInit() {
     super.onInit();
-    fetchProfileData();
+    // First load from local storage
     loadProfileData();
+    // Then try to fetch from API
+    fetchProfileData();
   }
   
   // Fetch profile data from API and store locally
@@ -70,11 +62,13 @@ class UserProfileService extends GetxService {
 
         log('DEBUG: Updated profile values - firstName: ${firstName.value}, lastName: ${lastName.value}, username: ${username.value}');
         
-        // Save to storage
-        await storage.write(firstNameKey, firstName.value);
-        await storage.write(lastNameKey, lastName.value);
-        await storage.write(usernameKey, username.value);
-        await storage.write(pointsKey, _pointsService.points.value);
+        // Save to storage using StorageService
+        await _storageService.saveUserProfile(
+          firstName: firstName.value,
+          lastName: lastName.value,
+          username: username.value
+        );
+        await _storageService.savePoints(_pointsService.points.value);
         
         log('DEBUG: Profile data saved to storage successfully');
       } else {
@@ -92,22 +86,28 @@ class UserProfileService extends GetxService {
   // Load profile data from local storage
   void loadProfileData() {
     try {
-      firstName.value = storage.read<String>(firstNameKey) ?? '';
-      lastName.value = storage.read<String>(lastNameKey) ?? '';
-      username.value = storage.read<String>(usernameKey) ?? 'User';
+      firstName.value = _storageService.read<String>(StorageService.firstNameKey) ?? '';
+      lastName.value = _storageService.read<String>(StorageService.lastNameKey) ?? '';
+      username.value = _storageService.read<String>(StorageService.usernameKey) ?? 'User';
       
-      // Load avatar settings
-      final savedAvatarImage = storage.read<String>(avatarImageKey);
+      // Load avatar settings with better null handling
+      final savedAvatarImage = _storageService.read<String>(StorageService.avatarImageKey);
       if (savedAvatarImage != null && savedAvatarImage.isNotEmpty) {
+        log('DEBUG: Loading avatar image from storage: $savedAvatarImage');
         selectedAvatarImage.value = savedAvatarImage;
+      } else {
+        log('DEBUG: No saved avatar image found, using default');
       }
       
-      final savedColorIndex = storage.read<int>(avatarColorIndexKey);
+      final savedColorIndex = _storageService.read<int>(StorageService.avatarColorIndexKey);
       if (savedColorIndex != null && savedColorIndex >= 0) {
+        log('DEBUG: Loading avatar color index from storage: $savedColorIndex');
         selectedAvatarColorIndex.value = savedColorIndex;
+      } else {
+        log('DEBUG: No saved color index found, using default');
       }
       
-      log('DEBUG: Loaded profile data from storage');
+      log('DEBUG: Loaded profile data from storage - username: ${username.value}, avatar: ${selectedAvatarImage.value}, colorIndex: ${selectedAvatarColorIndex.value}');
     } catch (e) {
       log('DEBUG: Error loading profile data: $e');
     }
@@ -116,13 +116,16 @@ class UserProfileService extends GetxService {
   // Save avatar settings
   Future<void> saveAvatarSettings(String avatarPath, int colorIndex) async {
     try {
+      log('DEBUG: Saving avatar settings - path: $avatarPath, colorIndex: $colorIndex');
+      
+      // Update observable values
       selectedAvatarImage.value = avatarPath;
       selectedAvatarColorIndex.value = colorIndex;
       
-      await storage.write(avatarImageKey, avatarPath);
-      await storage.write(avatarColorIndexKey, colorIndex);
+      // Save to storage using StorageService
+      await _storageService.saveAvatarSettings(avatarPath, colorIndex);
       
-      log('DEBUG: Avatar settings saved');
+      log('DEBUG: Avatar settings saved successfully');
     } catch (e) {
       log('DEBUG: Error saving avatar settings: $e');
     }

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:get/get.dart';
+import 'package:skillzone/core/services/storage_service.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/core/utils/error_helper.dart';
 import 'package:skillzone/core/config/env_config.dart';
@@ -66,11 +67,41 @@ class CoursesController extends GetxController {
     'lib/assets/svgs/course6.svg',
   ];
 
+  final _storageService = Get.find<StorageService>();
+  
+  // Set to store liked course IDs
+  final _likedCourseIds = <String>{}.obs;
+
   @override
   void onInit() {
     super.onInit();
+    // Load liked courses from storage
+    _loadLikedCoursesFromStorage();
+    // Load courses from API
     loadCourses();
   }
+  
+  // Load liked courses from storage
+  void _loadLikedCoursesFromStorage() {
+    try {
+      final likedIds = _storageService.getLikedCourses();
+      _likedCourseIds.clear();
+      _likedCourseIds.addAll(likedIds.toSet());
+      log('DEBUG: Loaded ${_likedCourseIds.length} liked courses from storage');
+    } catch (e) {
+      log('ERROR: Failed to load liked courses from storage: $e');
+    }
+  }
+  
+  // Save liked courses to storage
+  // Future<void> _saveLikedCoursesToStorage() async {
+  //   try {
+  //     await _storageService.saveLikedCourses(_likedCourseIds.toList());
+  //     log('DEBUG: Saved ${_likedCourseIds.length} liked courses to storage');
+  //   } catch (e) {
+  //     log('ERROR: Failed to save liked courses to storage: $e');
+  //   }
+  // }
 
   // Get freemium courses (free soft skills)
   List<Course> get freemiumCourses => softSkillsCourses;
