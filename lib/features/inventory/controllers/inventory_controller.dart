@@ -316,6 +316,7 @@ class InventoryController extends GetxController {
             title: 'Error',
             message: 'Failed to unlock course: $e',
           );
+          return false ;
         }
  
       } else {
@@ -350,6 +351,7 @@ class InventoryController extends GetxController {
             title: 'Error',
             message: 'Failed to unlock course: $e',
           );
+          return false ;
         }
     }
     
