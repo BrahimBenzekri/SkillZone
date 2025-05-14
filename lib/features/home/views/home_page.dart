@@ -109,6 +109,7 @@ class HomePage extends StatelessWidget {
                         ),
                         const SizedBox(width: 12),
                         // Upload Course Button
+                        if (profileService.isTeacher)
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,

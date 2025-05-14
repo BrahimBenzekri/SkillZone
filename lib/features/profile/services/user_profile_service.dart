@@ -30,7 +30,7 @@ class UserProfileService extends GetxService {
   
   // Computed properties
   String get fullName => '${firstName.value} ${lastName.value}'.trim();
-  bool get isTeacher => _authController.isTeacher.value;
+  bool get isTeacher => false;
   int get points => _pointsService.points.value;
   
   @override
