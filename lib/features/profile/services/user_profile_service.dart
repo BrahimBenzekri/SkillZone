@@ -30,13 +30,14 @@ class UserProfileService extends GetxService {
   
   // Computed properties
   String get fullName => '${firstName.value} ${lastName.value}'.trim();
-  bool get isTeacher => false;
+  bool get isTeacher => _authController.isTeacher.value;
   int get points => _pointsService.points.value;
   
   @override
   void onInit() {
     super.onInit();
     fetchProfileData();
+    loadProfileData();
   }
   
   // Fetch profile data from API and store locally
