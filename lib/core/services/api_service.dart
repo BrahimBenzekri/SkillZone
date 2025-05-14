@@ -23,6 +23,7 @@ class ApiService extends GetxService {
       try {
         final authController = Get.find<AuthController>();
         final token = authController.accessToken;
+        log('DEBUG: Token found: $token');
         if (token != null) {
           headers['Authorization'] = 'Bearer $token';
         }

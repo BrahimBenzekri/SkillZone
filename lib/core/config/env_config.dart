@@ -13,7 +13,9 @@ class EnvConfig {
   static String get logout => '$apiUrl/logout/';
   static String get refreshToken => '$apiBaseUrl/api/token/refresh/';
   static String get getCourses => '$apiBaseUrl/api/v1/courses/';
+  static String get unlockedCourses => '$apiBaseUrl/api/v1/courses/inventory/';
   static String getLessonsForCourse(String courseId) => '$apiBaseUrl/api/v1/courses/$courseId/lessons';
+  static String unlockCourse(String courseid) => '$apiBaseUrl/api/v1/courses/$courseid/unlock/';
   
   // Helper method to get the API service
   static ApiService get apiService => Get.find<ApiService>();

@@ -1,6 +1,9 @@
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skillzone/core/config/env_config.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/courses/controllers/courses_controller.dart';
 import 'package:skillzone/features/courses/models/course.dart';
@@ -39,11 +42,20 @@ class InventoryController extends GetxController {
     selectedTab.value = index;
   }
   
-  // This would fetch from API in a real app
-  void loadEnrolledCourses() {
-    // For demo purposes, we'll use some dummy enrolled course IDs
-    // In a real app, this would be an API call
-    // enrolledCourseIds.assignAll(['h1', 's1']);
+  // Load enrolled courses from API
+  Future<void> loadEnrolledCourses() async {
+    try {
+      final response = await EnvConfig.apiService.get(EnvConfig.unlockedCourses);
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.body['data']['courses'];
+        enrolledCourseIds.assignAll(data.map((course) => course['id'].toString()).toList());
+        log("DEBUG: Enrolled courses loaded: ${enrolledCourseIds.length}");
+      } else {
+        throw 'Failed to load enrolled courses: ${response.statusCode}';
+      }
+    } catch (e) {
+      log('DEBUG: Error loading enrolled courses: $e');
+    }
   }
   
   // Initialize progress tracking for enrolled courses
