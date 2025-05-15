@@ -31,10 +31,10 @@ class InventoryController extends GetxController {
   final CoursesController _coursesController = Get.find<CoursesController>();
   
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    // Load enrolled courses (dummy data for now)
-    loadEnrolledCourses();
+    // Load enrolled courses
+    await loadEnrolledCourses();
     // Initialize progress tracking
     _initializeProgressTracking();
   }
