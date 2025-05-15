@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'quiz_question.dart';
 
 class Quiz {
@@ -16,20 +18,18 @@ class Quiz {
     required this.timePerQuestion,
   }) : totalPoints = questions.fold(0, (sum, question) => sum + question.points);
 
-  factory Quiz.fromJson(Map<String, dynamic> json) => Quiz(
-        id: json['id'],
-        courseId: json['courseId'],
-        title: json['title'],
-        questions: List<QuizQuestion>.from(
-            json['questions'].map((x) => QuizQuestion.fromJson(x))),
-        timePerQuestion: Duration(seconds: json['timePerQuestion']),
-      );
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'courseId': courseId,
-        'title': title,
-        'questions': questions.map((x) => x.toJson()).toList(),
-        'timePerQuestion': timePerQuestion.inSeconds,
-      };
+  factory Quiz.fromJson(Map<String, dynamic> json) {
+    log('Creating Quiz from JSON: ${json['id']}');
+    return Quiz(
+      id: json['id'],
+      courseId: json['courseId'],
+      title: json['title'],
+      questions: List<QuizQuestion>.from(
+          json['questions'].map((x) {
+            log('Creating QuizQuestion: ${x['id']}');
+            return QuizQuestion.fromJson(x);
+          })),
+      timePerQuestion: Duration(seconds: json['timePerQuestion']),
+    );
+  }
 }

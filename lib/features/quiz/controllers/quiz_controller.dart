@@ -1,5 +1,8 @@
 
+import 'dart:developer';
+
 import 'package:get/get.dart';
+import 'package:skillzone/core/config/env_config.dart';
 import 'package:skillzone/features/points/services/user_points_service.dart';
 import 'dart:async';
 import '../models/quiz.dart';
@@ -247,6 +250,7 @@ class QuizController extends GetxController {
   };
 
   // Observable variables
+  final isLoading = true.obs;
   final currentQuiz = Rx<Quiz?>(null);
   final currentQuestionIndex = 0.obs;
   final selectedOptionIndex = (-1).obs;
@@ -264,7 +268,7 @@ class QuizController extends GetxController {
       currentQuestionIndex.value == (currentQuiz.value?.questions.length ?? 1) - 1;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     
     // Check if courseId is passed in arguments
@@ -273,7 +277,7 @@ class QuizController extends GetxController {
       if (args.containsKey('courseId')) {
         final courseId = args['courseId'] as String;
 
-        startQuiz(courseId);
+        await startQuiz(courseId);
       }
     }
   }
@@ -284,14 +288,19 @@ class QuizController extends GetxController {
     super.onClose();
   }
 
-  void startQuiz(String courseId) {
-    currentQuiz.value = getQuizForCourse(courseId);
-    if (currentQuiz.value == null) return;
-    
-    currentQuestionIndex.value = 0;
-    score.value = 0;
-    answers.clear();
-    startTimer();
+  Future<void> startQuiz(String courseId) async {
+    isLoading.value = true;
+    try {
+      currentQuiz.value = await getQuizFromApi(courseId);
+      if (currentQuiz.value == null) return;
+      
+      currentQuestionIndex.value = 0;
+      score.value = 0;
+      answers.clear();
+      startTimer();
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   void startTimer() {
@@ -342,6 +351,26 @@ class QuizController extends GetxController {
 
   Quiz? getQuizForCourse(String courseId) {
     return _quizzes[courseId];
+  }
+
+  Future<Quiz?> getQuizFromApi(String courseId) async {
+    try {
+      log('DEBUG: Fetching quiz for course ID: $courseId');
+      final response = await EnvConfig.apiService.get(EnvConfig.getQuiz(courseId));
+      log('DEBUG: Quiz API response status: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final quizData = response.body;
+        log('DEBUG: Quiz data received successfully');
+        return Quiz.fromJson(quizData);
+      } else {
+        log('ERROR: Failed to load quiz. Status code: ${response.statusCode}');
+        throw Exception('Failed to load quiz');
+      }
+    } catch (e) {
+      log('ERROR: Exception while fetching quiz: $e');
+      ErrorHelper.showError(title: "Error Fetching Quiz", message: "Error: $e");
+      return null;
+    }
   }
 
   void showWarningSnackbar() {

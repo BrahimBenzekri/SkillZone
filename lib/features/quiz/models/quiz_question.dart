@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class QuizQuestion {
   final String id;
   final String question;
@@ -13,19 +15,14 @@ class QuizQuestion {
     required this.points,
   });
 
-  factory QuizQuestion.fromJson(Map<String, dynamic> json) => QuizQuestion(
-        id: json['id'],
-        question: json['question'],
-        options: List<String>.from(json['options']),
-        correctOptionIndex: json['correctOptionIndex'],
-        points: json['points'],
-      );
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'question': question,
-        'options': options,
-        'correctOptionIndex': correctOptionIndex,
-        'points': points,
-      };
+  factory QuizQuestion.fromJson(Map<String, dynamic> json) {
+    log('Creating QuizQuestion from JSON: ${json['id']}');
+    return QuizQuestion(
+      id: json['id'],
+      question: json['question'],
+      options: List<String>.from(json['options']),
+      correctOptionIndex: json['correctOptionIndex'],
+      points: json['points'],
+    );
+  }
 }
