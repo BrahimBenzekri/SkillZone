@@ -10,7 +10,7 @@ class ProfileController extends GetxController {
   // final StorageService _storageService = Get.find<StorageService>();
   
   // About app URL
-  final String aboutAppUrl = 'https://skillzone.netlify.app/';
+  final String aboutAppUrl = 'https://skillzoneweb.netlify.app/';
   
   // Available avatars and colors
   final List<String> availableAvatars = [
@@ -55,7 +55,7 @@ class ProfileController extends GetxController {
   Future<void> launchAboutAppUrl() async {
     final Uri url = Uri.parse(aboutAppUrl);
     try {
-      if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
+      if (!await launchUrl(url, mode: LaunchMode.inAppBrowserView)) {
         throw 'Could not launch $url';
       }
     } catch (e) {
