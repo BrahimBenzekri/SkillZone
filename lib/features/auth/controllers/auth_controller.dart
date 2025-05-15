@@ -67,12 +67,15 @@ class AuthController extends GetxController {
   }
 
   Future<bool> _refreshTokens() async {
+    log('DEBUG: Starting token refresh process');
     try {
       final refreshToken = _storageService.read<String>(StorageService.refreshTokenKey);
       if (refreshToken == null) {
+        log('DEBUG: No refresh token found in storage');
         return false;
       }
 
+      log('DEBUG: Sending refresh token request');
       // Use centralized API service
       final response = await EnvConfig.apiService.post(
         EnvConfig.refreshToken,
@@ -82,20 +85,28 @@ class AuthController extends GetxController {
         requiresAuth: false
       );
 
+      log('DEBUG: Received response with status code: ${response.statusCode}');
       if (response.statusCode == 200 && response.body != null) {
         final newAccessToken = response.body['access'];
         final newRefreshToken = response.body['refresh'];
         
         if (newAccessToken != null && newRefreshToken != null) {
+          log('DEBUG: New tokens received, saving auth data');
           await _saveAuthData(
             accessToken: newAccessToken,
             refreshToken: newRefreshToken,
           );
+          log('DEBUG: Token refresh successful');
           return true;
+        } else {
+          log('DEBUG: New tokens are null');
         }
+      } else {
+        log('DEBUG: Token refresh failed with status code: ${response.statusCode}');
       }
       return false;
     } catch (e) {
+      log('ERROR: Exception during token refresh: $e');
       return false;
     }
   }
@@ -255,6 +266,11 @@ class AuthController extends GetxController {
 
       if (response.statusCode == 200) {
         log('DEBUG: Email verification successful');
+        
+        // Refresh tokens after successful verification
+        log('DEBUG: Attempting to refresh tokens after verification');
+        await _refreshTokens();
+        
         log('DEBUG: Navigating to interests page');
         Get.offAllNamed(AppRoutes.interests);
       } else {
@@ -289,36 +305,6 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       error.value = 'Connection error';
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<void> updateUserType(bool isTeacherValue) async {
-    try {
-      isLoading.value = true;
-      error.value = '';
-
-      final response = await GetConnect().post(
-        '${EnvConfig.apiUrl}/update-user-type/',
-        {
-          'email': userEmail.value,
-          'is_teacher': isTeacherValue,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        await _storageService.write(StorageService.isTeacherKey, isTeacherValue);
-        isTeacher.value = isTeacherValue;
-      } else {
-        throw response.body['message'] ?? 'Failed to update user type';
-      }
-    } catch (e) {
-      error.value = e.toString();
-      ErrorHelper.showAuthError(
-        message: e.toString(),
-        onRetry: () => updateUserType(isTeacherValue),
-      );
     } finally {
       isLoading.value = false;
     }

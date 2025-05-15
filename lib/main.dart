@@ -35,7 +35,7 @@ class MainApp extends StatelessWidget {
           bodySmall: TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
-      initialRoute: AppRoutes.main,
+      initialRoute: AppRoutes.login,
       getPages: AppPages.pages,
     );
   }
