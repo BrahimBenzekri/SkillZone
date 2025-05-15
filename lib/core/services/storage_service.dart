@@ -69,10 +69,12 @@ class StorageService extends GetxService {
     String? firstName,
     String? lastName,
     String? username,
+    bool? isTeacher,
   }) async {
     if (firstName != null) await write(firstNameKey, firstName);
     if (lastName != null) await write(lastNameKey, lastName);
     if (username != null) await write(usernameKey, username);
+    if (isTeacher != null) await write(isTeacherKey, isTeacher);
   }
   
   // Avatar specific methods

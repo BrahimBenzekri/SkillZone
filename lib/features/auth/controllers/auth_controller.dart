@@ -29,13 +29,13 @@ class AuthController extends GetxController {
     log('DEBUG: AuthController initializing');
     
     // Load isTeacher value from storage when controller initializes
-    final savedIsTeacher = _storageService.read<bool>(StorageService.isTeacherKey);
-    if (savedIsTeacher != null) {
-      isTeacher.value = savedIsTeacher;
-      log('DEBUG: Loaded isTeacher from storage: ${isTeacher.value}');
-    } else {
-      log('DEBUG: No isTeacher value found in storage');
-    }
+    // final savedIsTeacher = _storageService.read<bool>(StorageService.isTeacherKey);
+    // if (savedIsTeacher != null) {
+    //   isTeacher.value = savedIsTeacher;
+    //   log('DEBUG: Loaded isTeacher from storage: ${isTeacher.value}');
+    // } else {
+    //   log('DEBUG: No isTeacher value found in storage');
+    // }
   }
 
   Future<String> determineInitialRoute() async {

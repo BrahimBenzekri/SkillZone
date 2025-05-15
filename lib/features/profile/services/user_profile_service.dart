@@ -15,12 +15,14 @@ class UserProfileService extends GetxService {
   final firstName = ''.obs;
   final lastName = ''.obs;
   final username = ''.obs;
+  // ignore: non_constant_identifier_names
+  final is_teacher = false.obs;
   final selectedAvatarImage = 'lib/assets/images/avatar13.png'.obs;
   final selectedAvatarColorIndex = 0.obs;
   
   // Computed properties
   String get fullName => '${firstName.value} ${lastName.value}'.trim();
-  bool get isTeacher => _authController.isTeacher.value;
+  bool get isTeacher => is_teacher.value;
   int get points => _pointsService.points.value;
   
   @override
@@ -58,6 +60,7 @@ class UserProfileService extends GetxService {
         firstName.value = data['first_name'] ?? '';
         lastName.value = data['last_name'] ?? '';
         username.value = data['username'] ?? '';
+        is_teacher.value = data['is_teacher'];
         _pointsService.points.value = data['points'] ?? 0;
 
         log('DEBUG: Updated profile values - firstName: ${firstName.value}, lastName: ${lastName.value}, username: ${username.value}');
@@ -66,7 +69,8 @@ class UserProfileService extends GetxService {
         await _storageService.saveUserProfile(
           firstName: firstName.value,
           lastName: lastName.value,
-          username: username.value
+          username: username.value,
+          isTeacher: is_teacher.value,
         );
         await _storageService.savePoints(_pointsService.points.value);
         
@@ -89,6 +93,7 @@ class UserProfileService extends GetxService {
       firstName.value = _storageService.read<String>(StorageService.firstNameKey) ?? '';
       lastName.value = _storageService.read<String>(StorageService.lastNameKey) ?? '';
       username.value = _storageService.read<String>(StorageService.usernameKey) ?? 'User';
+      is_teacher.value = _storageService.read<bool>(StorageService.isTeacherKey) ?? false;
       
       // Load avatar settings with better null handling
       final savedAvatarImage = _storageService.read<String>(StorageService.avatarImageKey);
@@ -107,7 +112,7 @@ class UserProfileService extends GetxService {
         log('DEBUG: No saved color index found, using default');
       }
       
-      log('DEBUG: Loaded profile data from storage - username: ${username.value}, avatar: ${selectedAvatarImage.value}, colorIndex: ${selectedAvatarColorIndex.value}');
+      log('DEBUG: Loaded profile data from storage - username: ${username.value}, avatar: ${selectedAvatarImage.value}, colorIndex: ${selectedAvatarColorIndex.value}, isTecher: ${is_teacher.value}');
     } catch (e) {
       log('DEBUG: Error loading profile data: $e');
     }
