@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:skillzone/core/config/env_config.dart';
 import 'package:skillzone/core/services/storage_service.dart';
 
 class UserPointsService extends GetxService {
@@ -15,6 +16,15 @@ class UserPointsService extends GetxService {
   // Add points (when completing courses, quizzes, etc.)
   Future<void> addPoints(int amount) async {
     points.value += amount;
+    final response = await EnvConfig.apiService.post(
+      EnvConfig.updatePoints,
+      {
+        'points': points.value,
+      },
+    );
+    if (response.statusCode != 200) {
+      throw 'Failed to update points: ${response.body}';
+    }
     await _savePoints();
   }
 
