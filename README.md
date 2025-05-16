@@ -2,12 +2,10 @@
   <img src="lib/assets/images/SKILLZONE.png"  width="200"/>
 </p>
 
-# SkillZone
-
 A modern e-learning platform built with Flutter, featuring a clean and intuitive interface for an enhanced learning experience.
 
----
-⭐️ If you found this project helpful, please give it a star!
+
+> ⭐️ If you found this project helpful, please give it a star!
 
 ## 🙌 Special Thanks
 
