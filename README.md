@@ -1,8 +1,18 @@
+<p align="center">
+  <img src="lib/assets/images/SKILLZONE.png"  width="200"/>
+</p>
+
 # SkillZone
 
-> 🎓 **College Project Status**: This is an ongoing college project currently in active development. Features and functionality are being continuously added and refined.
-
 A modern e-learning platform built with Flutter, featuring a clean and intuitive interface for an enhanced learning experience.
+
+---
+⭐️ If you found this project helpful, please give it a star!
+
+## 🙌 Special Thanks
+
+- **Backend Developer**: [Abdallah Wassim Meftah](https://github.com/abdallah-mft) - Nta Sahbi w vrai les hommes 😂.
+- **Project Supervisor**: [Mdm Lydia Imene Allou](https://github.com/lydia-imene-allou) - for guidance and invaluable insights throughout the development process.
 
 ## 💡 Project Concept
 
@@ -246,18 +256,23 @@ git clone https://github.com/yourusername/skillzone.git
 cd skillzone
 ```
 
-3. Install dependencies
+3. Update flutter to latest version
+```bash
+flutter upgrade
+```
+
+4. Install dependencies
 ```bash
 flutter pub get
 ```
 
-4. Create a .env file in the root directory with required environment variables
+5. Create a .env file in the root directory with required environment variables
 ```
 API_URL=your_api_url_here
 API_KEY=your_api_key_here
 ```
 
-5. Run the app
+6. Run the app
 ```bash
 flutter run
 ```
@@ -309,8 +324,3 @@ As this is a college project in development, contributions are currently limited
 * [Flutter SVG](https://pub.dev/packages/flutter_svg) - SVG rendering support
 * [Smooth Page Indicator](https://pub.dev/packages/smooth_page_indicator) - Page indicators for onboarding
 * [Percent Indicator](https://pub.dev/packages/percent_indicator) - Progress visualization
-
----
-⭐️ If you found this project helpful, please give it a star!
-
-> **Note**: This is a college project under development. Some features may be incomplete or subject to change.
