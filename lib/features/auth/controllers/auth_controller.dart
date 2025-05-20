@@ -292,6 +292,9 @@ class AuthController extends GetxController {
 
       if (response.statusCode == 200) {
         log('DEBUG: Email verification successful');
+
+        // Saving tokens from response
+        _saveAuthData(accessToken: response.body["data"]["access"], refreshToken: response.body["data"]["refresh"]);
         
         // Refresh tokens after successful verification
         log('DEBUG: Attempting to refresh tokens after verification');
