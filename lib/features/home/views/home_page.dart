@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/courses/controllers/courses_controller.dart';
@@ -17,6 +18,13 @@ class HomePage extends StatelessWidget {
   final controller = Get.put(CoursesController(), permanent: true);
   final profileService = Get.find<UserProfileService>();
   final pointsService = Get.find<UserPointsService>();
+
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+
+  void _onRefresh() async{
+    await Future.delayed(const Duration(seconds: 3));
+    _refreshController.refreshCompleted();
+  }
 
   Widget _buildCoursesList(
       String section, List<Course> courses, List<Color> colors) {
@@ -157,60 +165,69 @@ class HomePage extends StatelessWidget {
             ),
             // Scrollable Content
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Welcome Message
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Obx(() => Text.rich(
-                        TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: 'Welcome back,\n',
-                              style: TextStyle(
-                                color: AppColors.primaryColor,
-                                fontSize: 26,
+              child: SmartRefresher(
+                controller: _refreshController,
+                enablePullDown: true, // Enable pull-to-refresh
+                header: const WaterDropMaterialHeader(
+                  backgroundColor: AppColors.primaryColor,
+                  distance: 40.0,
+                ), // Default refresh indicator style
+                onRefresh: _onRefresh,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Welcome Message
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Obx(() => Text.rich(
+                          TextSpan(
+                            children: [
+                              const TextSpan(
+                                text: 'Welcome back,\n',
+                                style: TextStyle(
+                                  color: AppColors.primaryColor,
+                                  fontSize: 26,
+                                ),
                               ),
-                            ),
-                            TextSpan(
-                              text: profileService.firstName.value.isNotEmpty 
-                                  ? profileService.firstName.value 
-                                  : profileService.username.value,
-                              style: const TextStyle(
-                                color: AppColors.textColorLight,
-                                fontSize: 20,
+                              TextSpan(
+                                text: profileService.firstName.value.isNotEmpty 
+                                    ? profileService.firstName.value 
+                                    : profileService.username.value,
+                                style: const TextStyle(
+                                  color: AppColors.textColorLight,
+                                  fontSize: 20,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      )),
-                    ),
-                    const SizedBox(height: 30),
-
-                    // Popular Courses Section
-                    const CourseSection(text: 'Popular Courses'),
-                    const SizedBox(height: 16),
-                    _buildCoursesList('popular', controller.popularCourses,
-                        controller.sectionColors['popular']!),
-
-                    const SizedBox(height: 16),
-                    // Hard Skills Section
-                    const CourseSection(text: 'Hard Skills'),
-                    const SizedBox(height: 16),
-                    _buildCoursesList('hard', controller.premiumCourses,
-                        controller.sectionColors['hard']!),
-
-                    const SizedBox(height: 16),
-                    // Soft Skills Section
-                    const CourseSection(text: 'Soft Skills'),
-                    const SizedBox(height: 16),
-                    _buildCoursesList('soft', controller.freemiumCourses,
-                        controller.sectionColors['soft']!),
-
-                    const SizedBox(height: 115),
-                  ],
+                            ],
+                          ),
+                        )),
+                      ),
+                      const SizedBox(height: 30),
+                
+                      // Popular Courses Section
+                      const CourseSection(text: 'Popular Courses'),
+                      const SizedBox(height: 16),
+                      _buildCoursesList('popular', controller.popularCourses,
+                          controller.sectionColors['popular']!),
+                
+                      const SizedBox(height: 16),
+                      // Hard Skills Section
+                      const CourseSection(text: 'Hard Skills'),
+                      const SizedBox(height: 16),
+                      _buildCoursesList('hard', controller.premiumCourses,
+                          controller.sectionColors['hard']!),
+                
+                      const SizedBox(height: 16),
+                      // Soft Skills Section
+                      const CourseSection(text: 'Soft Skills'),
+                      const SizedBox(height: 16),
+                      _buildCoursesList('soft', controller.freemiumCourses,
+                          controller.sectionColors['soft']!),
+                
+                      const SizedBox(height: 115),
+                    ],
+                  ),
                 ),
               ),
             ),

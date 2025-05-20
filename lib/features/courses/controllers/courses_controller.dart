@@ -165,12 +165,6 @@ class CoursesController extends GetxController {
         throw 'Failed to fetch courses: ${allCoursesResponse.statusCode}';
       }
       
-      // Validate response body exists
-      if (allCoursesResponse.body == null) {
-        log('ERROR: Empty response body');
-        throw 'Empty response body';
-      }
-      
       log('DEBUG: Processing response body');
       
       // Safely extract courses data with null checks
