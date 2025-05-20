@@ -219,18 +219,13 @@ class CoursesController extends GetxController {
       
       // Update popular courses based on fetched data
       _updatePopularCourses();
-      
-      // If API returns empty data, use dummy data for development
-      if (_allCourses.isEmpty) {
-        log('DEBUG: No courses received, loading dummy data');
-        _loadDummyData();
-      }
+
     } catch (e) {
       log('ERROR: Error loading courses: $e');
       hasError.value = true;
       errorMessage.value = 'Failed to load courses: $e';
-      // Load dummy data as fallback
-      _loadDummyData();
+      ErrorHelper.showError(title: "Network Error", message: "Couldn't fetch courses. Please Check You Network Connection!");
+
     } finally {
       isLoading.value = false;
       log('DEBUG: Course loading completed');
@@ -286,256 +281,256 @@ class CoursesController extends GetxController {
   }
 
   // Private method to load dummy data
-  void _loadDummyData() {
-    log('DEBUG: Loading dummy data');
+  // void _loadDummyData() {
+  //   log('DEBUG: Loading dummy data');
     
-    // Create temporary lists
-    final tempSoftSkills = <Course>[];
-    final tempHardSkills = <Course>[];
+  //   // Create temporary lists
+  //   final tempSoftSkills = <Course>[];
+  //   final tempHardSkills = <Course>[];
     
-    // Add soft skills courses
-    tempSoftSkills.addAll([
-      Course(
-        id: 's1',
-        title: 'Effective Communication Skills',
-        description:
-            'Master the art of clear and impactful communication in professional settings. Learn key strategies for better verbal and non-verbal communication.',
-        rating: 4.5,
-        duration: const Duration(hours: 2, minutes: 30),
-        type: CourseType.soft,
-        points: 100,
-        thumbnail: getRandomThumbnail(),
-        lessons: _getDummyLessonsForCourse('s1'), price: '0.00',
-      ),
-      Course(
-        id: 's2',
-        title: 'Leadership Fundamentals',
-        description:
-            'Develop essential leadership skills and learn how to inspire and guide teams effectively. Perfect for aspiring managers and team leaders.',
-        rating: 4.8,
-        duration: const Duration(hours: 3),
-        type: CourseType.soft,
-        points: 150,
-        thumbnail: getRandomThumbnail(), price: '0.00',
-      ),
-      Course(
-        id: 's3',
-        title: 'Time Management Mastery',
-        description:
-            'Learn proven techniques to maximize productivity and achieve better work-life balance through effective time management strategies.',
-        rating: 4.6,
-        duration: const Duration(hours: 1, minutes: 45),
-        type: CourseType.soft,
-        points: 80,
-        thumbnail: getRandomThumbnail(), price: '0.00',
-      ),
-      Course(
-        id: 's4',
-        title: 'Emotional Intelligence at Work',
-        description:
-            'Enhance your emotional intelligence to build better relationships and navigate workplace dynamics more effectively.',
-        rating: 4.9,
-        duration: const Duration(hours: 2, minutes: 15),
-        type: CourseType.soft,
-        points: 120,
-        thumbnail: getRandomThumbnail(), price: '0.00',
-      ),
-      Course(
-        id: 's5',
-        title: 'Public Speaking Excellence',
-        description:
-            'Overcome stage fright and master the art of public speaking. Learn to deliver compelling presentations with confidence.',
-        rating: 4.7,
-        duration: const Duration(hours: 4),
-        type: CourseType.soft,
-        points: 200,
-        thumbnail: getRandomThumbnail(), price: '0.00',
-      ),
-      Course(
-        id: 's6',
-        title: 'Conflict Resolution Strategies',
-        description:
-            'Learn effective techniques for managing and resolving workplace conflicts. Transform challenges into opportunities for growth.',
-        rating: 4.4,
-        duration: const Duration(hours: 2),
-        type: CourseType.soft,
-        points: 100,
-        thumbnail: getRandomThumbnail(), price: '0.00',
-      ),
-      Course(
-        id: 's7',
-        title: 'Team Building Essentials',
-        description:
-            'Discover proven methods for building and maintaining high-performing teams. Foster collaboration and team spirit.',
-        rating: 4.3,
-        duration: const Duration(hours: 1, minutes: 30),
-        type: CourseType.soft,
-        points: 75,
-        thumbnail: getRandomThumbnail(), price: '0.00',
-      ),
-    ]);
+  //   // Add soft skills courses
+  //   tempSoftSkills.addAll([
+  //     Course(
+  //       id: 's1',
+  //       title: 'Effective Communication Skills',
+  //       description:
+  //           'Master the art of clear and impactful communication in professional settings. Learn key strategies for better verbal and non-verbal communication.',
+  //       rating: 4.5,
+  //       duration: const Duration(hours: 2, minutes: 30),
+  //       type: CourseType.soft,
+  //       points: 100,
+  //       thumbnail: getRandomThumbnail(),
+  //       lessons: _getDummyLessonsForCourse('s1'), price: '0.00',
+  //     ),
+  //     Course(
+  //       id: 's2',
+  //       title: 'Leadership Fundamentals',
+  //       description:
+  //           'Develop essential leadership skills and learn how to inspire and guide teams effectively. Perfect for aspiring managers and team leaders.',
+  //       rating: 4.8,
+  //       duration: const Duration(hours: 3),
+  //       type: CourseType.soft,
+  //       points: 150,
+  //       thumbnail: getRandomThumbnail(), price: '0.00',
+  //     ),
+  //     Course(
+  //       id: 's3',
+  //       title: 'Time Management Mastery',
+  //       description:
+  //           'Learn proven techniques to maximize productivity and achieve better work-life balance through effective time management strategies.',
+  //       rating: 4.6,
+  //       duration: const Duration(hours: 1, minutes: 45),
+  //       type: CourseType.soft,
+  //       points: 80,
+  //       thumbnail: getRandomThumbnail(), price: '0.00',
+  //     ),
+  //     Course(
+  //       id: 's4',
+  //       title: 'Emotional Intelligence at Work',
+  //       description:
+  //           'Enhance your emotional intelligence to build better relationships and navigate workplace dynamics more effectively.',
+  //       rating: 4.9,
+  //       duration: const Duration(hours: 2, minutes: 15),
+  //       type: CourseType.soft,
+  //       points: 120,
+  //       thumbnail: getRandomThumbnail(), price: '0.00',
+  //     ),
+  //     Course(
+  //       id: 's5',
+  //       title: 'Public Speaking Excellence',
+  //       description:
+  //           'Overcome stage fright and master the art of public speaking. Learn to deliver compelling presentations with confidence.',
+  //       rating: 4.7,
+  //       duration: const Duration(hours: 4),
+  //       type: CourseType.soft,
+  //       points: 200,
+  //       thumbnail: getRandomThumbnail(), price: '0.00',
+  //     ),
+  //     Course(
+  //       id: 's6',
+  //       title: 'Conflict Resolution Strategies',
+  //       description:
+  //           'Learn effective techniques for managing and resolving workplace conflicts. Transform challenges into opportunities for growth.',
+  //       rating: 4.4,
+  //       duration: const Duration(hours: 2),
+  //       type: CourseType.soft,
+  //       points: 100,
+  //       thumbnail: getRandomThumbnail(), price: '0.00',
+  //     ),
+  //     Course(
+  //       id: 's7',
+  //       title: 'Team Building Essentials',
+  //       description:
+  //           'Discover proven methods for building and maintaining high-performing teams. Foster collaboration and team spirit.',
+  //       rating: 4.3,
+  //       duration: const Duration(hours: 1, minutes: 30),
+  //       type: CourseType.soft,
+  //       points: 75,
+  //       thumbnail: getRandomThumbnail(), price: '0.00',
+  //     ),
+  //   ]);
 
-    // Add hard skills courses
-    tempHardSkills.addAll([
-      Course(
-        id: 'h1',
-        title: 'Flutter Advanced Concepts',
-        description:
-            'Deep dive into advanced Flutter development concepts including state management, custom widgets, and performance optimization.',
-        rating: 4.7,
-        duration: const Duration(hours: 8),
-        type: CourseType.hard,
-        points: 500,
-        price: '199',
-        thumbnail: getRandomThumbnail(),
-        lessons: _getDummyLessonsForCourse('h1'),
-      ),
-      Course(
-        id: 'h2',
-        title: 'AWS Cloud Architecture',
-        description:
-            'Master cloud computing with AWS. Learn to design, deploy and manage scalable cloud infrastructure.',
-        rating: 4.6,
-        duration: const Duration(hours: 10),
-        type: CourseType.hard,
-        price: '99',
-        points: 400,
-        thumbnail: getRandomThumbnail(),
-      ),
-      Course(
-        id: 'h3',
-        title: 'Machine Learning Fundamentals',
-        description:
-            'Introduction to machine learning algorithms, data preprocessing, and model training. Includes hands-on projects.',
-        rating: 4.9,
-        duration: const Duration(hours: 12),
-        type: CourseType.hard,
-        price: '149',
-        points: 600,
-        thumbnail: getRandomThumbnail(),
-      ),
-      Course(
-        id: 'h4',
-        title: 'Blockchain Development',
-        description:
-            'Learn blockchain technology and smart contract development. Build decentralized applications from scratch.',
-        rating: 4.5,
-        duration: const Duration(hours: 8),
-        type: CourseType.hard,
-        points: 800,
-        price: '199',
-        thumbnail: getRandomThumbnail(),
-      ),
-      Course(
-        id: 'h5',
-        title: 'Advanced Python Programming',
-        description:
-            'Master advanced Python concepts including metaclasses, decorators, and concurrent programming.',
-        rating: 4.8,
-        duration: const Duration(hours: 15),
-        type: CourseType.hard,
-        price: '129',
-        points: 700,
-        thumbnail: getRandomThumbnail(),
-      ),
-      Course(
-        id: 'h6',
-        title: 'Cybersecurity Essentials',
-        description:
-            'Comprehensive guide to network security, threat detection, and security best practices.',
-        rating: 4.7,
-        duration: const Duration(hours: 20),
-        type: CourseType.hard,
-        price: '199',
-        points: 900,
-        thumbnail: getRandomThumbnail(),
-      ),
-      Course(
-        id: 'h7',
-        title: 'DevOps & CI/CD',
-        description:
-            'Learn modern DevOps practices, continuous integration, and deployment automation techniques.',
-        rating: 4.6,
-        duration: const Duration(hours: 16),
-        type: CourseType.hard,
-        points: 750,
-        price: '149',
-        thumbnail: getRandomThumbnail(),
-      ),
-      Course(
-        id: 'h8',
-        title: 'React Native Masterclass',
-        description:
-            'Build cross-platform mobile applications using React Native. Includes real-world project development.',
-        rating: 4.5,
-        duration: const Duration(hours: 10),
-        type: CourseType.hard,
-        price: '89',
-        points: 400,
-        thumbnail: getRandomThumbnail(),
-      ),
+  //   // Add hard skills courses
+  //   tempHardSkills.addAll([
+  //     Course(
+  //       id: 'h1',
+  //       title: 'Flutter Advanced Concepts',
+  //       description:
+  //           'Deep dive into advanced Flutter development concepts including state management, custom widgets, and performance optimization.',
+  //       rating: 4.7,
+  //       duration: const Duration(hours: 8),
+  //       type: CourseType.hard,
+  //       points: 500,
+  //       price: '199',
+  //       thumbnail: getRandomThumbnail(),
+  //       lessons: _getDummyLessonsForCourse('h1'),
+  //     ),
+  //     Course(
+  //       id: 'h2',
+  //       title: 'AWS Cloud Architecture',
+  //       description:
+  //           'Master cloud computing with AWS. Learn to design, deploy and manage scalable cloud infrastructure.',
+  //       rating: 4.6,
+  //       duration: const Duration(hours: 10),
+  //       type: CourseType.hard,
+  //       price: '99',
+  //       points: 400,
+  //       thumbnail: getRandomThumbnail(),
+  //     ),
+  //     Course(
+  //       id: 'h3',
+  //       title: 'Machine Learning Fundamentals',
+  //       description:
+  //           'Introduction to machine learning algorithms, data preprocessing, and model training. Includes hands-on projects.',
+  //       rating: 4.9,
+  //       duration: const Duration(hours: 12),
+  //       type: CourseType.hard,
+  //       price: '149',
+  //       points: 600,
+  //       thumbnail: getRandomThumbnail(),
+  //     ),
+  //     Course(
+  //       id: 'h4',
+  //       title: 'Blockchain Development',
+  //       description:
+  //           'Learn blockchain technology and smart contract development. Build decentralized applications from scratch.',
+  //       rating: 4.5,
+  //       duration: const Duration(hours: 8),
+  //       type: CourseType.hard,
+  //       points: 800,
+  //       price: '199',
+  //       thumbnail: getRandomThumbnail(),
+  //     ),
+  //     Course(
+  //       id: 'h5',
+  //       title: 'Advanced Python Programming',
+  //       description:
+  //           'Master advanced Python concepts including metaclasses, decorators, and concurrent programming.',
+  //       rating: 4.8,
+  //       duration: const Duration(hours: 15),
+  //       type: CourseType.hard,
+  //       price: '129',
+  //       points: 700,
+  //       thumbnail: getRandomThumbnail(),
+  //     ),
+  //     Course(
+  //       id: 'h6',
+  //       title: 'Cybersecurity Essentials',
+  //       description:
+  //           'Comprehensive guide to network security, threat detection, and security best practices.',
+  //       rating: 4.7,
+  //       duration: const Duration(hours: 20),
+  //       type: CourseType.hard,
+  //       price: '199',
+  //       points: 900,
+  //       thumbnail: getRandomThumbnail(),
+  //     ),
+  //     Course(
+  //       id: 'h7',
+  //       title: 'DevOps & CI/CD',
+  //       description:
+  //           'Learn modern DevOps practices, continuous integration, and deployment automation techniques.',
+  //       rating: 4.6,
+  //       duration: const Duration(hours: 16),
+  //       type: CourseType.hard,
+  //       points: 750,
+  //       price: '149',
+  //       thumbnail: getRandomThumbnail(),
+  //     ),
+  //     Course(
+  //       id: 'h8',
+  //       title: 'React Native Masterclass',
+  //       description:
+  //           'Build cross-platform mobile applications using React Native. Includes real-world project development.',
+  //       rating: 4.5,
+  //       duration: const Duration(hours: 10),
+  //       type: CourseType.hard,
+  //       price: '89',
+  //       points: 400,
+  //       thumbnail: getRandomThumbnail(),
+  //     ),
       
-    ]);
+  //   ]);
 
 
-    // Add some dummy teacher courses
-    _teacherCourses.assignAll([
-      Course(
-        id: 't1',
-        title: 'Introduction to Flutter',
-        description: 'Learn the basics of Flutter development and build your first app.',
-        rating: 4.2,
-        duration: const Duration(hours: 5, minutes: 30),
-        type: CourseType.hard,
-        price: '79',
-        points: 300,
-        thumbnail: getRandomThumbnail(),
-        lessons: [
-          Lesson(
-            id: 'l1',
-            title: 'Getting Started with Flutter',
-            number: 1,
-            duration: const Duration(minutes: 45),
-            videoUrl: 'https://example.com/videos/flutter-intro',
-          ),
-          Lesson(
-            id: 'l2',
-            title: 'Building Your First Widget',
-            number: 2,
-            duration: const Duration(minutes: 60),
-            videoUrl: 'https://example.com/videos/flutter-widgets',
-          ),
-        ],
-      ),
-      Course(
-        id: 't2',
-        title: 'Effective Team Communication',
-        description: 'Master the art of communication within teams for better collaboration.',
-        rating: 4.8,
-        duration: const Duration(hours: 3, minutes: 15),
-        type: CourseType.soft,
-        points: 150,
-        thumbnail: getRandomThumbnail(),
-        lessons: [
-          Lesson(
-            id: 'l1',
-            title: 'Understanding Communication Styles',
-            number: 1,
-            duration: const Duration(minutes: 30),
-            videoUrl: 'https://example.com/videos/comm-styles',
-          ),
-          Lesson(
-            id: 'l2',
-            title: 'Active Listening Techniques',
-            number: 2,
-            duration: const Duration(minutes: 45),
-            videoUrl: 'https://example.com/videos/active-listening',
-          ),
-        ], price: '0.00',
-      ),
-    ]);
+  //   // Add some dummy teacher courses
+  //   _teacherCourses.assignAll([
+  //     Course(
+  //       id: 't1',
+  //       title: 'Introduction to Flutter',
+  //       description: 'Learn the basics of Flutter development and build your first app.',
+  //       rating: 4.2,
+  //       duration: const Duration(hours: 5, minutes: 30),
+  //       type: CourseType.hard,
+  //       price: '79',
+  //       points: 300,
+  //       thumbnail: getRandomThumbnail(),
+  //       lessons: [
+  //         Lesson(
+  //           id: 'l1',
+  //           title: 'Getting Started with Flutter',
+  //           number: 1,
+  //           duration: const Duration(minutes: 45),
+  //           videoUrl: 'https://example.com/videos/flutter-intro',
+  //         ),
+  //         Lesson(
+  //           id: 'l2',
+  //           title: 'Building Your First Widget',
+  //           number: 2,
+  //           duration: const Duration(minutes: 60),
+  //           videoUrl: 'https://example.com/videos/flutter-widgets',
+  //         ),
+  //       ],
+  //     ),
+  //     Course(
+  //       id: 't2',
+  //       title: 'Effective Team Communication',
+  //       description: 'Master the art of communication within teams for better collaboration.',
+  //       rating: 4.8,
+  //       duration: const Duration(hours: 3, minutes: 15),
+  //       type: CourseType.soft,
+  //       points: 150,
+  //       thumbnail: getRandomThumbnail(),
+  //       lessons: [
+  //         Lesson(
+  //           id: 'l1',
+  //           title: 'Understanding Communication Styles',
+  //           number: 1,
+  //           duration: const Duration(minutes: 30),
+  //           videoUrl: 'https://example.com/videos/comm-styles',
+  //         ),
+  //         Lesson(
+  //           id: 'l2',
+  //           title: 'Active Listening Techniques',
+  //           number: 2,
+  //           duration: const Duration(minutes: 45),
+  //           videoUrl: 'https://example.com/videos/active-listening',
+  //         ),
+  //       ], price: '0.00',
+  //     ),
+  //   ]);
 
-  }
+  // }
 
   Future<void> uploadCourse({
     required String title,
@@ -602,82 +597,82 @@ class CoursesController extends GetxController {
   }
 
   // Add method to get dummy lessons for a course
-  List<Lesson> _getDummyLessonsForCourse(String courseId) {
-    switch (courseId) {
-      case 's1': // Effective Communication Skills
-        return [
-          Lesson(
-            number: 1,
-            id: 's1l1',
-            title: 'Understanding Communication Basics',
-            duration: const Duration(minutes: 30),
-            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
-            isCompleted: false,
-          ),
-          Lesson(
-            number: 2,
-            id: 's1l2',
-            title: 'Verbal Communication Techniques',
-            duration: const Duration(minutes: 45),
-            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
-            isCompleted: false,
-          ),
-          Lesson(
-            number: 3,
-            id: 's1l3',
-            title: 'Non-verbal Communication',
-            duration: const Duration(minutes: 35),
-            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
-            isCompleted: false,
-          ),
-          Lesson(
-            number: 4,
-            id: 's1l4',
-            title: 'Active Listening Skills',
-            duration: const Duration(minutes: 40),
-            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
-            isCompleted: false,
-          ),
-        ];
-      case 'h1': // Flutter Advanced Concepts
-        return [
-          Lesson(
-            number: 1,
-            id: 'h1l1',
-            title: 'Advanced State Management',
-            duration: const Duration(minutes: 60),
-            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
-            isCompleted: false,
-          ),
-          Lesson(
-            number: 2,
-            id: 'h1l2',
-            title: 'Custom Widgets and Inheritance',
-            duration: const Duration(minutes: 55),
-            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
-            isCompleted: false,
-          ),
-          Lesson(
-            number: 3,
-            id: 'h1l3',
-            title: 'Performance Optimization Techniques',
-            duration: const Duration(minutes: 50),
-            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
-            isCompleted: false,
-          ),
-          Lesson(
-            number: 4,
-            id: 'h1l4',
-            title: 'Advanced Animation and Gestures',
-            duration: const Duration(minutes: 65),
-            videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
-            isCompleted: false,
-          ),
-        ];
-      default:
-        return [];
-    }
-  }
+  // List<Lesson> _getDummyLessonsForCourse(String courseId) {
+  //   switch (courseId) {
+  //     case 's1': // Effective Communication Skills
+  //       return [
+  //         Lesson(
+  //           number: 1,
+  //           id: 's1l1',
+  //           title: 'Understanding Communication Basics',
+  //           duration: const Duration(minutes: 30),
+  //           videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+  //           isCompleted: false,
+  //         ),
+  //         Lesson(
+  //           number: 2,
+  //           id: 's1l2',
+  //           title: 'Verbal Communication Techniques',
+  //           duration: const Duration(minutes: 45),
+  //           videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+  //           isCompleted: false,
+  //         ),
+  //         Lesson(
+  //           number: 3,
+  //           id: 's1l3',
+  //           title: 'Non-verbal Communication',
+  //           duration: const Duration(minutes: 35),
+  //           videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+  //           isCompleted: false,
+  //         ),
+  //         Lesson(
+  //           number: 4,
+  //           id: 's1l4',
+  //           title: 'Active Listening Skills',
+  //           duration: const Duration(minutes: 40),
+  //           videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+  //           isCompleted: false,
+  //         ),
+  //       ];
+  //     case 'h1': // Flutter Advanced Concepts
+  //       return [
+  //         Lesson(
+  //           number: 1,
+  //           id: 'h1l1',
+  //           title: 'Advanced State Management',
+  //           duration: const Duration(minutes: 60),
+  //           videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+  //           isCompleted: false,
+  //         ),
+  //         Lesson(
+  //           number: 2,
+  //           id: 'h1l2',
+  //           title: 'Custom Widgets and Inheritance',
+  //           duration: const Duration(minutes: 55),
+  //           videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+  //           isCompleted: false,
+  //         ),
+  //         Lesson(
+  //           number: 3,
+  //           id: 'h1l3',
+  //           title: 'Performance Optimization Techniques',
+  //           duration: const Duration(minutes: 50),
+  //           videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+  //           isCompleted: false,
+  //         ),
+  //         Lesson(
+  //           number: 4,
+  //           id: 'h1l4',
+  //           title: 'Advanced Animation and Gestures',
+  //           duration: const Duration(minutes: 65),
+  //           videoUrl: 'https://drive.google.com/file/d/1WRuqlqEFj4vorPakJ46yaVASOfF2UWVi/view?usp=sharing',
+  //           isCompleted: false,
+  //         ),
+  //       ];
+  //     default:
+  //       return [];
+  //   }
+  // }
 
   // Add method to upload course to API
   Future<void> uploadCourseToApi({

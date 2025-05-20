@@ -153,8 +153,9 @@ class AuthController extends GetxController {
           'email': email,
           'password': password,
         },
-        requiresAuth: false
       );
+
+      log("DEBUG: Response body: ${response.body}");
       
       if (response.statusCode == 200) {
         final authData = _extractAuthData(response);
@@ -171,7 +172,11 @@ class AuthController extends GetxController {
           throw 'Invalid response format';
         }
       } else {
-        throw response.body['message'] ?? 'Login failed';
+        if (response.body == null) {
+          throw 'Connection error, please wait while the server starts!';
+        } else {
+          throw 'Login failed';
+        }
       }
     } catch (e) {
       error.value = e.toString();
