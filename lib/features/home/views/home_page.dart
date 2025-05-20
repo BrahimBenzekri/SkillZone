@@ -3,6 +3,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:skillzone/core/routes/app_routes.dart';
 import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/courses/controllers/courses_controller.dart';
+import 'package:skillzone/features/inventory/controllers/inventory_controller.dart';
 import 'package:skillzone/features/points/services/user_points_service.dart';
 import 'package:skillzone/features/profile/services/user_profile_service.dart';
 import 'package:skillzone/widgets/notification_icon.dart';
@@ -21,9 +22,24 @@ class HomePage extends StatelessWidget {
 
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
-  void _onRefresh() async{
-    await Future.delayed(const Duration(seconds: 3));
-    _refreshController.refreshCompleted();
+  void _onRefresh() async {
+    try {
+      // Refresh courses data from API
+      await controller.loadCourses();
+      
+      // Refresh enrolled courses in the inventory controller
+      final inventoryController = Get.find<InventoryController>();
+      await inventoryController.loadEnrolledCourses();
+      
+      // Refresh user profile data
+      await profileService.fetchProfileData();
+      
+      // Complete the refresh
+      _refreshController.refreshCompleted();
+    } catch (e) {
+      // Handle any errors during refresh
+      _refreshController.refreshFailed();
+    }
   }
 
   Widget _buildCoursesList(
@@ -171,6 +187,7 @@ class HomePage extends StatelessWidget {
                 header: const WaterDropMaterialHeader(
                   backgroundColor: AppColors.primaryColor,
                   distance: 40.0,
+                  semanticsLabel: "Completed",
                 ), // Default refresh indicator style
                 onRefresh: _onRefresh,
                 child: SingleChildScrollView(
