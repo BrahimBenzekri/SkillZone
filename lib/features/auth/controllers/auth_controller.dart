@@ -197,7 +197,6 @@ class AuthController extends GetxController {
       error.value = '';
       userEmail.value = email;
     
-      
       log('DEBUG: Preparing signup request with firstName: $firstName, lastName: $lastName, username: $username');
       log('DEBUG: Preparing signup request with email: $email, password: $password, isTeacher: $isTeacherValue');
       log('DEBUG:Sending request to endpoint: ${EnvConfig.registerEndpoint}');
@@ -232,11 +231,33 @@ class AuthController extends GetxController {
         log('DEBUG: Signup failed with response: ${response.body}');
         error.value = response.body['message'] ?? 'Signup failed';
         log('DEBUG: Error set to: ${error.value}');
+        ErrorHelper.showAuthError(
+          message: error.value,
+          onRetry: () => signup(
+            firstName: firstName,
+            lastName: lastName,
+            username: username,
+            email: email,
+            password: password,
+            isTeacherValue: isTeacherValue,
+          ),
+        );
       }
     } catch (e) {
       log('DEBUG: Exception during signup: $e');
       error.value = 'Connection error, please wait while the server starts!';
       log('DEBUG: Error set to: ${error.value}');
+      ErrorHelper.showAuthError(
+        message: error.value,
+        onRetry: () => signup(
+          firstName: firstName,
+          lastName: lastName,
+          username: username,
+          email: email,
+          password: password,
+          isTeacherValue: isTeacherValue,
+        ),
+      );
     } finally {
       isLoading.value = false;
       log('DEBUG: Signup process completed, isLoading set to false');
