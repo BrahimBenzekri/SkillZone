@@ -58,7 +58,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.accountType,
-      page: () => const AccountTypePage(),
+      page: () => AccountTypePage(),
     ),
 
     // Main App Pages

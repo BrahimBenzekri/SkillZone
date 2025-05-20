@@ -4,7 +4,11 @@ import 'package:skillzone/core/theme/app_colors.dart';
 import 'package:skillzone/features/auth/controllers/auth_controller.dart';
 
 class AccountTypePage extends GetView<AuthController> {
-  const AccountTypePage({super.key});
+  AccountTypePage({super.key});
+  
+  // Add a variable to track which type was selected
+  final RxBool _selectedTeacher = false.obs;
+  final RxBool _isSelecting = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -110,8 +114,8 @@ class AccountTypePage extends GetView<AuthController> {
       ),
       child: Material(
         color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
+        child: Obx(() => InkWell(
+          onTap: (_isSelecting.value || controller.isLoading.value) ? null : onTap,
           borderRadius: BorderRadius.circular(20),
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -125,13 +129,24 @@ class AccountTypePage extends GetView<AuthController> {
                         : AppColors.backgroundColor.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(
-                    icon,
-                    size: 30,
-                    color: isTeacher
-                        ? AppColors.primaryColor
-                        : AppColors.backgroundColor,
-                  ),
+                  child: (_isSelecting.value && _selectedTeacher.value == isTeacher)
+                      ? SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: CircularProgressIndicator(
+                            color: isTeacher
+                                ? AppColors.primaryColor
+                                : AppColors.backgroundColor,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Icon(
+                          icon,
+                          size: 30,
+                          color: isTeacher
+                              ? AppColors.primaryColor
+                              : AppColors.backgroundColor,
+                        ),
                 ),
                 const SizedBox(width: 15),
                 Expanded(
@@ -170,12 +185,15 @@ class AccountTypePage extends GetView<AuthController> {
               ],
             ),
           ),
-        ),
+        )),
       ),
     );
   }
 
   void _selectType(bool isTeacherValue) {
+    _selectedTeacher.value = isTeacherValue;
+    _isSelecting.value = true;
+    
     final signupData = controller.tempSignupData.value;
     controller.signup(
       firstName: signupData['firstName'],
@@ -184,6 +202,10 @@ class AccountTypePage extends GetView<AuthController> {
       email: signupData['email'] ?? "",
       password: signupData['password'] ?? "",
       isTeacherValue: isTeacherValue,
-    );
+    ).then((_) {
+      _isSelecting.value = false;
+    }).catchError((_) {
+      _isSelecting.value = false;
+    });
   }
 }
