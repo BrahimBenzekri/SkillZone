@@ -192,7 +192,9 @@ class CourseDetailsPage extends StatelessWidget {
                               ),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primaryColor.withValues(alpha: 0.1),
+                                  backgroundColor: inventoryController.enrolledCourseIds.contains(course.id)
+                                      ? AppColors.textColorInactive
+                                      : AppColors.primaryColor.withValues(alpha: 0.1),
                                   elevation: 0,
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 24,
@@ -203,18 +205,28 @@ class CourseDetailsPage extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () async {
-                                  // Enroll in the course
-                                  await Get.find<InventoryController>().enrollInCourse(course.id);
-                                  
-                                  // Only go back if this is a new enrollment
-                                  if (!Get.find<InventoryController>().enrolledCourseIds.contains(course.id)) {
-                                    Get.back(); // Return to previous screen
+                                  if (inventoryController.enrolledCourseIds.contains(course.id)) {
+                                    // Show already enrolled message
+                                    Get.snackbar(
+                                      'Already Enrolled',
+                                      'You are already enrolled in this course',
+                                      backgroundColor: AppColors.secondaryColor,
+                                      colorText: AppColors.backgroundColor,
+                                      snackPosition: SnackPosition.BOTTOM,
+                                      margin: const EdgeInsets.all(16),
+                                    );
+                                  } else {
+                                    // Enroll in the course
+                                    await Get.find<InventoryController>().enrollInCourse(course.id);
                                   }
                                 },
-                                child: const Text(
+                                child: Text(
+                                  inventoryController.enrolledCourseIds.contains(course.id) ? 'Enrolled' :
                                   'Enroll Now',
                                   style: TextStyle(
-                                    color: AppColors.primaryColor,
+                                    color: inventoryController.enrolledCourseIds.contains(course.id)
+                                        ? AppColors.backgroundColor
+                                        : AppColors.primaryColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -225,7 +237,7 @@ class CourseDetailsPage extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     Container(
-                                      padding: const EdgeInsets.all(12),
+                                      padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
                                         color: AppColors.primaryColor.withValues(alpha: 0.1),
                                         shape: BoxShape.circle,
@@ -236,7 +248,7 @@ class CourseDetailsPage extends StatelessWidget {
                                         size: 24,
                                       ),
                                     ),
-                                    const SizedBox(width: 16),
+                                    const SizedBox(width: 10),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,7 +259,7 @@ class CourseDetailsPage extends StatelessWidget {
                                                 '+${course.points}',
                                                 style: const TextStyle(
                                                   color: AppColors.primaryColor,
-                                                  fontSize: 24,
+                                                  fontSize: 20,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
@@ -279,7 +291,9 @@ class CourseDetailsPage extends StatelessWidget {
                               ),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primaryColor.withValues(alpha: 0.1),
+                                  backgroundColor: inventoryController.enrolledCourseIds.contains(course.id)
+                                      ? AppColors.textColorInactive
+                                      : AppColors.primaryColor.withValues(alpha: 0.1),
                                   elevation: 0,
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 24,
@@ -290,13 +304,29 @@ class CourseDetailsPage extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () async {
-                                  // Enroll in the course
-                                  await Get.find<InventoryController>().enrollInCourse(course.id);
+                                  if (inventoryController.enrolledCourseIds.contains(course.id)) {
+                                    // Show already enrolled message
+                                    Get.snackbar(
+                                      'Already Enrolled',
+                                      'You are already enrolled in this course',
+                                      backgroundColor: AppColors.secondaryColor,
+                                      colorText: AppColors.backgroundColor,
+                                      snackPosition: SnackPosition.BOTTOM,
+                                      margin: const EdgeInsets.all(16),
+                                    );
+                                  } else {
+                                    // Enroll in the course
+                                    await Get.find<InventoryController>().enrollInCourse(course.id);
+                                  }
                                 },
-                                child: const Text(
-                                  'Enroll Now',
+                                child: Text(
+                                  inventoryController.enrolledCourseIds.contains(course.id)
+                                  ? 'Enrolled'
+                                  : 'Enroll Now',
                                   style: TextStyle(
-                                    color: AppColors.primaryColor,
+                                    color: inventoryController.enrolledCourseIds.contains(course.id)
+                                        ? AppColors.backgroundColor
+                                        : AppColors.primaryColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
