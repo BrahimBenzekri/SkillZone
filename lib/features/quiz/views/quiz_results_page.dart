@@ -232,7 +232,7 @@ class QuizResultsPage extends GetView<QuizController> {
                             ],
                           ),
                           child: ElevatedButton(
-                            onPressed: () => Get.offAllNamed('/main'),
+                            onPressed: () => controller.finishQuiz(),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primaryColor,
                               padding: const EdgeInsets.symmetric(vertical: 16),

@@ -332,7 +332,7 @@ class QuizController extends GetxController {
 
     // Move to next question or finish quiz
     if (isLastQuestion) {
-      finishQuiz();
+      Get.offNamed('/quiz-results');
     } else {
       currentQuestionIndex.value++;
       startTimer();
@@ -346,7 +346,7 @@ class QuizController extends GetxController {
     final pointsService = Get.find<UserPointsService>();
     pointsService.addPoints(score.value);
     
-    Get.offNamed('/quiz-results');
+    Get.offAllNamed('/main');
   }
 
   Quiz? getQuizForCourse(String courseId) {
