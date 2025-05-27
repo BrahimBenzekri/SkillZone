@@ -146,12 +146,12 @@ class AuthController extends GetxController {
 
       // Use centralized API service
       final response = await EnvConfig.apiService.post(
-        EnvConfig.loginEndpoint,
-        {
-          'email': email,
-          'password': password,
-        },
-      );
+          EnvConfig.loginEndpoint,
+          {
+            'email': email,
+            'password': password,
+          },
+          requiresAuth: false);
 
       log("DEBUG: Response body: ${response.body}");
 
