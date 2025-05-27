@@ -12,7 +12,8 @@ class Course {
   final Duration duration;
   final CourseType type;
   final String price; // null means free
-  final int points; // points needed for hard skills or earned for soft skills
+  final int points; // points earned when completing the course quiz
+  final int pointsRequired; // points required to unlock the course
   final RxBool isLiked;
   final String thumbnail;
   List<Lesson> lessons;
@@ -27,6 +28,7 @@ class Course {
     required this.type,
     required this.price,
     required this.points,
+    required this.pointsRequired,
     bool isLiked = false,
     required this.thumbnail,
     this.lessons = const [],
@@ -74,20 +76,18 @@ class Course {
       if (json['id'] == null) {
         throw ArgumentError('Course ID is required');
       }
-      
+
       if (json['title'] == null) {
         throw ArgumentError('Course title is required');
       }
-      
+
       // Extract course type with better error handling
       CourseType courseType;
       final typeStr = json['course_type'];
-      courseType = typeStr.toUpperCase().contains('HARD') 
-          ? CourseType.hard 
+      courseType = typeStr.toUpperCase().contains('HARD')
+          ? CourseType.hard
           : CourseType.soft;
 
-      
-      
       return Course(
         id: json['id'].toString(),
         title: json['title'],
@@ -97,6 +97,7 @@ class Course {
         type: courseType,
         price: json['price'],
         points: json['points'],
+        pointsRequired: json['points_required'],
         isLiked: false,
         thumbnail: '',
         lessons: [],
@@ -114,8 +115,9 @@ class Course {
     double? rating,
     Duration? duration,
     CourseType? type,
-    String ? price,
+    String? price,
     int? points,
+    int? pointsRequired,
     bool? isLiked,
     String? thumbnail,
     List<Lesson>? lessons,
@@ -130,6 +132,7 @@ class Course {
       type: type ?? this.type,
       price: price ?? this.price,
       points: points ?? this.points,
+      pointsRequired: pointsRequired ?? this.pointsRequired,
       isLiked: isLiked ?? this.isLiked.value,
       thumbnail: thumbnail ?? this.thumbnail,
       lessons: lessons ?? this.lessons,
