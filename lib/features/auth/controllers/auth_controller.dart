@@ -153,6 +153,7 @@ class AuthController extends GetxController {
           'email': email,
           'password': password,
         },
+        requiresAuth: false
       );
 
       log("DEBUG: Response body: ${response.body}");

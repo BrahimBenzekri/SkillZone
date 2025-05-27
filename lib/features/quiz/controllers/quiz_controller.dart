@@ -332,7 +332,7 @@ class QuizController extends GetxController {
 
     // Move to next question or finish quiz
     if (isLastQuestion) {
-      Get.offNamed('/quiz-results');
+      Get.toNamed('/quiz-results');
     } else {
       currentQuestionIndex.value++;
       startTimer();
