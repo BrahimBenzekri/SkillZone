@@ -12,7 +12,7 @@ Future<void> main() async {
   await Get.putAsync(() => StorageService().init(), permanent: true);
   await dotenv.load(fileName: ".env");
   await Get.putAsync(() => ApiService().init(), permanent: true);
-  
+
   Get.put(UserProfileService(), permanent: true);
   runApp(const MainApp());
 }
@@ -22,7 +22,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -35,7 +34,7 @@ class MainApp extends StatelessWidget {
           bodySmall: TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
-      initialRoute: AppRoutes.login,
+      initialRoute: AppRoutes.main,
       getPages: AppPages.pages,
     );
   }

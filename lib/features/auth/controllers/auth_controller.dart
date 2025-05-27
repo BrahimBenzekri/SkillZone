@@ -12,7 +12,8 @@ class AuthController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxString error = ''.obs;
   final RxString userEmail = ''.obs;
-  final RxBool isTeacher = false.obs; // Main property to track if user is a teacher
+  final RxBool isTeacher =
+      false.obs; // Main property to track if user is a teacher
   final RxBool isLoggingOut = false.obs;
   final RxString logoutError = ''.obs;
   final Rx<Map<String, String>> tempSignupData = Rx<Map<String, String>>({
@@ -27,7 +28,7 @@ class AuthController extends GetxController {
   void onInit() {
     super.onInit();
     log('DEBUG: AuthController initializing');
-    
+
     // Load isTeacher value from storage when controller initializes
     // final savedIsTeacher = _storageService.read<bool>(StorageService.isTeacherKey);
     // if (savedIsTeacher != null) {
@@ -69,7 +70,8 @@ class AuthController extends GetxController {
   Future<bool> _refreshTokens() async {
     log('DEBUG: Starting token refresh process');
     try {
-      final refreshToken = _storageService.read<String>(StorageService.refreshTokenKey);
+      final refreshToken =
+          _storageService.read<String>(StorageService.refreshTokenKey);
       if (refreshToken == null) {
         log('DEBUG: No refresh token found in storage');
         return false;
@@ -78,18 +80,14 @@ class AuthController extends GetxController {
       log('DEBUG: Sending refresh token request');
       // Use centralized API service
       final response = await EnvConfig.apiService.post(
-        EnvConfig.refreshToken,
-        {
-          'refresh': refreshToken
-        },
-        requiresAuth: false
-      );
+          EnvConfig.refreshToken, {'refresh': refreshToken},
+          requiresAuth: false);
 
       log('DEBUG: Received response with status code: ${response.statusCode}');
       if (response.statusCode == 200 && response.body != null) {
         final newAccessToken = response.body['access'];
         final newRefreshToken = response.body['refresh'];
-        
+
         if (newAccessToken != null && newRefreshToken != null) {
           log('DEBUG: New tokens received, saving auth data');
           await _saveAuthData(
@@ -114,18 +112,18 @@ class AuthController extends GetxController {
   Map<String, dynamic>? _extractAuthData(Response response) {
     try {
       log('DEBUG: Extracting auth data from response');
-      
+
       if (response.body['status'] == true) {
         final data = response.body['data'];
         log('DEBUG: Data extracted: ${data.keys}');
-        
+
         // Extract isTeacher value if available
         if (data['is_teacher'] != null) {
           final isTeacherValue = data['is_teacher'] == true;
           isTeacher.value = isTeacherValue;
           log('DEBUG: isTeacher value extracted: ${isTeacher.value}');
         }
-        
+
         return {
           'access': data['access'],
           'refresh': data['refresh'],
@@ -143,9 +141,9 @@ class AuthController extends GetxController {
     try {
       isLoading.value = true;
       error.value = '';
-      
+
       log('DEBUG: Attempting login with email: $email');
-      
+
       // Use centralized API service
       final response = await EnvConfig.apiService.post(
         EnvConfig.loginEndpoint,
@@ -153,21 +151,20 @@ class AuthController extends GetxController {
           'email': email,
           'password': password,
         },
-        requiresAuth: false
       );
 
       log("DEBUG: Response body: ${response.body}");
-      
+
       if (response.statusCode == 200) {
         final authData = _extractAuthData(response);
-        
+
         if (authData != null) {
           await _saveAuthData(
             accessToken: authData['access'],
             refreshToken: authData['refresh'],
             isTeacherValue: authData['is_teacher'],
           );
-          
+
           Get.offAllNamed(AppRoutes.main);
         } else {
           throw 'Invalid response format';
@@ -202,35 +199,35 @@ class AuthController extends GetxController {
       isLoading.value = true;
       error.value = '';
       userEmail.value = email;
-    
+
       log('DEBUG: Preparing signup request with firstName: $firstName, lastName: $lastName, username: $username');
       log('DEBUG: Preparing signup request with email: $email, password: $password, isTeacher: $isTeacherValue');
       log('DEBUG:Sending request to endpoint: ${EnvConfig.registerEndpoint}');
-      
+
       // Use centralized API service
       final response = await EnvConfig.apiService.post(
-        EnvConfig.registerEndpoint,
-        {
-          'first_name': firstName,
-          'last_name': lastName,
-          'username': username,
-          'email': email,
-          'password': password,
-          'password2': password,
-          'accept_terms': true,
-          'is_teacher': isTeacherValue
-        },
-        requiresAuth: false
-      );
-      
+          EnvConfig.registerEndpoint,
+          {
+            'first_name': firstName,
+            'last_name': lastName,
+            'username': username,
+            'email': email,
+            'password': password,
+            'password2': password,
+            'accept_terms': true,
+            'is_teacher': isTeacherValue
+          },
+          requiresAuth: false);
+
       log('DEBUG: Signup response received with body: ${response.body}');
-      
+
       if (response.statusCode == 201) {
         log('DEBUG: Signup successful, saving isTeacher value: $isTeacherValue');
         // Save isTeacher value to storage
-        await _storageService.write(StorageService.isTeacherKey, isTeacherValue);
+        await _storageService.write(
+            StorageService.isTeacherKey, isTeacherValue);
         log('DEBUG: isTeacher value saved to storage: $isTeacherValue');
-        
+
         log('DEBUG: Navigating to email verification page');
         Get.offAllNamed(AppRoutes.emailVerification);
       } else {
@@ -275,19 +272,18 @@ class AuthController extends GetxController {
       log('DEBUG: Starting email verification with code: $code');
       isLoading.value = true;
       error.value = '';
-      
+
       log('DEBUG: User email for verification: ${userEmail.value}');
-      
+
       // Use centralized API service
       final response = await EnvConfig.apiService.post(
-        EnvConfig.verifyEmail,
-        {
-          'email': userEmail.value,
-          'code': code,
-        },
-        requiresAuth: false
-      );
-      
+          EnvConfig.verifyEmail,
+          {
+            'email': userEmail.value,
+            'code': code,
+          },
+          requiresAuth: false);
+
       log('DEBUG: Verification response received with status code: ${response.statusCode}');
       log('DEBUG: Response body: ${response.body}');
 
@@ -295,12 +291,14 @@ class AuthController extends GetxController {
         log('DEBUG: Email verification successful');
 
         // Saving tokens from response
-        _saveAuthData(accessToken: response.body["data"]["access"], refreshToken: response.body["data"]["refresh"]);
-        
+        _saveAuthData(
+            accessToken: response.body["data"]["access"],
+            refreshToken: response.body["data"]["refresh"]);
+
         // Refresh tokens after successful verification
         log('DEBUG: Attempting to refresh tokens after verification');
         await _refreshTokens();
-        
+
         log('DEBUG: Navigating to interests page');
         Get.offAllNamed(AppRoutes.interests);
       } else {
@@ -348,13 +346,13 @@ class AuthController extends GetxController {
   }) async {
     try {
       log('DEBUG: Saving auth data to storage');
-      
+
       await _storageService.saveAuthData(
         accessToken: accessToken,
         refreshToken: refreshToken,
         isTeacher: isTeacherValue,
       );
-      
+
       // Update isTeacher value if provided
       if (isTeacherValue != null) {
         isTeacher.value = isTeacherValue;
@@ -374,8 +372,10 @@ class AuthController extends GetxController {
   }
 
   // Getter methods for stored data
-  String? get accessToken => _storageService.read<String>(StorageService.accessTokenKey);
-  String? get refreshToken => _storageService.read<String>(StorageService.refreshTokenKey);
+  String? get accessToken =>
+      _storageService.read<String>(StorageService.accessTokenKey);
+  String? get refreshToken =>
+      _storageService.read<String>(StorageService.refreshTokenKey);
   bool get isStudent => !isTeacher.value;
 
   // Update logout method to clear stored data
@@ -386,12 +386,8 @@ class AuthController extends GetxController {
       }
 
       // Use centralized API service
-      final response = await EnvConfig.apiService.post(
-        EnvConfig.logout,
-        {
-          'refresh_token': refreshToken
-        }
-      );
+      final response = await EnvConfig.apiService
+          .post(EnvConfig.logout, {'refresh_token': refreshToken});
 
       if (response.body["success"]) {
         await _clearAuthData();
