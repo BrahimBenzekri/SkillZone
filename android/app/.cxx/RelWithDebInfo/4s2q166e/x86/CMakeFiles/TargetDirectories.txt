@@ -1,0 +1,2 @@
+/home/bahitto/myapps/skillzone/android/app/.cxx/RelWithDebInfo/4s2q166e/x86/CMakeFiles/edit_cache.dir
+/home/bahitto/myapps/skillzone/android/app/.cxx/RelWithDebInfo/4s2q166e/x86/CMakeFiles/rebuild_cache.dir

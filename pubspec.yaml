@@ -1,7 +1,7 @@
 name: skillzone
-description: "A new Flutter project."
+description: "SkillZone e-learning app."
 publish_to: 'none'
-version: 0.1.0
+version: 1.0.0+1
 
 environment:
   sdk: ^3.5.4
