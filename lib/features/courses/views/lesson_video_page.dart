@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:chewie/chewie.dart';
@@ -8,7 +7,6 @@ import 'package:skillzone/core/theme/app_colors.dart';
 import '../models/lesson.dart';
 
 class LessonVideoPage extends StatefulWidget {
-
   const LessonVideoPage({super.key});
 
   @override
@@ -31,15 +29,15 @@ class _LessonVideoPageState extends State<LessonVideoPage> {
 
   Future<void> _initializePlayer() async {
     try {
-      
-      _videoPlayerController = VideoPlayerController.asset('lib/assets/videos/output.mp4');
+      _videoPlayerController =
+          VideoPlayerController.asset('lib/assets/videos/output.mp4');
       await _videoPlayerController.initialize();
 
       _chewieController = ChewieController(
         videoPlayerController: _videoPlayerController,
         aspectRatio: _videoPlayerController.value.aspectRatio,
         autoPlay: true,
-        looping: false,
+        looping: true,
         allowFullScreen: true,
         allowMuting: true,
         showControls: true,
@@ -225,10 +223,9 @@ class _LessonVideoPageState extends State<LessonVideoPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () async {
-
-                          
                           // Mark the lesson as completed
-                          inventoryController.markLessonAsCompleted(courseId, lesson.id);
+                          inventoryController.markLessonAsCompleted(
+                              courseId, lesson.id);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryColor,
@@ -240,10 +237,9 @@ class _LessonVideoPageState extends State<LessonVideoPage> {
                         child: const Text(
                           'Mark as Complete',
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textColorLight
-                          ),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textColorLight),
                         ),
                       ),
                     ),

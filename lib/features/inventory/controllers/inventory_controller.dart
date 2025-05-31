@@ -261,7 +261,7 @@ class InventoryController extends GetxController {
           Future.delayed(Duration.zero, () {
             Get.snackbar(
               'Not Enough Points',
-              'You need ${course.points} points to unlock this course',
+              'You need ${course.pointsRequired} points to unlock this course',
               backgroundColor: AppColors.errorColor,
               colorText: AppColors.backgroundColor,
               snackPosition: SnackPosition.BOTTOM,
