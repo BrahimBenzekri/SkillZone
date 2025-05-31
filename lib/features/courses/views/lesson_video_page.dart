@@ -29,8 +29,8 @@ class _LessonVideoPageState extends State<LessonVideoPage> {
 
   Future<void> _initializePlayer() async {
     try {
-      _videoPlayerController =
-          VideoPlayerController.asset('lib/assets/videos/output.mp4');
+      _videoPlayerController = VideoPlayerController.asset(
+          'lib/assets/videos/${courseId}_${lesson.number}.mp4');
       await _videoPlayerController.initialize();
 
       _chewieController = ChewieController(

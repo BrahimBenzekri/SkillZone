@@ -79,9 +79,8 @@ class AuthController extends GetxController {
 
       log('DEBUG: Sending refresh token request');
       // Use centralized API service
-      final response = await EnvConfig.apiService.post(
-          EnvConfig.refreshToken, {'refresh': refreshToken},
-          requiresAuth: false);
+      final response = await EnvConfig.apiService
+          .post(EnvConfig.refreshToken, {'refresh': refreshToken});
 
       log('DEBUG: Received response with status code: ${response.statusCode}');
       if (response.statusCode == 200 && response.body != null) {
