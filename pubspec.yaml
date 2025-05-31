@@ -27,6 +27,7 @@ dependencies:
   pull_to_refresh: ^2.0.0
   skeletonizer: ^1.4.3
   animate_do: ^4.2.0
+  flutter_launcher_icons: ^0.14.3
 
 
 
@@ -64,3 +65,10 @@ flutter_native_splash:
     color: "#232323"
     icon_background_color: "#232323"
     image: lib/assets/logo/960.png
+
+flutter_launcher_icons:
+  android: true
+  adaptive_icon_background: "#232323"
+  adaptive_icon_foreground: "lib/assets/logo/app_icon.png"
+  image_path: "lib/assets/logo/app_icon.png"
+
