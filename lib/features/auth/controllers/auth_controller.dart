@@ -388,7 +388,7 @@ class AuthController extends GetxController {
       final response = await EnvConfig.apiService
           .post(EnvConfig.logout, {'refresh_token': refreshToken});
 
-      if (response.body["success"]) {
+      if (response.body["status"]) {
         await _clearAuthData();
         Get.delete<AuthController>();
         Get.offAllNamed(AppRoutes.login);
@@ -396,6 +396,7 @@ class AuthController extends GetxController {
         throw response.body["message"] ?? 'Logout failed';
       }
     } catch (e) {
+      log(e.toString());
       ErrorHelper.showAuthError(
         message: 'Failed to logout. Please try again.',
         onRetry: logout,
