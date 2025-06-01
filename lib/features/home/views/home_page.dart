@@ -15,7 +15,11 @@ import '../../courses/models/course.dart';
 import '../widgets/course_card.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
+  HomePage({super.key}) {
+    // Load profile data when HomePage is created
+    profileService.loadProfileData();
+    profileService.fetchProfileData();
+  }
 
   final controller = Get.put(CoursesController(), permanent: true);
   final profileService = Get.find<UserProfileService>();
