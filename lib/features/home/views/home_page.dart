@@ -264,39 +264,38 @@ class HomePage extends StatelessWidget {
                         const SizedBox(width: 12),
                         // Upload Course Button
                         if (profileService.isTeacher)
-                          Obx(() => Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AppColors.primaryColor
-                                      .withValues(alpha: 0.2),
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: GestureDetector(
-                                  onTap: () =>
-                                      Get.toNamed(AppRoutes.uploadCourse),
-                                  child: const Row(
-                                    children: [
-                                      Icon(
-                                        Icons.add_circle_outline_rounded,
-                                        color: AppColors.primaryColor,
-                                        size: 16,
-                                      ),
-                                      SizedBox(width: 6),
-                                      Text(
-                                        'Upload Course',
-                                        style: TextStyle(
-                                          color: AppColors.primaryColor,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color:
+                                  AppColors.primaryColor.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: GestureDetector(
+                              onTap: () => Get.toNamed(AppRoutes.uploadCourse),
+                              child: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.add_circle_outline_rounded,
+                                    color: AppColors.primaryColor,
+                                    size: 16,
                                   ),
-                                ),
-                              )),
+                                  SizedBox(width: 6),
+                                  Text(
+                                    'Upload Course',
+                                    style: TextStyle(
+                                      color: AppColors.primaryColor,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),

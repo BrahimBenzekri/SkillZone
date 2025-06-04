@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:get/get.dart';
@@ -20,14 +19,24 @@ class QuizController extends GetxController {
         QuizQuestion(
           id: 's1q1',
           question: 'What is the most important element of active listening?',
-          options: ['Speaking clearly', 'Making eye contact', 'Providing feedback', 'Taking notes'],
+          options: [
+            'Speaking clearly',
+            'Making eye contact',
+            'Providing feedback',
+            'Taking notes'
+          ],
           correctOptionIndex: 2,
           points: 20,
         ),
         QuizQuestion(
           id: 's1q2',
           question: 'Which of these is a barrier to effective communication?',
-          options: ['Cultural differences', 'Clear message', 'Active listening', 'Open body language'],
+          options: [
+            'Cultural differences',
+            'Clear message',
+            'Active listening',
+            'Open body language'
+          ],
           correctOptionIndex: 0,
           points: 25,
         ),
@@ -65,12 +74,7 @@ class QuizController extends GetxController {
         QuizQuestion(
           id: 's1q6',
           question: 'Which communication style is most effective in a crisis?',
-          options: [
-            'Passive',
-            'Aggressive',
-            'Assertive',
-            'Passive-aggressive'
-          ],
+          options: ['Passive', 'Aggressive', 'Assertive', 'Passive-aggressive'],
           correctOptionIndex: 2,
           points: 45,
         ),
@@ -112,8 +116,14 @@ class QuizController extends GetxController {
         ),
         QuizQuestion(
           id: 's1q10',
-          question: 'Which is a characteristic of effective written communication?',
-          options: ['Using complex vocabulary', 'Being concise and clear', 'Writing long paragraphs', 'Using multiple fonts'],
+          question:
+              'Which is a characteristic of effective written communication?',
+          options: [
+            'Using complex vocabulary',
+            'Being concise and clear',
+            'Writing long paragraphs',
+            'Using multiple fonts'
+          ],
           correctOptionIndex: 1,
           points: 65,
         ),
@@ -127,7 +137,8 @@ class QuizController extends GetxController {
       questions: [
         QuizQuestion(
           id: 'h1q1',
-          question: 'What is the main advantage of using GetX for state management?',
+          question:
+              'What is the main advantage of using GetX for state management?',
           options: [
             'Larger app size',
             'More boilerplate code',
@@ -139,7 +150,8 @@ class QuizController extends GetxController {
         ),
         QuizQuestion(
           id: 'h1q2',
-          question: 'Which widget should you use for better performance with large lists?',
+          question:
+              'Which widget should you use for better performance with large lists?',
           options: [
             'ListView',
             'ListView.builder',
@@ -151,7 +163,8 @@ class QuizController extends GetxController {
         ),
         QuizQuestion(
           id: 'h1q3',
-          question: 'What is the purpose of the "const" constructor in Flutter?',
+          question:
+              'What is the purpose of the "const" constructor in Flutter?',
           options: [
             'Slower widget building',
             'Compile-time constant widgets',
@@ -164,12 +177,7 @@ class QuizController extends GetxController {
         QuizQuestion(
           id: 'h1q4',
           question: 'Which is NOT a Flutter widget lifecycle method?',
-          options: [
-            'initState',
-            'build',
-            'dispose',
-            'onCreate'
-          ],
+          options: ['initState', 'build', 'dispose', 'onCreate'],
           correctOptionIndex: 3,
           points: 50,
         ),
@@ -211,7 +219,8 @@ class QuizController extends GetxController {
         ),
         QuizQuestion(
           id: 'h1q8',
-          question: 'Which is the best practice for handling large images in Flutter?',
+          question:
+              'Which is the best practice for handling large images in Flutter?',
           options: [
             'Always use full resolution',
             'Cache images',
@@ -235,13 +244,9 @@ class QuizController extends GetxController {
         ),
         QuizQuestion(
           id: 'h1q10',
-          question: 'Which method is called when a GetX controller is removed from memory?',
-          options: [
-            'onDelete',
-            'dispose',
-            'onClose',
-            'onRemove'
-          ],
+          question:
+              'Which method is called when a GetX controller is removed from memory?',
+          options: ['onDelete', 'dispose', 'onClose', 'onRemove'],
           correctOptionIndex: 2,
           points: 80, // Most difficult question
         ),
@@ -258,19 +263,20 @@ class QuizController extends GetxController {
   final progress = 0.0.obs;
   final score = 0.obs;
   final answers = <int>[].obs;
-  
+
   Timer? _timer;
-  
+
   QuizQuestion? get currentQuestion =>
       currentQuiz.value?.questions[currentQuestionIndex.value];
-      
+
   bool get isLastQuestion =>
-      currentQuestionIndex.value == (currentQuiz.value?.questions.length ?? 1) - 1;
+      currentQuestionIndex.value ==
+      (currentQuiz.value?.questions.length ?? 1) - 1;
 
   @override
   void onInit() async {
     super.onInit();
-    
+
     // Check if courseId is passed in arguments
     if (Get.arguments != null && Get.arguments is Map) {
       final args = Get.arguments as Map;
@@ -293,7 +299,7 @@ class QuizController extends GetxController {
     try {
       currentQuiz.value = await getQuizFromApi(courseId);
       if (currentQuiz.value == null) return;
-      
+
       currentQuestionIndex.value = 0;
       score.value = 0;
       answers.clear();
@@ -309,7 +315,8 @@ class QuizController extends GetxController {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (timeLeft.value > 0) {
         timeLeft.value--;
-        progress.value = timeLeft.value / (currentQuiz.value?.timePerQuestion.inSeconds ?? 30);
+        progress.value = timeLeft.value /
+            (currentQuiz.value?.timePerQuestion.inSeconds ?? 30);
       } else {
         nextQuestion();
       }
@@ -339,13 +346,13 @@ class QuizController extends GetxController {
     }
   }
 
-  void finishQuiz() {
+  Future<void> finishQuiz() async {
     _timer?.cancel();
-    
+
     // Award points to the user
     final pointsService = Get.find<UserPointsService>();
-    pointsService.addPoints(score.value);
-    
+    await pointsService.addPoints(score.value);
+
     Get.offAllNamed('/main');
   }
 
@@ -356,7 +363,8 @@ class QuizController extends GetxController {
   Future<Quiz?> getQuizFromApi(String courseId) async {
     try {
       log('DEBUG: Fetching quiz for course ID: $courseId');
-      final response = await EnvConfig.apiService.get(EnvConfig.getQuiz(courseId));
+      final response =
+          await EnvConfig.apiService.get(EnvConfig.getQuiz(courseId));
       log('DEBUG: Quiz API response status: ${response.statusCode}');
       if (response.statusCode == 200) {
         final quizData = response.body;

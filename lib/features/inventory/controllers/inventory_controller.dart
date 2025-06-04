@@ -135,33 +135,8 @@ class InventoryController extends GetxController {
     // Mark lesson as completed
     completedLessons[courseId]![lessonId] = true;
 
-    // Update course progress
-    final previousProgress = courseProgress[courseId]?.value ?? 0.0;
+    // // Update course progress
     _updateCourseProgress(courseId);
-    final newProgress = courseProgress[courseId]?.value ?? 0.0;
-
-    // Get the course to check its type
-    final course = _getCourseById(courseId);
-
-    // Check if this completion resulted in course completion
-    if (newProgress == 1.0 && previousProgress < 1.0 && course != null) {
-      // Course just completed
-      if (course.type == CourseType.soft) {
-        // Award points for completing soft skill course
-        final pointsService = Get.find<UserPointsService>();
-        pointsService.addPoints(course.points);
-
-        // Show points earned message
-        Get.snackbar(
-          'Points Earned',
-          'You earned ${course.points} points for completing this course!',
-          backgroundColor: AppColors.primaryColor,
-          colorText: AppColors.backgroundColor,
-          margin: const EdgeInsets.all(16),
-          duration: const Duration(seconds: 3),
-        );
-      }
-    }
 
     // Navigate back
     Get.back();

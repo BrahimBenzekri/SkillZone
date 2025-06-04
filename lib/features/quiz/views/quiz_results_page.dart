@@ -26,6 +26,9 @@ class QuizResultsPage extends GetView<QuizController> {
     final totalPoints = quiz.questions.fold<int>(0, (sum, q) => sum + q.points);
     final percentage = (controller.score.value / totalPoints) * 100;
 
+    // Add an observable for loading state
+    final isLoading = false.obs;
+
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: Stack(
@@ -75,12 +78,14 @@ class QuizResultsPage extends GetView<QuizController> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: AppColors.bottomBarColor.withValues(alpha: 0.3),
+                            color:
+                                AppColors.bottomBarColor.withValues(alpha: 0.3),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Table(
                             border: TableBorder.all(
-                              color: AppColors.textColorInactive.withValues(alpha: 0.3),
+                              color: AppColors.textColorInactive
+                                  .withValues(alpha: 0.3),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             children: [
@@ -140,7 +145,8 @@ class QuizResultsPage extends GetView<QuizController> {
                                 quiz.questions.length,
                                 (index) {
                                   final question = quiz.questions[index];
-                                  final isCorrect = controller.answers[index] == question.correctOptionIndex;
+                                  final isCorrect = controller.answers[index] ==
+                                      question.correctOptionIndex;
                                   return TableRow(
                                     children: [
                                       TableCell(
@@ -159,8 +165,12 @@ class QuizResultsPage extends GetView<QuizController> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(12),
                                           child: Icon(
-                                            isCorrect ? Icons.check_circle : Icons.cancel,
-                                            color: isCorrect ? AppColors.primaryColor : AppColors.errorColor,
+                                            isCorrect
+                                                ? Icons.check_circle
+                                                : Icons.cancel,
+                                            color: isCorrect
+                                                ? AppColors.primaryColor
+                                                : AppColors.errorColor,
                                           ),
                                         ),
                                       ),
@@ -168,9 +178,13 @@ class QuizResultsPage extends GetView<QuizController> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(12),
                                           child: Text(
-                                            isCorrect ? '+${question.points}' : '0',
+                                            isCorrect
+                                                ? '+${question.points}'
+                                                : '0',
                                             style: TextStyle(
-                                              color: isCorrect ? AppColors.primaryColor : AppColors.textColorInactive,
+                                              color: isCorrect
+                                                  ? AppColors.primaryColor
+                                                  : AppColors.textColorInactive,
                                               fontWeight: FontWeight.bold,
                                             ),
                                             textAlign: TextAlign.center,
@@ -185,28 +199,25 @@ class QuizResultsPage extends GetView<QuizController> {
                           ),
                         ),
                         const SizedBox(height: 32),
-                        
+
                         // Points Earned Text
-                        Obx(() => Text.rich(
-                          TextSpan(
-                          text: 'You earned ',
-                          style: const TextStyle(
-                            color: AppColors.textColorLight,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: '${controller.score} points',
-                              style: const TextStyle(
-                                color: AppColors.secondaryColor,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
-                          ]
-                          )
-                        )),
+                        Obx(() => Text.rich(TextSpan(
+                                text: 'You earned ',
+                                style: const TextStyle(
+                                  color: AppColors.textColorLight,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: '${controller.score} points',
+                                    style: const TextStyle(
+                                      color: AppColors.secondaryColor,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                ]))),
                         const SizedBox(height: 8),
                         Text(
                           getEncouragementMessage(percentage),
@@ -220,36 +231,55 @@ class QuizResultsPage extends GetView<QuizController> {
 
                         // Claim Button
                         Container(
-                          width: MediaQueryHelper.getScreenWidth(context) * 60 / 100,
+                          width: MediaQueryHelper.getScreenWidth(context) *
+                              60 /
+                              100,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.primaryColor.withValues(alpha: 0.5),
+                                color: AppColors.primaryColor
+                                    .withValues(alpha: 0.5),
                                 blurRadius: 20,
                                 spreadRadius: 1,
                               ),
                             ],
                           ),
-                          child: ElevatedButton(
-                            onPressed: () => controller.finishQuiz(),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primaryColor,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              elevation: 4,
-                            ),
-                            child: const Text(
-                              'Claim Points',
-                              style: TextStyle(
-                                color: AppColors.backgroundColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
+                          child: Obx(() => ElevatedButton(
+                                onPressed: isLoading.value
+                                    ? null
+                                    : () async {
+                                        isLoading.value = true;
+                                        await controller.finishQuiz();
+                                        isLoading.value = false;
+                                      },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primaryColor,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  elevation: 4,
+                                ),
+                                child: isLoading.value
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          color: AppColors.backgroundColor,
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                    : const Text(
+                                        'Claim Points',
+                                        style: TextStyle(
+                                          color: AppColors.backgroundColor,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                              )),
                         ),
                       ],
                     ),
